@@ -2,7 +2,7 @@
   "name": "Longevity Age Estimator",
   "short_name": "Longevity",
   "description": "Εκτίμηση βιολογικής ηλικίας με PhenoAge algorithm",
-  "start_url": "/",
+  "start_url": "/longevity-app/",
   "display": "standalone",
   "background_color": "#0f0f1a",
   "theme_color": "#1a1a2e",
