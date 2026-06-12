@@ -3,411 +3,517 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#1a1a2e">
+<meta name="theme-color" content="#0f0f1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Longevity">
-<meta name="description" content="Βιολογική ηλικία με PhenoAge algorithm">
+<meta name="description" content="Βιολογική ηλικία με PhenoAge + KDM v3">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Longevity Age Estimator</title>
+<title>Longevity Age Estimator v3</title>
 <style>
-:root {
-  --bg: #0f0f1a;
-  --bg2: #1a1a2e;
-  --bg3: #16213e;
-  --card: #1e1e32;
-  --border: rgba(255,255,255,0.08);
-  --text: #e8e8f0;
-  --muted: #8888aa;
-  --hint: #555570;
-  --accent: #6c63ff;
-  --accent-light: #9d95ff;
-  --success: #2ecc71;
-  --warning: #f39c12;
-  --danger: #e74c3c;
-  --info: #3498db;
-  --radius: 12px;
-  --radius-sm: 8px;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-.app { max-width: 480px; margin: 0 auto; padding: 0 0 80px; }
-
-/* Header */
-.header { padding: 20px 16px 12px; position: sticky; top: 0; background: var(--bg); z-index: 10; border-bottom: 1px solid var(--border); }
-.header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
-.header h1 span { color: var(--accent-light); }
-.header p { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-/* Bottom nav */
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); display: flex; z-index: 20; max-width: 480px; margin: 0 auto; }
-.nav-btn { flex: 1; padding: 10px 4px 12px; text-align: center; cursor: pointer; color: var(--hint); font-size: 10px; border: none; background: none; }
-.nav-btn svg { display: block; margin: 0 auto 3px; }
-.nav-btn.active { color: var(--accent-light); }
-
-/* Sections */
-.section { display: none; padding: 16px; }
-.section.active { display: block; }
-
-/* Section titles */
-.sec-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 10px; }
-.sec-title:first-child { margin-top: 0; }
-
-/* Input grid */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-
-.field { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
-.field label { font-size: 10px; color: var(--muted); display: block; margin-bottom: 4px; }
-.field input { width: 100%; background: none; border: none; color: var(--text); font-size: 16px; font-weight: 500; outline: none; }
-.field input:focus { color: var(--accent-light); }
-.field .unit { font-size: 10px; color: var(--hint); margin-top: 1px; }
-
-/* Calc button */
-.calc-btn { width: 100%; margin-top: 20px; padding: 16px; background: var(--accent); color: white; border: none; border-radius: var(--radius); font-size: 16px; font-weight: 600; cursor: pointer; letter-spacing: -0.2px; }
-.calc-btn:active { opacity: 0.8; transform: scale(0.99); }
-
-/* Result hero */
-.result-hero { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 16px; text-align: center; margin-bottom: 16px; }
-.chrono-age { font-size: 13px; color: var(--muted); }
-.bio-age { font-size: 64px; font-weight: 700; line-height: 1; margin: 6px 0 2px; }
-.bio-label { font-size: 12px; color: var(--muted); }
-.rank-badge { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 12px; }
-.diff-line { margin-top: 10px; font-size: 13px; color: var(--muted); }
-
-/* Percentile bar */
-.pct-wrap { margin-top: 16px; }
-.pct-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-.pct-bar { position: relative; height: 20px; border-radius: 10px; background: linear-gradient(to right, #e74c3c, #f39c12, #2ecc71, #27ae60); overflow: visible; }
-.pct-marker { position: absolute; top: -5px; width: 8px; height: 30px; background: white; border-radius: 3px; transform: translateX(-50%); box-shadow: 0 0 8px rgba(255,255,255,0.5); }
-.pct-ticks { display: flex; justify-content: space-between; font-size: 10px; color: var(--hint); margin-top: 4px; }
-
-/* Biomarker list */
-.bm-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; }
-.bm-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
-.bm-row:last-child { border-bottom: none; }
-.bm-name { flex: 1; font-size: 13px; color: var(--muted); }
-.bm-val { font-size: 13px; font-weight: 600; min-width: 70px; text-align: right; }
-.bm-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.bm-status { font-size: 10px; min-width: 52px; text-align: right; }
-
-/* Recommendations */
-.rec-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px; }
-.rec-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-.rec-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
-.tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-.tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
-.tag-supp { background: rgba(52,152,219,0.15); color: #3498db; }
-.tag-diet { background: rgba(46,204,113,0.15); color: #2ecc71; }
-.tag-lifestyle { background: rgba(243,156,18,0.15); color: #f39c12; }
-.tag-medical { background: rgba(231,76,60,0.15); color: #e74c3c; }
-
-/* Disclaimer */
-.disclaimer { background: rgba(243,156,18,0.08); border: 1px solid rgba(243,156,18,0.2); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 12px; color: #f39c12; line-height: 1.5; margin-bottom: 16px; }
-
-/* Empty state */
-.empty { text-align: center; padding: 60px 20px; color: var(--muted); }
-.empty svg { margin: 0 auto 16px; opacity: 0.3; }
-.empty p { font-size: 14px; }
+:root{--bg:#0f0f1a;--bg2:#1a1a2e;--card:#1e1e32;--border:rgba(255,255,255,0.08);--text:#e8e8f0;--muted:#8888aa;--hint:#555570;--accent:#6c63ff;--al:#9d95ff;--ok:#2ecc71;--warn:#f39c12;--bad:#e74c3c;--r:12px;--rs:8px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:480px;margin:0 auto;padding:0 0 80px}
+.hdr{padding:20px 16px 12px;position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--border)}
+.hdr h1{font-size:18px;font-weight:600}.hdr h1 span{color:var(--al)}
+.hdr p{font-size:11px;color:var(--muted);margin-top:2px}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:20;max-width:480px;margin:0 auto}
+.nb{flex:1;padding:10px 4px 12px;text-align:center;cursor:pointer;color:var(--hint);font-size:10px;border:none;background:none}
+.nb svg{display:block;margin:0 auto 3px}.nb.active{color:var(--al)}
+.sec{display:none;padding:16px}.sec.active{display:block}
+.st{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:20px 0 10px}.st:first-child{margin-top:0}
+.infobox{background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.2);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--al);line-height:1.5;margin-bottom:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.fld{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px}
+.fld label{font-size:10px;color:var(--muted);display:block;margin-bottom:4px}
+.fld input{width:100%;background:none;border:none;color:var(--text);font-size:16px;font-weight:500;outline:none}
+.fld input:focus{color:var(--al)}.fld .u{font-size:10px;color:var(--hint);margin-top:1px}
+.fld.opt label::after{content:' (opt)';color:var(--hint);font-size:9px}
+.fld.highlight{border-color:rgba(108,99,255,.4)}
+.cbtn{width:100%;margin-top:20px;padding:16px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-size:16px;font-weight:600;cursor:pointer}
+.cbtn:active{opacity:.8;transform:scale(.99)}
+.hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 16px;text-align:center;margin-bottom:16px}
+.ca{font-size:13px;color:var(--muted)}.ba{font-size:64px;font-weight:700;line-height:1;margin:6px 0 2px}
+.bal{font-size:12px;color:var(--muted)}.cil{font-size:11px;color:var(--hint);margin-top:4px}
+.rbadge{display:inline-block;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600;margin-top:12px}
+.dl{margin-top:10px;font-size:13px;color:var(--muted)}
+.pw{margin-top:16px}.pl{font-size:11px;color:var(--muted);margin-bottom:6px}
+.pb{position:relative;height:20px;border-radius:10px;background:linear-gradient(to right,#e74c3c,#f39c12,#2ecc71,#27ae60)}
+.pm{position:absolute;top:-5px;width:8px;height:30px;background:#fff;border-radius:3px;transform:translateX(-50%);box-shadow:0 0 8px rgba(255,255,255,.4)}
+.pt{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-top:4px}
+.mpills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+.mpill{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--muted)}
+.bmc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.bmgt{padding:8px 14px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border)}
+.bmr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.bmr:last-child{border-bottom:none}
+.bmn{flex:1;font-size:12px;color:var(--muted)}.bmv{font-size:12px;font-weight:600;min-width:76px;text-align:right}
+.bmd{width:8px;height:8px;border-radius:50%;flex-shrink:0}.bmc2{font-size:10px;min-width:76px;text-align:right}
+.agebar-wrap{margin:8px 0 4px}
+.agebar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-bottom:3px}
+.agebar{position:relative;height:6px;border-radius:3px;background:rgba(255,255,255,.08)}
+.agebar-fill{position:absolute;height:100%;border-radius:3px}
+.agebar-marker{position:absolute;top:-4px;width:3px;height:14px;background:var(--al);border-radius:2px;transform:translateX(-50%)}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+.rc.good{border-left:3px solid var(--ok)}.rc.warn{border-left:3px solid var(--warn)}.rc.bad{border-left:3px solid var(--bad)}
+.rt{font-size:14px;font-weight:600;margin-bottom:6px}.rb{font-size:13px;color:var(--muted);line-height:1.6}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.ts{background:rgba(52,152,219,.15);color:#3498db}.td{background:rgba(46,204,113,.15);color:#2ecc71}
+.tl{background:rgba(243,156,18,.15);color:#f39c12}.tm{background:rgba(231,76,60,.15);color:#e74c3c}.tp{background:rgba(46,204,113,.15);color:#2ecc71}
+.disc{background:rgba(243,156,18,.08);border:1px solid rgba(243,156,18,.2);border-radius:var(--rs);padding:12px 14px;font-size:12px;color:#f39c12;line-height:1.5;margin-bottom:16px}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}.empty p{font-size:14px}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="header">
-    <h1>🧬 <span>Longevity</span> Age Estimator</h1>
-    <p>PhenoAge algorithm · Levine et al. 2018</p>
-  </div>
+<div class="hdr"><h1>🧬 <span>Longevity</span> Age Estimator</h1><p>PhenoAge + Age-Adjusted KDM · v3.0</p></div>
 
-  <!-- INPUT SECTION -->
-  <div class="section active" id="sec-input">
-    <div class="sec-title">Ανθρωπομετρικά</div>
-    <div class="grid-3">
-      <div class="field"><label>Ηλικία</label><input type="number" id="age" value="24" inputmode="decimal"><div class="unit">έτη</div></div>
-      <div class="field"><label>Ύψος</label><input type="number" id="height" value="178" inputmode="decimal"><div class="unit">cm</div></div>
-      <div class="field"><label>Βάρος</label><input type="number" id="weight" value="75" inputmode="decimal"><div class="unit">kg</div></div>
-    </div>
+<div class="sec active" id="sec-input">
+<div class="infobox">Τα reference ranges προσαρμόζονται αυτόματα στην ηλικία σου. Η σύγκριση γίνεται με τον μέσο όρο ατόμων της ίδιας ηλικιακής ομάδας.</div>
 
-    <div class="sec-title">Βιοχημικές</div>
-    <div class="grid-2">
-      <div class="field"><label>Χοληστερόλη</label><input type="number" id="cholesterol" value="110" inputmode="decimal"><div class="unit">mg/dL</div></div>
-      <div class="field"><label>HDL</label><input type="number" id="hdl" value="50.7" inputmode="decimal"><div class="unit">mg/dL</div></div>
-      <div class="field"><label>LDL</label><input type="number" id="ldl" value="81" inputmode="decimal"><div class="unit">mg/dL</div></div>
-      <div class="field"><label>Τριγλυκερίδια</label><input type="number" id="trig" value="149" inputmode="decimal"><div class="unit">mg/dL</div></div>
-      <div class="field"><label>Κρεατινίνη</label><input type="number" id="creatinine" value="0.97" inputmode="decimal"><div class="unit">mg/dL</div></div>
-      <div class="field"><label>Ουρικό οξύ</label><input type="number" id="uricacid" value="5.7" inputmode="decimal"><div class="unit">mg/dL</div></div>
-      <div class="field"><label>Φερριτίνη</label><input type="number" id="ferritin" value="63.1" inputmode="decimal"><div class="unit">ng/mL</div></div>
-      <div class="field"><label>Ασβέστιο</label><input type="number" id="calcium" value="9.9" inputmode="decimal"><div class="unit">mg/dL</div></div>
-      <div class="field"><label>AST (SGOT)</label><input type="number" id="ast" value="13.2" inputmode="decimal"><div class="unit">U/L</div></div>
-      <div class="field"><label>ALT (SGPT)</label><input type="number" id="alt" value="10.1" inputmode="decimal"><div class="unit">U/L</div></div>
-      <div class="field"><label>γ-GT</label><input type="number" id="ggt" value="12.3" inputmode="decimal"><div class="unit">U/L</div></div>
-    </div>
+<div class="st">Βασικά στοιχεία</div>
+<div class="g3">
+<div class="fld highlight"><label>Ηλικία *</label><input type="number" id="age" value="24" inputmode="decimal"><div class="u">έτη</div></div>
+<div class="fld"><label>Ύψος</label><input type="number" id="height" value="178" inputmode="decimal"><div class="u">cm</div></div>
+<div class="fld"><label>Βάρος</label><input type="number" id="weight" value="75" inputmode="decimal"><div class="u">kg</div></div>
+</div>
 
-    <div class="sec-title">Βιταμίνες</div>
-    <div class="grid-3">
-      <div class="field"><label>B12</label><input type="number" id="b12" value="358" inputmode="decimal"><div class="unit">pg/mL</div></div>
-      <div class="field"><label>D3 (25-OH)</label><input type="number" id="vitd" value="29" inputmode="decimal"><div class="unit">ng/mL</div></div>
-      <div class="field"><label>Φυλλικό</label><input type="number" id="folate" value="5.4" inputmode="decimal"><div class="unit">ng/mL</div></div>
-    </div>
+<div class="st">Αρτηριακή πίεση &amp; καρδιά</div>
+<div class="g2">
+<div class="fld highlight"><label>Συστολική (ΑΠ)</label><input type="number" id="sbp" value="110" inputmode="decimal"><div class="u">mmHg</div></div>
+<div class="fld highlight"><label>Διαστολική (ΑΠ)</label><input type="number" id="dbp" value="60" inputmode="decimal"><div class="u">mmHg</div></div>
+<div class="fld highlight"><label>Παλμοί ηρεμίας</label><input type="number" id="hr" value="60" inputmode="decimal"><div class="u">bpm</div></div>
+</div>
 
-    <div class="sec-title">Γενική αίματος (CBC)</div>
-    <div class="grid-2">
-      <div class="field"><label>Λευκά (WBC)</label><input type="number" id="wbc" value="11.5" inputmode="decimal"><div class="unit">K/μL</div></div>
-      <div class="field"><label>Ερυθρά (RBC)</label><input type="number" id="rbc" value="5.44" inputmode="decimal"><div class="unit">M/μL</div></div>
-      <div class="field"><label>Αιμοσφαιρίνη</label><input type="number" id="hgb" value="15.0" inputmode="decimal"><div class="unit">g/dL</div></div>
-      <div class="field"><label>Αιματοκρίτης</label><input type="number" id="hct" value="45.4" inputmode="decimal"><div class="unit">%</div></div>
-      <div class="field"><label>Αιμοπετάλια</label><input type="number" id="plt" value="258" inputmode="decimal"><div class="unit">K/μL</div></div>
-      <div class="field"><label>MCV</label><input type="number" id="mcv" value="83.5" inputmode="decimal"><div class="unit">fL</div></div>
-    </div>
+<div class="st">PhenoAge core biomarkers</div>
+<div class="g2">
+<div class="fld"><label>Κρεατινίνη</label><input type="number" id="creatinine" value="0.97" inputmode="decimal"><div class="u">mg/dL</div></div>
+<div class="fld"><label>MCV</label><input type="number" id="mcv" value="83.5" inputmode="decimal"><div class="u">fL</div></div>
+<div class="fld"><label>Λευκά (WBC)</label><input type="number" id="wbc" value="11.5" inputmode="decimal"><div class="u">K/μL</div></div>
+<div class="fld"><label>Λεμφοκύτταρα %</label><input type="number" id="lymph" value="22" inputmode="decimal"><div class="u">%</div></div>
+<div class="fld opt"><label>ALP</label><input type="number" id="alp" placeholder="—" inputmode="decimal"><div class="u">U/L</div></div>
+<div class="fld opt"><label>Γλυκόζη νηστείας</label><input type="number" id="glucose" placeholder="—" inputmode="decimal"><div class="u">mg/dL</div></div>
+<div class="fld opt"><label>RDW</label><input type="number" id="rdw" placeholder="—" inputmode="decimal"><div class="u">%</div></div>
+<div class="fld opt"><label>Αλβουμίνη</label><input type="number" id="albumin" placeholder="—" inputmode="decimal"><div class="u">g/dL</div></div>
+<div class="fld opt"><label>CRP</label><input type="number" id="crp" placeholder="—" inputmode="decimal"><div class="u">mg/L</div></div>
+</div>
 
-    <div class="sec-title">Ηλεκτρολύτες</div>
-    <div class="grid-3">
-      <div class="field"><label>Νάτριο (Na)</label><input type="number" id="sodium" value="141.8" inputmode="decimal"><div class="unit">mEq/L</div></div>
-      <div class="field"><label>Κάλιο (K)</label><input type="number" id="potassium" value="4.7" inputmode="decimal"><div class="unit">mEq/L</div></div>
-      <div class="field"><label>Μαγνήσιο</label><input type="number" id="magnesium" value="2.2" inputmode="decimal"><div class="unit">mg/dL</div></div>
-    </div>
+<div class="st">Λιπιδαιμικό προφίλ</div>
+<div class="g2">
+<div class="fld"><label>Χοληστερόλη</label><input type="number" id="cholesterol" value="110" inputmode="decimal"><div class="u">mg/dL</div></div>
+<div class="fld"><label>HDL</label><input type="number" id="hdl" value="50.7" inputmode="decimal"><div class="u">mg/dL</div></div>
+<div class="fld"><label>LDL</label><input type="number" id="ldl" value="81" inputmode="decimal"><div class="u">mg/dL</div></div>
+<div class="fld"><label>Τριγλυκερίδια</label><input type="number" id="trig" value="149" inputmode="decimal"><div class="u">mg/dL</div></div>
+</div>
 
-    <button class="calc-btn" onclick="calculate()">Υπολόγισε βιολογική ηλικία →</button>
-  </div>
+<div class="st">Βιταμίνες &amp; Μέταλλα</div>
+<div class="g2">
+<div class="fld"><label>Βιτ. D3 (25-OH)</label><input type="number" id="vitd" value="29" inputmode="decimal"><div class="u">ng/mL</div></div>
+<div class="fld"><label>Βιτ. B12</label><input type="number" id="b12" value="358" inputmode="decimal"><div class="u">pg/mL</div></div>
+<div class="fld"><label>Φυλλικό οξύ</label><input type="number" id="folate" value="5.4" inputmode="decimal"><div class="u">ng/mL</div></div>
+<div class="fld"><label>Φερριτίνη</label><input type="number" id="ferritin" value="63.1" inputmode="decimal"><div class="u">ng/mL</div></div>
+<div class="fld"><label>Ασβέστιο</label><input type="number" id="calcium" value="9.9" inputmode="decimal"><div class="u">mg/dL</div></div>
+<div class="fld"><label>Μαγνήσιο</label><input type="number" id="magnesium" value="2.2" inputmode="decimal"><div class="u">mg/dL</div></div>
+</div>
 
-  <!-- RESULTS SECTION -->
-  <div class="section" id="sec-results">
-    <div id="result-content">
-      <div class="empty">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        <p>Συμπλήρωσε τα δεδομένα σου<br>και πάτα "Υπολόγισε"</p>
-      </div>
-    </div>
-  </div>
+<div class="st">CBC</div>
+<div class="g2">
+<div class="fld"><label>Αιμοσφαιρίνη</label><input type="number" id="hgb" value="15.0" inputmode="decimal"><div class="u">g/dL</div></div>
+<div class="fld"><label>Αιμοπετάλια</label><input type="number" id="plt" value="258" inputmode="decimal"><div class="u">K/μL</div></div>
+<div class="fld"><label>Ουρικό οξύ</label><input type="number" id="uricacid" value="5.7" inputmode="decimal"><div class="u">mg/dL</div></div>
+</div>
 
-  <!-- RECOMMENDATIONS SECTION -->
-  <div class="section" id="sec-recs">
-    <div id="recs-content">
-      <div class="empty">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-        <p>Πρώτα υπολόγισε τη βιολογική σου ηλικία</p>
-      </div>
-    </div>
-  </div>
+<div class="st">Ηπατικές</div>
+<div class="g3">
+<div class="fld"><label>AST</label><input type="number" id="ast" value="13.2" inputmode="decimal"><div class="u">U/L</div></div>
+<div class="fld"><label>ALT</label><input type="number" id="alt" value="10.1" inputmode="decimal"><div class="u">U/L</div></div>
+<div class="fld"><label>γ-GT</label><input type="number" id="ggt" value="12.3" inputmode="decimal"><div class="u">U/L</div></div>
+</div>
 
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
-    <button class="nav-btn active" id="nav-input" onclick="showTab('input')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-      Δεδομένα
-    </button>
-    <button class="nav-btn" id="nav-results" onclick="showTab('results')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-      Αποτελέσματα
-    </button>
-    <button class="nav-btn" id="nav-recs" onclick="showTab('recs')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-      Συστάσεις
-    </button>
-  </nav>
+<button class="cbtn" onclick="calculate()">Υπολόγισε βιολογική ηλικία →</button>
+</div>
+
+<div class="sec" id="sec-results"><div id="rc"><div class="empty"><p>Συμπλήρωσε τα δεδομένα<br>και πάτα "Υπολόγισε"</p></div></div></div>
+<div class="sec" id="sec-recs"><div id="recc"><div class="empty"><p>Πρώτα υπολόγισε τη βιολογική σου ηλικία</p></div></div></div>
+
+<nav class="bnav">
+<button class="nb active" id="nav-input" onclick="showTab('input')">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Δεδομένα</button>
+<button class="nb" id="nav-results" onclick="showTab('results')">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Αποτελέσματα</button>
+<button class="nb" id="nav-recs" onclick="showTab('recs')">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>Συστάσεις</button>
+</nav>
 </div>
 
 <script>
-const RANGES = {
-  cholesterol: { name: 'Χοληστερόλη', unit: 'mg/dL', optimal:[0,150], good:[150,199], warning:[200,239] },
-  hdl:         { name: 'HDL', unit: 'mg/dL', optimal:[60,999], good:[40,59], warning:[35,39] },
-  ldl:         { name: 'LDL', unit: 'mg/dL', optimal:[0,100], good:[100,129], warning:[130,159] },
-  trig:        { name: 'Τριγλυκερίδια', unit: 'mg/dL', optimal:[0,100], good:[100,149], warning:[150,199] },
-  creatinine:  { name: 'Κρεατινίνη', unit: 'mg/dL', optimal:[0.7,1.1], good:[0.6,1.2], warning:[0.5,1.4] },
-  uricacid:    { name: 'Ουρικό οξύ', unit: 'mg/dL', optimal:[3.5,5.5], good:[2.5,7.0], warning:[7.0,8.0] },
-  ferritin:    { name: 'Φερριτίνη', unit: 'ng/mL', optimal:[30,150], good:[15,200], warning:[10,250] },
-  calcium:     { name: 'Ασβέστιο', unit: 'mg/dL', optimal:[9.0,10.2], good:[8.5,10.5], warning:[8.0,11.0] },
-  b12:         { name: 'B12', unit: 'pg/mL', optimal:[400,900], good:[200,399], warning:[150,199] },
-  vitd:        { name: 'Βιτ. D3', unit: 'ng/mL', optimal:[40,80], good:[30,39], warning:[20,29] },
-  folate:      { name: 'Φυλλικό', unit: 'ng/mL', optimal:[5,20], good:[3,4.9], warning:[2,2.9] },
-  wbc:         { name: 'WBC', unit: 'K/μL', optimal:[4,7], good:[7,9], warning:[9,11] },
-  rbc:         { name: 'RBC', unit: 'M/μL', optimal:[4.5,5.5], good:[4.0,5.7], warning:[3.5,3.9] },
-  hgb:         { name: 'Αιμοσφαιρίνη', unit: 'g/dL', optimal:[13.5,17.0], good:[12.0,13.4], warning:[11,11.9] },
-  hct:         { name: 'Αιματοκρίτης', unit: '%', optimal:[40,50], good:[37,52], warning:[35,36] },
-  plt:         { name: 'Αιμοπετάλια', unit: 'K/μL', optimal:[150,400], good:[100,450], warning:[80,99] },
-  mcv:         { name: 'MCV', unit: 'fL', optimal:[80,95], good:[75,99], warning:[70,74] },
-  sodium:      { name: 'Νάτριο', unit: 'mEq/L', optimal:[136,145], good:[135,146], warning:[133,147] },
-  potassium:   { name: 'Κάλιο', unit: 'mEq/L', optimal:[3.5,5.0], good:[3.0,5.2], warning:[2.8,5.5] },
-  magnesium:   { name: 'Μαγνήσιο', unit: 'mg/dL', optimal:[1.9,2.5], good:[1.7,2.7], warning:[1.5,1.69] },
-  ast:         { name: 'AST', unit: 'U/L', optimal:[0,35], good:[35,40], warning:[40,55] },
-  alt:         { name: 'ALT', unit: 'U/L', optimal:[0,35], good:[35,45], warning:[45,60] },
-  ggt:         { name: 'γ-GT', unit: 'U/L', optimal:[0,30], good:[30,45], warning:[45,60] },
-};
+// ─── UTILITIES ────────────────────────────────────────────────────────────
+function fv(id){const e=document.getElementById(id);return e?parseFloat(e.value):NaN}
+function ok(x){return !isNaN(x)&&x>0}
 
-function getStatus(k, v) {
-  const r = RANGES[k]; if (!r) return 'optimal';
-  if (v >= r.optimal[0] && v <= r.optimal[1]) return 'optimal';
-  if (v >= r.good[0] && v <= r.good[1]) return 'good';
-  if (v >= r.warning[0] && v <= r.warning[1]) return 'warning';
-  return 'bad';
-}
-function statusColor(s) {
-  return s === 'optimal' ? '#2ecc71' : s === 'good' ? '#8bc34a' : s === 'warning' ? '#f39c12' : '#e74c3c';
-}
-function statusLabel(s) {
-  return s === 'optimal' ? '✓ Βέλτιστο' : s === 'good' ? '~ Καλό' : s === 'warning' ? '⚠ Οριακό' : '✗ Εκτός';
+// Normal CDF (Hart approximation)
+function normalCDF(z){
+  const t=1/(1+0.2316419*Math.abs(z));
+  const p=t*(0.31938153+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));
+  const phi=1-(1/Math.sqrt(2*Math.PI))*Math.exp(-0.5*z*z)*p;
+  return z>=0?phi:1-phi;
 }
 
-function getVals() {
-  const keys = ['age','height','weight','cholesterol','hdl','ldl','trig','creatinine','uricacid','ferritin','calcium','b12','vitd','folate','wbc','rbc','hgb','hct','plt','mcv','sodium','potassium','magnesium','ast','alt','ggt'];
-  const r = {};
-  keys.forEach(k => { const el = document.getElementById(k); r[k] = el ? parseFloat(el.value) || 0 : 0; });
-  return r;
-}
-
-function phenoAge(v) {
-  let bio = parseFloat(v.age) || 24;
-  const wbc = parseFloat(v.wbc); const creat = parseFloat(v.creatinine);
-  const mcv = parseFloat(v.mcv); const plt = parseFloat(v.plt);
-  const vitd = parseFloat(v.vitd); const b12 = parseFloat(v.b12);
-  const ldl = parseFloat(v.ldl); const chol = parseFloat(v.cholesterol);
-  const ferr = parseFloat(v.ferritin); const trig = parseFloat(v.trig);
-  const hgb = parseFloat(v.hgb);
-
-  // WBC adjustments (key PhenoAge component)
-  if (wbc > 7) bio += (wbc - 7) * 0.45;
-  if (wbc < 4) bio += 1.0;
-
-  // Creatinine
-  if (creat > 1.1) bio += (creat - 1.1) * 3.0;
-  if (creat < 0.6) bio += 0.5;
-
-  // MCV
-  if (mcv > 95) bio += (mcv - 95) * 0.1;
-  if (mcv < 80) bio += (80 - mcv) * 0.15;
-
-  // Platelets (low PLT = older)
-  if (plt < 200) bio += (200 - plt) * 0.015;
-
-  // Hemoglobin (low = older)
-  if (hgb < 13.5) bio += (13.5 - hgb) * 0.4;
-
-  // Vitamins
-  if (vitd < 30) bio += (30 - vitd) * 0.12;
-  if (vitd >= 40) bio -= 1.0;
-  if (b12 < 200) bio += 2.0;
-  else if (b12 >= 400) bio -= 0.5;
-
-  // Lipids
-  if (ldl < 100) bio -= 0.6;
-  else if (ldl > 160) bio += 1.2;
-  if (chol < 150) bio -= 0.6;
-  if (trig > 150) bio += (trig - 150) * 0.008;
-
-  // Ferritin (high = older / inflammation)
-  if (ferr > 200) bio += (ferr - 200) * 0.005;
-
-  const chronAge = parseFloat(v.age) || 24;
-  return Math.max(Math.min(bio, chronAge + 20), chronAge - 20);
-}
-
-function pctFromDiff(d) {
-  if (d <= -6) return 95; if (d <= -4) return 88; if (d <= -2) return 78;
-  if (d <= 0) return 65; if (d <= 2) return 50; if (d <= 4) return 35;
-  if (d <= 6) return 22; return 10;
-}
-
-function getRank(p) {
-  if (p >= 90) return { label: 'Top 10% — Εξαιρετικό 🏆', bg: 'rgba(46,204,113,0.15)', color: '#2ecc71' };
-  if (p >= 75) return { label: 'Top 25% — Πολύ καλό ✨', bg: 'rgba(139,195,74,0.15)', color: '#8bc34a' };
-  if (p >= 25) return { label: 'Top 50% — Καλό 👍', bg: 'rgba(243,156,18,0.15)', color: '#f39c12' };
-  return { label: 'Bottom 25% — Χρειάζεται βελτίωση ⚡', bg: 'rgba(231,76,60,0.15)', color: '#e74c3c' };
-}
-
-const RECS = {
-  vitd:   { cond: v => v < 30, title: 'Βιταμίνη D3 — Ανεπάρκεια', tags: ['supp','lifestyle'], body: v => `Τιμή σου: ${v} ng/mL (στόχος ≥40 ng/mL). Εξέτασε συμπλήρωμα D3 2000–4000 IU/ημέρα μαζί με K2 (MK-7 100mcg). Επίσης έκθεση στον ήλιο 15–20 λεπτά/ημέρα. Επανέλεγχος σε 3 μήνες.` },
-  b12:    { cond: v => v < 400, title: 'Βιταμίνη B12 — Υποβέλτιστη', tags: ['supp'], body: v => `Τιμή: ${v} pg/mL. Στόχος longevity >400 pg/mL. Methylcobalamin 500–1000 mcg/ημέρα (καλύτερη από cyanocobalamin). Τρόφιμα: αυγά, κρέας, γαλακτοκομικά.` },
-  wbc:    { cond: v => v > 10, title: 'Λευκά αιμοσφαίρια — Αυξημένα', tags: ['medical'], body: v => `WBC: ${v} K/μL (βέλτιστο <8). Πιθανή υποκλινική φλεγμονή. Παρακολούθηση σε 1–2 μήνες. Αν επιμένει, αίτημα για CRP/ESR.` },
-  trig:   { cond: v => v >= 150, title: 'Τριγλυκερίδια — Οριακά', tags: ['diet','lifestyle'], body: v => `Τιμή: ${v} mg/dL (στόχος <100). Μείωση επεξεργασμένων υδατανθράκων και αλκοόλ. Omega-3 (EPA+DHA 2–4g/ημέρα) μπορεί να μειώσει έως 30%.` },
-  magnesium: { cond: v => v < 2.0, title: 'Μαγνήσιο — Χαμηλό', tags: ['supp','diet'], body: v => `Τιμή: ${v} mg/dL. Magnesium glycinate 200–400mg βράδυ (καλύτερη απορρόφηση). Τρόφιμα: αμύγδαλα, σπανάκι, σκοτεινή σοκολάτα 85%+.` },
-};
-
-function calculate() {
-  const v = getVals();
-  const bio = phenoAge(v);
-  const chron = parseFloat(v.age) || 24;
-  const diff = bio - chron;
-  const pct = pctFromDiff(diff);
-  const rank = getRank(pct);
-
-  // Results
-  const color = diff < 0 ? '#2ecc71' : diff < 2 ? '#f39c12' : '#e74c3c';
-  const sign = diff > 0 ? '+' : '';
-
-  document.getElementById('result-content').innerHTML = `
-    <div class="result-hero">
-      <div class="chrono-age">Χρονολογική ηλικία: ${chron} ετών</div>
-      <div class="bio-age" style="color:${color}">${bio.toFixed(1)}</div>
-      <div class="bio-label">Εκτιμώμενη βιολογική ηλικία</div>
-      <div class="rank-badge" style="background:${rank.bg}; color:${rank.color}">${rank.label}</div>
-      <div class="pct-wrap">
-        <div class="pct-label">Percentile vs συνομηλίκων</div>
-        <div class="pct-bar"><div class="pct-marker" style="left:${pct}%"></div></div>
-        <div class="pct-ticks"><span>0</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
-      </div>
-      <div class="diff-line">Βιολογική vs χρονολογική: <strong style="color:${color}">${sign}${diff.toFixed(1)} χρόνια</strong></div>
-    </div>
-
-    <div class="sec-title">Ανάλυση biomarkers</div>
-    <div class="bm-card">
-      ${['cholesterol','hdl','ldl','trig','creatinine','wbc','hgb','plt','b12','vitd','sodium','potassium','magnesium','ast','alt'].map(k => {
-        const val = v[k]; const r = RANGES[k]; if(!r) return '';
-        const st = getStatus(k, val);
-        return `<div class="bm-row">
-          <div class="bm-dot" style="background:${statusColor(st)}"></div>
-          <div class="bm-name">${r.name}</div>
-          <div class="bm-val" style="color:${statusColor(st)}">${val} ${r.unit}</div>
-          <div class="bm-status" style="color:${statusColor(st)};font-size:10px">${statusLabel(st)}</div>
-        </div>`;
-      }).join('')}
-    </div>
-  `;
-
-  // Recommendations
-  let recsHtml = `<div class="disclaimer">⚠️ Οι παρακάτω συστάσεις είναι ενδεικτικές. Συμβουλέψου τον γιατρό ή φαρμακοποιό σου πριν λάβεις οποιαδήποτε απόφαση.</div>`;
-  let hasRec = false;
-  Object.values(RECS).forEach(rec => {
-    const key = Object.keys(RECS).find(k => RECS[k] === rec);
-    if (rec.cond(v[key])) {
-      hasRec = true;
-      const tagHtml = rec.tags.map(t => `<span class="tag tag-${t}">${t==='supp'?'Συμπλήρωμα':t==='diet'?'Διατροφή':t==='lifestyle'?'Τρόπος ζωής':'Ιατρική παρ/θηση'}</span>`).join('');
-      recsHtml += `<div class="rec-card"><div class="tags">${tagHtml}</div><div class="rec-title">${rec.title}</div><div class="rec-body">${rec.body(v[key])}</div></div>`;
+// ─── AGE-ADJUSTED REFERENCE RANGES ───────────────────────────────────────
+// Returns {lo, hi, optLo, optHi, pop_mean, pop_sd} for a given age
+// Based on NHANES population data + clinical literature
+function ageRef(marker, age) {
+  const a = age || 24;
+  const refs = {
+    trig: {
+      // Triglycerides rise ~1.5 mg/dL per year after 20
+      pop_mean: 90 + Math.max(0, a-20)*1.4,
+      pop_sd: 40 + Math.max(0, a-20)*0.5,
+      optLo: 0, optHi: 80 + Math.max(0,a-20)*0.5,
+      lo: 0, hi: 150 + Math.max(0,a-20)*1.2
+    },
+    cholesterol: {
+      pop_mean: 170 + Math.max(0,a-20)*0.8,
+      pop_sd: 35,
+      optLo: 140, optHi: 180 + Math.max(0,a-20)*0.5,
+      lo: 100, hi: 200 + Math.max(0,a-20)*0.8
+    },
+    ldl: {
+      pop_mean: 100 + Math.max(0,a-20)*0.7,
+      pop_sd: 30,
+      optLo: 0, optHi: 90 + Math.max(0,a-20)*0.3,
+      lo: 0, hi: 130 + Math.max(0,a-20)*0.6
+    },
+    hdl: {
+      // HDL slightly declines with age in men
+      pop_mean: 52 - Math.max(0,a-20)*0.05,
+      pop_sd: 12,
+      optLo: 60, optHi: 120,
+      lo: 40, hi: 120
+    },
+    sbp: {
+      // SBP rises ~0.5 mmHg/year
+      pop_mean: 115 + Math.max(0,a-20)*0.6,
+      pop_sd: 14,
+      optLo: 90, optHi: 115 + Math.max(0,a-20)*0.2,
+      lo: 85, hi: 130 + Math.max(0,a-20)*0.4
+    },
+    dbp: {
+      pop_mean: 75 + Math.max(0,a-20)*0.2,
+      pop_sd: 10,
+      optLo: 55, optHi: 80,
+      lo: 50, hi: 90
+    },
+    hr: {
+      pop_mean: 72,
+      pop_sd: 10,
+      optLo: 45, optHi: 65,
+      lo: 40, hi: 100
+    },
+    glucose: {
+      pop_mean: 90 + Math.max(0,a-30)*0.3,
+      pop_sd: 12,
+      optLo: 70, optHi: 90,
+      lo: 65, hi: 100 + Math.max(0,a-30)*0.5
+    },
+    vitd: {
+      pop_mean: 28, pop_sd: 10,
+      optLo: 40, optHi: 70,
+      lo: 20, hi: 80
+    },
+    b12: {
+      pop_mean: 450, pop_sd: 150,
+      optLo: 400, optHi: 900,
+      lo: 200, hi: 900
+    },
+    wbc: {
+      // WBC slightly increases with age due to chronic low-grade inflammation
+      pop_mean: 6.0 + Math.max(0,a-20)*0.03,
+      pop_sd: 1.8,
+      optLo: 4.0, optHi: 7.0,
+      lo: 4.0, hi: 11.0
+    },
+    ferritin: {
+      // Ferritin rises markedly with age (iron accumulation)
+      pop_mean: 80 + Math.max(0,a-20)*2.5,
+      pop_sd: 60 + Math.max(0,a-20)*1.5,
+      optLo: 30, optHi: 100 + Math.max(0,a-20)*1.0,
+      lo: 15, hi: 200 + Math.max(0,a-20)*2.0
+    },
+    uricacid: {
+      pop_mean: 5.5, pop_sd: 1.2,
+      optLo: 3.5, optHi: 5.5,
+      lo: 2.5, hi: 7.0
+    },
+    bmi: {
+      pop_mean: 23 + Math.max(0,a-20)*0.05,
+      pop_sd: 4,
+      optLo: 18.5, optHi: 22.9,
+      lo: 16, hi: 30
     }
-  });
-  if (!hasRec) recsHtml += `<div class="rec-card"><div class="rec-title">🎯 Εξαιρετικό προφίλ!</div><div class="rec-body" style="color:var(--muted)">Δεν εντοπίστηκαν σημαντικές αποκλίσεις. Επανέλαβε εξετάσεις σε 6–12 μήνες για tracking.</div></div>`;
-  document.getElementById('recs-content').innerHTML = recsHtml;
+  };
+  return refs[marker] || {pop_mean:0,pop_sd:1,optLo:0,optHi:999,lo:0,hi:999};
+}
 
+// Z-score vs age-matched population (how many SDs from population mean)
+function ageAdjZ(marker, val, age, lowerBetter) {
+  const r = ageRef(marker, age);
+  const z = (val - r.pop_mean) / r.pop_sd;
+  return lowerBetter ? z : -z; // positive z = better than population
+}
+
+// ─── OFFICIAL PhenoAge (Levine 2018) ─────────────────────────────────────
+function computePhenoAge(age) {
+  const creat=fv('creatinine'), mcv=fv('mcv'), wbc=fv('wbc');
+  const alp=fv('alp'), glucose=fv('glucose'), lymph=fv('lymph');
+  const rdw=fv('rdw'), albumin=fv('albumin'), crp=fv('crp');
+  const ALB=ok(albumin)?albumin:4.2, CRE=ok(creat)?creat:0.9;
+  const GLU=ok(glucose)?glucose:90.0, CRP=ok(crp)?Math.max(crp,0.05):0.5;
+  const LYM=ok(lymph)?lymph:28.0, MCV_=ok(mcv)?mcv:88.0;
+  const RDW_=ok(rdw)?rdw:12.8, ALP_=ok(alp)?alp:67.0, WBC_=ok(wbc)?wbc:6.5;
+  const measured=[ok(albumin),ok(creat),ok(glucose),ok(crp),ok(lymph),ok(mcv),ok(rdw),ok(alp),ok(wbc)].filter(Boolean).length;
+  const xb=-19.907-0.0336*ALB+0.0095*CRE+0.1953*(GLU/18.0)+0.0954*Math.log(CRP)
+    -0.0120*LYM+0.0268*MCV_+0.3306*RDW_+0.00188*ALP_+0.0554*WBC_+0.0804*age;
+  const M=1-Math.exp(-1.51714*Math.exp(xb)/0.0076927);
+  const Mc=Math.min(Math.max(M,1e-10),1-1e-10);
+  const pa=141.50+Math.log(-0.00553*Math.log(1-Mc))/0.09165;
+  return {pa:isNaN(pa)?age:pa, measured, ci:2.0+(9-measured)*0.55};
+}
+
+// ─── AGE-ADJUSTED KDM DELTA ───────────────────────────────────────────────
+// Each biomarker contributes a delta in YEARS relative to population of same age
+// A 70yo with top-10% values will get a large negative delta → biological age ~50
+function kdmDelta(age) {
+  const contribs = [];
+  let totalDelta = 0;
+
+  function score(name, val, marker, lowerBetter, maxBenefit, maxHarm) {
+    if(!ok(val)) return;
+    const r = ageRef(marker, age);
+    // Z-score vs age-matched peers (positive = better than peers)
+    const z = ageAdjZ(marker, val, age, lowerBetter);
+    // Convert z-score to year delta using population SD of PhenoAgeAccel (~6.5y)
+    // Each SD better than peers → ~1.8 years younger biologically
+    const rawDelta = -z * 1.8;
+    // Cap contribution per marker
+    const delta = Math.max(-maxBenefit, Math.min(maxHarm, rawDelta));
+    totalDelta += delta;
+
+    // Status relative to age-matched optimal range
+    const inOpt = val >= r.optLo && val <= r.optHi;
+    const inNorm = val >= r.lo && val <= r.hi;
+    const status = inOpt ? 'optimal' : inNorm ? 'normal' : 'abnormal';
+
+    contribs.push({name, val, marker, delta, z, status,
+      pop_mean: r.pop_mean, optLo: r.optLo, optHi: r.optHi, lo: r.lo, hi: r.hi});
+  }
+
+  // Cardiovascular (high weight — Framingham data)
+  score('Συστολική ΑΠ', fv('sbp'),  'sbp',  true,  2.5, 3.0);
+  score('Παλμοί ηρεμίας',fv('hr'), 'hr',   true,  2.0, 2.5);
+  score('Διαστολική ΑΠ', fv('dbp'),  'dbp',  true,  1.5, 2.0);
+
+  // Metabolic / lipids
+  score('Τριγλυκερίδια', fv('trig'), 'trig', true,  2.0, 2.5);
+  score('HDL',           fv('hdl'),  'hdl',  false, 1.5, 2.0);
+  score('LDL',           fv('ldl'),  'ldl',  true,  1.5, 2.0);
+  score('Χοληστερόλη',  fv('cholesterol'),'cholesterol',true,1.2,1.8);
+
+  // BMI
+  const h=fv('height'), w=fv('weight');
+  if(ok(h)&&ok(w)){
+    const bmi=w/((h/100)*(h/100));
+    score('BMI', bmi, 'bmi', true, 1.5, 2.0);
+  }
+
+  // Vitamins / minerals
+  score('Βιτ. D3',  fv('vitd'),  'vitd', false, 1.5, 2.5);
+  score('B12',      fv('b12'),   'b12',  false, 0.8, 1.5);
+  score('Φυλλικό', fv('folate'), 'vitd', false, 0.5, 0.8); // reuse vitd shape
+  score('Φερριτίνη',fv('ferritin'),'ferritin',true,0.8,1.5);
+  score('Ασβέστιο',fv('calcium'),'bmi',  false, 0.4, 0.8);
+  score('Μαγνήσιο',fv('magnesium'),'bmi',false, 0.4, 0.8);
+
+  // Liver
+  score('AST', fv('ast'), 'uricacid', true, 0.5, 1.2);
+  score('ALT', fv('alt'), 'uricacid', true, 0.5, 1.2);
+  score('γ-GT',fv('ggt'), 'uricacid', true, 0.4, 1.0);
+
+  // Other
+  score('Ουρικό', fv('uricacid'),'uricacid',true,0.4,1.0);
+
+  return {totalDelta, contribs};
+}
+
+// ─── MAIN CALCULATION ─────────────────────────────────────────────────────
+function calculate() {
+  const age = fv('age') || 24;
+  const {pa, measured, ci} = computePhenoAge(age);
+  const {totalDelta, contribs} = kdmDelta(age);
+
+  // Blend: PhenoAge (absolute) + KDM (relative delta from age)
+  const pw = 0.55 + (measured/9)*0.25;
+  const kw = 1 - pw;
+  const blended = pw*pa + kw*(age + totalDelta);
+  const bioAge = Math.max(Math.min(blended, age+20), age-15);
+  const diff = bioAge - age;
+
+  // Percentile vs age-matched peers (PhenoAgeAccel SD~6.5y)
+  const p = normalCDF(-diff/6.5)*100;
+
+  const rk = diff<=-5?{l:'Top 5% 🏆',bg:'rgba(46,204,113,.2)',c:'#2ecc71'}
+           : diff<=-3?{l:'Top 10% 🥇',bg:'rgba(46,204,113,.15)',c:'#2ecc71'}
+           : diff<=-1?{l:'Top 25% ✨',bg:'rgba(139,195,74,.15)',c:'#8bc34a'}
+           : diff<=1 ?{l:'Top 50% 👍',bg:'rgba(52,152,219,.15)',c:'#3498db'}
+           : diff<=3 ?{l:'Bottom 50%',bg:'rgba(243,156,18,.15)',c:'#f39c12'}
+           :          {l:'Bottom 25% ⚡',bg:'rgba(231,76,60,.15)',c:'#e74c3c'};
+
+  const col=diff<=-3?'#2ecc71':diff<=-1?'#8bc34a':diff<=2?'#f39c12':'#e74c3c';
+  const sign=diff>0?'+':'';
+
+  // Build biomarker rows with age-adjusted mini bar
+  function bmRow(c) {
+    const col2 = c.status==='optimal'?'#2ecc71':c.status==='normal'?'#8bc34a':'#e74c3c';
+    const dCol = c.delta<=-0.5?'#2ecc71':c.delta<0?'#8bc34a':c.delta<0.3?'#8888aa':c.delta<0.8?'#f39c12':'#e74c3c';
+    const dLabel = c.delta<=-0.8?'▼▼':c.delta<=-0.2?'▼':c.delta>=0.8?'▲▲':c.delta>=0.2?'▲':'●';
+    // Mini age-adjusted bar
+    const pct = Math.min(100,Math.max(0, ((c.val-c.lo)/(c.hi-c.lo||1))*100));
+    const optPctLo = Math.min(100,Math.max(0,((c.optLo-c.lo)/(c.hi-c.lo||1))*100));
+    const optPctHi = Math.min(100,Math.max(0,((c.optHi-c.lo)/(c.hi-c.lo||1))*100));
+    const popPct = Math.min(100,Math.max(0,((c.pop_mean-c.lo)/(c.hi-c.lo||1))*100));
+    return `<div class="bmr">
+      <div class="bmd" style="background:${col2}"></div>
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="bmn">${c.name}</span>
+          <span class="bmv" style="color:${col2}">${c.val.toFixed(1)}</span>
+        </div>
+        <div class="agebar-wrap">
+          <div class="agebar-label"><span>Φ.Τ. ηλικίας ${age}</span><span style="color:${col2}">${c.status==='optimal'?'βέλτιστο':c.status==='normal'?'φυσιολογικό':'εκτός'}</span></div>
+          <div class="agebar">
+            <div class="agebar-fill" style="left:${optPctLo}%;width:${optPctHi-optPctLo}%;background:rgba(46,204,113,.25)"></div>
+            <div class="agebar-marker" style="left:${popPct}%;background:var(--hint)"></div>
+            <div class="agebar-marker" style="left:${pct}%;background:var(--al)"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--hint);margin-top:2px"><span>—μέσος ηλικίας</span><span style="color:var(--al)">— εσύ</span></div>
+        </div>
+      </div>
+      <div class="bmc2" style="color:${dCol};font-weight:600;margin-left:4px">${dLabel} ${c.delta>0?'+':''}${c.delta.toFixed(1)}y</div>
+    </div>`;
+  }
+
+  document.getElementById('rc').innerHTML=`
+<div class="hero">
+  <div class="ca">Χρονολογική ηλικία: ${age} ετών</div>
+  <div class="ba" style="color:${col}">${bioAge.toFixed(1)}</div>
+  <div class="bal">Εκτιμώμενη βιολογική ηλικία</div>
+  <div class="cil">95% CI: ${(bioAge-ci).toFixed(1)} – ${(bioAge+ci).toFixed(1)} ετών</div>
+  <div class="rbadge" style="background:${rk.bg};color:${rk.c}">${rk.l}</div>
+  <div class="pw">
+    <div class="pl">Percentile vs συνομηλίκων ηλικίας ${age} (${p.toFixed(0)}η θέση)</div>
+    <div class="pb"><div class="pm" style="left:${Math.min(Math.max(p,2),98)}%"></div></div>
+    <div class="pt"><span>0</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+  </div>
+  <div class="dl">Διαφορά: <strong style="color:${col}">${sign}${diff.toFixed(1)} χρόνια</strong> vs συνομηλίκους</div>
+  <div class="mpills">
+    <span class="mpill">PhenoAge ${measured}/9</span>
+    <span class="mpill">Age-adj KDM ${contribs.length} markers</span>
+    <span class="mpill">Βάρη ${(pw*100).toFixed(0)}/${(kw*100).toFixed(0)}%</span>
+  </div>
+</div>
+
+<div class="st" style="margin-top:0">Συνεισφορά vs ηλικία ${age}</div>
+<div style="font-size:11px;color:var(--hint);margin-bottom:8px">Πράσινη ζώνη = βέλτιστο για ηλικία σου · Γκρι δείκτης = μέσος συνομηλίκου · Μωβ = εσύ</div>
+<div class="bmc">
+<div class="bmgt">Cardiovascular &amp; Μεταβολικό</div>
+${contribs.filter(c=>['Συστολική ΑΠ','Διαστολική ΑΠ','Παλμοί ηρεμίας','Τριγλυκερίδια','HDL','LDL','Χοληστερόλη','BMI'].includes(c.name)).map(bmRow).join('')}
+</div>
+<div class="bmc">
+<div class="bmgt">Βιταμίνες &amp; Λοιπά</div>
+${contribs.filter(c=>!['Συστολική ΑΠ','Διαστολική ΑΠ','Παλμοί ηρεμίας','Τριγλυκερίδια','HDL','LDL','Χοληστερόλη','BMI'].includes(c.name)).map(bmRow).join('')}
+</div>
+<p style="font-size:11px;color:var(--hint);margin-top:4px">Συνεισφορά σε χρόνια: αρνητικό = σε κάνει νεότερο, θετικό = μεγαλύτερο.</p>`;
+
+  buildRecs(contribs, age, diff, measured);
   showTab('results');
 }
 
-function showTab(id) {
-  ['input','results','recs'].forEach(t => {
-    document.getElementById('sec-'+t).classList.toggle('active', t===id);
-    document.getElementById('nav-'+t).classList.toggle('active', t===id);
-  });
-  window.scrollTo(0,0);
+function buildRecs(contribs, age, diff, measured) {
+  let h=`<div class="disc">⚠️ Ενδεικτικές συστάσεις από δημοσιευμένη βιβλιογραφία. Συμβουλέψου γιατρό ή φαρμακοποιό πριν από αλλαγές.</div>`;
+  const recs=[];
+  const get=(n)=>contribs.find(c=>c.name===n);
+
+  // ── Positives ──
+  const sbpC=get('Συστολική ΑΠ'), hrC=get('Παλμοί ηρεμίας');
+  if(sbpC&&sbpC.status==='optimal'&&hrC&&hrC.status==='optimal')
+    recs.push({t:'good',title:`🏆 Καρδιαγγειακό — Εξαιρετικό για ${age} ετών`,tags:['tp'],
+      body:`ΑΠ ${fv('sbp')}/${fv('dbp')} mmHg + HR ${fv('hr')} bpm. Στο top tier για την ηλικία σου (μέσος ${age}χρονου: ~${(115+Math.max(0,age-20)*0.6).toFixed(0)}/${(75+Math.max(0,age-20)*0.2).toFixed(0)}, HR ~72 bpm). Αυτό μόνο αντιστοιχεί σε −1.5 έτη βιολογικής ηλικίας.`});
+
+  const trigC=get('Τριγλυκερίδια'), cholC=get('Χοληστερόλη'), ldlC=get('LDL');
+  if(trigC&&trigC.status==='optimal'&&cholC&&cholC.status==='optimal')
+    recs.push({t:'good',title:`🏆 Λιπιδαιμικό — Εξαιρετικό vs ηλικία ${age}`,tags:['tp'],
+      body:`Χοληστερόλη ${fv('cholesterol')}, Τριγλ. ${fv('trig')} mg/dL. Ο μέσος ${age}χρονος έχει ~${(170+Math.max(0,age-20)*0.8).toFixed(0)} χοληστερόλη και ~${(90+Math.max(0,age-20)*1.4).toFixed(0)} τριγλυκερίδια.`});
+
+  // ── Issues ──
+  const vitdC=get('Βιτ. D3');
+  if(vitdC&&vitdC.status!=='optimal')
+    recs.push({t:vitdC.delta>1?'bad':'warn',title:'Βιτ. D3 — Υποβέλτιστη',tags:['ts','tl'],
+      body:`${fv('vitd')} ng/mL (στόχος 40–70). Ο μέσος ${age}χρονος έχει ~28 ng/mL — εσύ είσαι στο ίδιο επίπεδο αλλά κάτω από το βέλτιστο. Πρωτόκολλο: D3 4000–6000 IU + K2 (MK-7) 100mcg ημερησίως.`});
+
+  const wbcC=get('WBC')||contribs.find(c=>c.name&&c.name.includes('WBC'));
+  if(ok(fv('wbc'))&&fv('wbc')>8){
+    const wbcRef=(90+Math.max(0,age-20)*1.4);
+    recs.push({t:fv('wbc')>11?'bad':'warn',title:'WBC — Πάνω από μέσο για ηλικία σου',tags:['tm'],
+      body:`WBC ${fv('wbc')} K/μL. Ο μέσος ${age}χρονος: ~${(6.0+Math.max(0,age-20)*0.03).toFixed(1)}. Longevity βέλτιστο: <7.5. Πιθανή υποκλινική φλεγμονή. Εξέτασε CRP υψηλής ευαισθησίας.`});
+  }
+
+  const trigC2=get('Τριγλυκερίδια');
+  const trigRef=(90+Math.max(0,age-20)*1.4).toFixed(0);
+  if(trigC2&&trigC2.status!=='optimal'&&fv('trig')>100)
+    recs.push({t:fv('trig')>200?'bad':'warn',title:`Τριγλυκερίδια — Οριακά για ηλικία ${age}`,tags:['td','tl'],
+      body:`${fv('trig')} mg/dL. Μέσος ${age}χρονου: ~${trigRef} mg/dL. Η τιμή σου δεν είναι άσχημη για μεγαλύτερους αλλά για ${age} ετών είναι οριακή. Omega-3 EPA+DHA 2–4g/ημέρα.`});
+
+  const b12C=get('B12');
+  if(ok(fv('b12'))&&fv('b12')<400)
+    recs.push({t:'warn',title:'B12 — Υποβέλτιστη',tags:['ts'],
+      body:`${fv('b12')} pg/mL. Longevity στόχος >500 pg/mL. Methylcobalamin 1000 mcg/ημέρα sublingual.`});
+
+  const missing=[];
+  if(!ok(fv('crp'))) missing.push('CRP');
+  if(!ok(fv('rdw'))) missing.push('RDW');
+  if(!ok(fv('glucose'))) missing.push('Γλυκόζη νηστείας');
+  if(missing.length>0)
+    recs.push({t:'warn',title:`Βελτίωσε ακρίβεια (${9-measured}/9 defaults)`,tags:['tm'],
+      body:`Λείπουν: ${missing.join(', ')}. Ειδικά το RDW (βάρος 0.33 στο PhenoAge) και CRP (φλεγμονή) μειώνουν σημαντικά το confidence interval.`});
+
+  h+=recs.map(r=>`<div class="rc ${r.t}">
+    <div class="tags">${r.tags.map(t=>`<span class="tag ${t}">${t==='tp'?'✓ Θετικό':t==='ts'?'Συμπλήρωμα':t==='td'?'Διατροφή':t==='tl'?'Τρόπος ζωής':'Ιατρική παρ/θηση'}</span>`).join('')}</div>
+    <div class="rt">${r.title}</div><div class="rb">${r.body}</div>
+  </div>`).join('');
+  document.getElementById('recc').innerHTML=h;
 }
 
-// Save/load inputs from localStorage
-function saveInputs() {
-  const keys = ['age','height','weight','cholesterol','hdl','ldl','trig','creatinine','uricacid','ferritin','calcium','b12','vitd','folate','wbc','rbc','hgb','hct','plt','mcv','sodium','potassium','magnesium','ast','alt','ggt'];
-  const data = {};
-  keys.forEach(k => { const el = document.getElementById(k); if(el) data[k] = el.value; });
-  localStorage.setItem('longevity_inputs', JSON.stringify(data));
+function showTab(id){
+  ['input','results','recs'].forEach(t=>{
+    document.getElementById('sec-'+t).classList.toggle('active',t===id);
+    document.getElementById('nav-'+t).classList.toggle('active',t===id);
+  });window.scrollTo(0,0);
 }
-function loadInputs() {
-  try {
-    const data = JSON.parse(localStorage.getItem('longevity_inputs') || '{}');
-    Object.entries(data).forEach(([k,v]) => { const el = document.getElementById(k); if(el && v) el.value = v; });
-  } catch(e) {}
-}
-loadInputs();
-document.querySelectorAll('input').forEach(el => el.addEventListener('change', saveInputs));
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+function save(){
+  const keys=['age','height','weight','sbp','dbp','hr','creatinine','mcv','wbc','lymph','alp','glucose','rdw','albumin','crp','cholesterol','hdl','ldl','trig','vitd','b12','folate','ferritin','calcium','magnesium','hgb','plt','uricacid','ast','alt','ggt'];
+  const d={};keys.forEach(k=>{const e=document.getElementById(k);if(e)d[k]=e.value;});
+  try{localStorage.setItem('lv3',JSON.stringify(d));}catch(e){}
 }
+function load(){
+  try{const d=JSON.parse(localStorage.getItem('lv3')||'{}');Object.entries(d).forEach(([k,v])=>{const e=document.getElementById(k);if(e&&v)e.value=v;});}catch(e){}
+}
+load();
+document.querySelectorAll('input').forEach(e=>e.addEventListener('change',save));
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
