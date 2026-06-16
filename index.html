@@ -2,380 +2,819 @@
 <html lang="el">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#0f0f1a">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#050A18">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Longevity">
+<meta name="apple-mobile-web-app-title" content="YouHealth">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Longevity Age Estimator v4</title>
+<title>YouHealth 1.2</title>
 <style>
-:root{--bg:#0f0f1a;--bg2:#1a1a2e;--card:#1e1e32;--border:rgba(255,255,255,0.08);--text:#e8e8f0;--muted:#8888aa;--hint:#555570;--accent:#6c63ff;--al:#9d95ff;--ok:#2ecc71;--warn:#f39c12;--bad:#e74c3c;--r:12px;--rs:8px}
+:root{--bg:#050A18;--bg2:#080E1F;--cyan:#00D4FF;--purple:#7C3AED;--em:#10B981;--am:#F59E0B;--red:#EF4444;--text:#E8EAF0;--muted:#6B7280;--hint:#2D3748;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.08);--r:16px;--rs:10px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.app{max-width:480px;margin:0 auto;padding:0 0 80px}
-.hdr{padding:20px 16px 12px;position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--border)}
-.hdr h1{font-size:18px;font-weight:600}.hdr h1 span{color:var(--al)}
-.hdr p{font-size:11px;color:var(--muted);margin-top:2px}
-.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:20;max-width:480px;margin:0 auto}
-.nb{flex:1;padding:10px 4px 12px;text-align:center;cursor:pointer;color:var(--hint);font-size:10px;border:none;background:none}
-.nb svg{display:block;margin:0 auto 3px}.nb.active{color:var(--al)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 10%,rgba(124,58,237,.18) 0%,transparent 70%),radial-gradient(ellipse 50% 35% at 80% 80%,rgba(0,212,255,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 60% 30%,rgba(16,185,129,.08) 0%,transparent 60%);pointer-events:none}
+.app{max-width:480px;margin:0 auto;padding:0 0 80px;position:relative;z-index:1}
+.hdr{padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;background:rgba(5,10,24,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb)}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:15px}
+.logo h1{font-size:18px;font-weight:700;letter-spacing:-.5px}
+.logo h1 span{background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-bio{text-align:right}
+.hdr-bio .n{font-size:22px;font-weight:800;background:linear-gradient(90deg,var(--cyan),var(--em));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.hdr-bio .l{font-size:9px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(5,10,24,.95);backdrop-filter:blur(20px);border-top:1px solid var(--gb);display:flex;z-index:100}
+.nb{flex:1;padding:10px 2px 13px;text-align:center;cursor:pointer;color:var(--muted);font-size:9px;letter-spacing:.3px;text-transform:uppercase;border:none;background:none;transition:color .2s}
+.nb svg{display:block;margin:0 auto 3px;transition:transform .2s}
+.nb.active{color:var(--cyan)}.nb.active svg{transform:scale(1.12)}
 .sec{display:none;padding:16px}.sec.active{display:block}
-.st{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:20px 0 10px}.st:first-child{margin-top:0}
-.infobox{background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.2);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--al);line-height:1.5;margin-bottom:16px}
+.slabel{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:20px 0 10px;padding-left:2px}.slabel:first-child{margin-top:0}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
-.fld{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px}
-.fld label{font-size:10px;color:var(--muted);display:block;margin-bottom:4px}
-.fld input{width:100%;background:none;border:none;color:var(--text);font-size:16px;font-weight:500;outline:none}
-.fld input:focus{color:var(--al)}.fld .u{font-size:10px;color:var(--hint);margin-top:1px}
-.fld.opt label::after{content:' (opt)';color:var(--hint);font-size:9px}
-.fld.highlight{border-color:rgba(108,99,255,.4)}
-.cbtn{width:100%;margin-top:20px;padding:16px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-size:16px;font-weight:600;cursor:pointer}
-.cbtn:active{opacity:.8;transform:scale(.99)}
-.hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 16px;text-align:center;margin-bottom:16px}
-.ca{font-size:13px;color:var(--muted)}.ba{font-size:64px;font-weight:700;line-height:1;margin:6px 0 2px}
-.bal{font-size:12px;color:var(--muted)}.cil{font-size:11px;color:var(--hint);margin-top:4px}
-.rbadge{display:inline-block;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600;margin-top:12px}
-.dl{margin-top:10px;font-size:13px;color:var(--muted)}
-.pw{margin-top:16px}.pl{font-size:11px;color:var(--muted);margin-bottom:6px}
-.pb{position:relative;height:20px;border-radius:10px;background:linear-gradient(to right,#e74c3c,#f39c12,#2ecc71,#27ae60)}
-.pm{position:absolute;top:-5px;width:8px;height:30px;background:#fff;border-radius:3px;transform:translateX(-50%);box-shadow:0 0 8px rgba(255,255,255,.4)}
-.pt{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-top:4px}
-.mpills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;justify-content:center}
-.mpill{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--muted)}
-.bmc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
-.bmgt{padding:8px 14px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border)}
-.bmr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.fld{background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:var(--rs);padding:11px 13px;transition:border-color .2s}
+.fld:focus-within{border-color:rgba(0,212,255,.4)}
+.fld label{font-size:10px;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:.2px}
+.fld input{width:100%;background:none;border:none;color:var(--text);font-size:17px;font-weight:600;outline:none}
+.fld .u{font-size:10px;color:var(--hint);margin-top:2px}
+.fld.opt{opacity:.6}.fld.opt label::after{content:' opt';color:rgba(0,212,255,.5);font-size:9px}
+.sfld{background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:var(--rs);padding:14px;margin-bottom:8px}
+.sfld-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sfld-label{font-size:12px;color:var(--text)}
+.sfld-val{font-size:16px;font-weight:700;color:var(--cyan)}
+.sfld input[type=range]{width:100%;appearance:none;height:4px;border-radius:2px;background:var(--hint);outline:none;cursor:pointer}
+.sfld input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));cursor:pointer;box-shadow:0 0 10px rgba(0,212,255,.4)}
+.sfld-hints{display:flex;justify-content:space-between;margin-top:5px}
+.sfld-hint{font-size:9px;color:var(--hint)}
+.cbtn{width:100%;margin-top:20px;padding:17px;background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 4px 24px rgba(124,58,237,.4);transition:transform .15s}
+.cbtn:active{transform:scale(.98)}
+
+/* SCORE PAGE */
+.score-hero{text-align:center;padding:4px 0 20px}
+.gauge-wrap{position:relative;width:200px;height:200px;margin:0 auto 16px}
+.gauge-wrap canvas{position:absolute;top:0;left:0}
+.gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.gauge-age{font-size:48px;font-weight:800;line-height:1;letter-spacing:-2px}
+.gauge-lbl{font-size:10px;color:var(--muted);letter-spacing:.5px;margin-top:2px}
+.gauge-chron{font-size:12px;color:var(--muted);margin-top:3px}
+.rank-pill{display:inline-block;padding:7px 18px;border-radius:100px;font-size:13px;font-weight:700;border:1px solid}
+.diff-line{font-size:13px;color:var(--muted);margin-top:10px}
+.pct-wrap{margin-top:16px}
+.pct-lbl{font-size:11px;color:var(--muted);margin-bottom:7px}
+.pct-track{position:relative;height:6px;border-radius:3px;background:linear-gradient(90deg,#EF4444,#F59E0B,#10B981,#06D6A0)}
+.pct-thumb{position:absolute;top:-6px;width:4px;height:18px;background:#fff;border-radius:2px;transform:translateX(-50%);box-shadow:0 0 10px rgba(255,255,255,.6)}
+.pct-ticks{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-top:4px}
+
+/* BODY MAP */
+.body-map-wrap{position:relative;width:100%;margin-bottom:14px}
+.body-map-svg{display:block;margin:0 auto}
+.sys-badge{position:absolute;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:700;border:1px solid;backdrop-filter:blur(8px);cursor:pointer;white-space:nowrap}
+
+/* PILLARS */
+.pillars4{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pillar{background:var(--glass);border:1px solid var(--gb);border-radius:var(--rs);padding:13px;position:relative;overflow:hidden}
+.p-icon{font-size:18px;margin-bottom:6px}
+.p-name{font-size:10px;color:var(--muted);letter-spacing:.3px}
+.p-score{font-size:20px;font-weight:800;line-height:1.1}
+.p-sub{font-size:10px;margin-top:2px}
+.p-bar{position:absolute;bottom:0;left:0;right:0;height:2px}
+
+/* BIOMARKER ROWS */
+.bmc{background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.bmgt{padding:9px 15px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.04)}
+.bmr{display:flex;align-items:center;gap:8px;padding:10px 15px;border-bottom:1px solid rgba(255,255,255,.04)}
 .bmr:last-child{border-bottom:none}
-.bmn{flex:1;font-size:12px;color:var(--muted)}.bmv{font-size:12px;font-weight:600;min-width:60px;text-align:right}
-.bmd{width:8px;height:8px;border-radius:50%;flex-shrink:0}.bmc2{font-size:10px;min-width:64px;text-align:right}
-.agebar-wrap{margin:8px 0 2px}
-.agebar-label{display:flex;justify-content:space-between;font-size:9px;color:var(--hint);margin-bottom:3px}
-.agebar{position:relative;height:6px;border-radius:3px;background:rgba(255,255,255,.08)}
-.agebar-fill{position:absolute;height:100%;border-radius:3px}
-.agebar-marker{position:absolute;top:-4px;width:3px;height:14px;border-radius:2px;transform:translateX(-50%)}
-.rc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
-.rc.good{border-left:3px solid var(--ok)}.rc.warn{border-left:3px solid var(--warn)}.rc.bad{border-left:3px solid var(--bad)}
-.rt{font-size:14px;font-weight:600;margin-bottom:6px}.rb{font-size:13px;color:var(--muted);line-height:1.6}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.tag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
-.ts{background:rgba(52,152,219,.15);color:#3498db}.td{background:rgba(46,204,113,.15);color:#2ecc71}
-.tl{background:rgba(243,156,18,.15);color:#f39c12}.tm{background:rgba(231,76,60,.15);color:#e74c3c}.tp{background:rgba(46,204,113,.15);color:#2ecc71}
-.disc{background:rgba(243,156,18,.08);border:1px solid rgba(243,156,18,.2);border-radius:var(--rs);padding:12px 14px;font-size:12px;color:#f39c12;line-height:1.5;margin-bottom:16px}
-.empty{text-align:center;padding:60px 20px;color:var(--muted)}.empty p{font-size:14px}
+.bm-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.bm-info{flex:1;min-width:0}
+.bm-name{font-size:12px;color:var(--muted)}
+.bm-bar-row{display:flex;align-items:center;gap:5px;margin-top:4px}
+.bm-track{flex:1;height:3px;background:rgba(255,255,255,.08);border-radius:2px;position:relative}
+.bm-opt{position:absolute;height:100%;border-radius:2px}
+.bm-mk{position:absolute;top:-3px;width:2px;height:9px;border-radius:1px;transform:translateX(-50%)}
+.bm-val{font-size:12px;font-weight:700;min-width:60px;text-align:right}
+.bm-dy{font-size:10px;min-width:42px;text-align:right;font-weight:700}
+
+/* TREND */
+.trend-empty{text-align:center;padding:30px;color:var(--muted);font-size:13px}
+.trend-entry{background:var(--glass);border:1px solid var(--gb);border-radius:var(--rs);padding:13px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.trend-date{font-size:11px;color:var(--muted)}
+.trend-ages{display:flex;align-items:center;gap:10px}
+.trend-bio{font-size:20px;font-weight:800}
+.trend-diff{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:700}
+.trend-chart{background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);padding:16px;margin-bottom:14px}
+
+/* WHATIF */
+.wi-card{background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.wi-title{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--cyan)}
+.wi-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.wi-label{font-size:12px;color:var(--muted);flex:1}
+.wi-impact{font-size:13px;font-weight:700;min-width:55px;text-align:right}
+.wi-bar{height:3px;border-radius:2px;margin-top:3px}
+
+/* RECS */
+.rec{background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);padding:15px 17px;margin-bottom:10px;position:relative;overflow:hidden}
+.rec::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.rec.good::before{background:linear-gradient(180deg,var(--em),#06D6A0)}
+.rec.warn::before{background:linear-gradient(180deg,var(--am),#F97316)}
+.rec.bad::before{background:linear-gradient(180deg,var(--red),#DC2626)}
+.rec-title{font-size:13px;font-weight:700;margin-bottom:5px}
+.rec-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px}
+.rtag{font-size:9px;padding:2px 8px;border-radius:100px;font-weight:700}
+.rt-pos{background:rgba(16,185,129,.15);color:var(--em);border:1px solid rgba(16,185,129,.2)}
+.rt-sup{background:rgba(0,212,255,.1);color:var(--cyan);border:1px solid rgba(0,212,255,.2)}
+.rt-diet{background:rgba(16,185,129,.1);color:#34D399;border:1px solid rgba(16,185,129,.2)}
+.rt-life{background:rgba(245,158,11,.1);color:var(--am);border:1px solid rgba(245,158,11,.2)}
+.rt-med{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.rec-body{font-size:12px;color:var(--muted);line-height:1.6}
+.disc{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:var(--rs);padding:11px 13px;font-size:11px;color:var(--am);line-height:1.6;margin-bottom:14px}
+
+/* NEWS */
+.news-hero{background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(0,212,255,.1));border:1px solid rgba(124,58,237,.2);border-radius:var(--r);padding:18px;margin-bottom:16px}
+.news-htag{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);margin-bottom:7px}
+.news-htitle{font-size:17px;font-weight:700;line-height:1.4;margin-bottom:6px}
+.news-hsub{font-size:12px;color:var(--muted);line-height:1.6}
+.news-card{background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);padding:15px 17px;margin-bottom:10px}
+.news-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:9px}
+.news-ctitle{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:7px}
+.news-cbody{font-size:12px;color:var(--muted);line-height:1.6}
+.news-footer{display:flex;align-items:center;gap:7px;margin-top:11px;padding-top:11px;border-top:1px solid var(--gb);font-size:10px;color:var(--hint)}
+.expand-btn{background:none;border:none;color:var(--cyan);font-size:11px;cursor:pointer;margin-top:7px;padding:0}
+.news-exp{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--gb)}
+.news-exp.open{display:block}
+.news-exp p{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:9px}
+.empty{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty p{font-size:13px;line-height:1.7}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="hdr"><h1>🧬 <span>Longevity</span> Age Estimator</h1><p>PhenoAgeAccel + Age-Adjusted KDM · v4.0</p></div>
-
-<div class="sec active" id="sec-input">
-<div class="infobox">Υπολογίζει πόσο γρηγορότερα/αργότερα γερνάς σε σχέση με τον μέσο συνομήλικό σου. Τα ίδια biomarkers δίνουν την ίδια επίδραση σε κάθε ηλικία.</div>
-
-<div class="st">Βασικά στοιχεία</div>
-<div class="g3">
-<div class="fld highlight"><label>Ηλικία *</label><input type="number" id="age" value="24" inputmode="decimal"><div class="u">έτη</div></div>
-<div class="fld"><label>Ύψος</label><input type="number" id="height" value="178" inputmode="decimal"><div class="u">cm</div></div>
-<div class="fld"><label>Βάρος</label><input type="number" id="weight" value="75" inputmode="decimal"><div class="u">kg</div></div>
+<div class="hdr">
+  <div class="logo"><div class="logo-dot">🧬</div><h1>You<span>Health</span> <span style="font-size:10px;color:var(--muted);font-weight:400;-webkit-text-fill-color:var(--muted)">1.2</span></h1></div>
+  <div class="hdr-bio" id="hdr-bio" style="display:none"><div class="n" id="hdr-n">—</div><div class="l">Βιολ. Ηλικία</div></div>
 </div>
 
-<div class="st">Αρτηριακή πίεση &amp; καρδιά</div>
-<div class="g3">
-<div class="fld highlight"><label>Συστολική</label><input type="number" id="sbp" value="110" inputmode="decimal"><div class="u">mmHg</div></div>
-<div class="fld highlight"><label>Διαστολική</label><input type="number" id="dbp" value="60" inputmode="decimal"><div class="u">mmHg</div></div>
-<div class="fld highlight"><label>Παλμοί ηρεμίας</label><input type="number" id="hr" value="60" inputmode="decimal"><div class="u">bpm</div></div>
+<!-- SCORE -->
+<div class="sec active" id="sec-score"><div id="score-content">
+  <div class="empty"><p style="font-size:40px;margin-bottom:14px">🧬</p><p>Πήγαινε στο <strong>Blood</strong> ή <strong>Lifestyle</strong>,<br>συμπλήρωσε τα δεδομένα<br>και πάτα <strong>Υπολόγισε</strong>.</p></div>
+</div></div>
+
+<!-- BLOOD -->
+<div class="sec" id="sec-blood">
+  <div class="slabel">Βασικά</div>
+  <div class="g3">
+    <div class="fld"><label>Ηλικία</label><input type="number" id="age" value="24" inputmode="decimal"><div class="u">έτη</div></div>
+    <div class="fld"><label>Ύψος</label><input type="number" id="height" value="178" inputmode="decimal"><div class="u">cm</div></div>
+    <div class="fld"><label>Βάρος</label><input type="number" id="weight" value="75" inputmode="decimal"><div class="u">kg</div></div>
+  </div>
+  <div class="slabel">Σύνθεση σώματος</div>
+  <div class="g2">
+    <div class="fld opt"><label>Λίπος σώματος</label><input type="number" id="body_fat" placeholder="—" inputmode="decimal"><div class="u">%</div></div>
+    <div class="fld opt"><label>Μυϊκή μάζα</label><input type="number" id="muscle_mass" placeholder="—" inputmode="decimal"><div class="u">kg</div></div>
+    <div class="fld opt"><label>Περίμετρος μέσης</label><input type="number" id="waist" placeholder="—" inputmode="decimal"><div class="u">cm</div></div>
+    <div class="fld opt"><label>Περίμετρος ισχίου</label><input type="number" id="hip" placeholder="—" inputmode="decimal"><div class="u">cm</div></div>
+  </div>
+  <div class="slabel">Καρδιά &amp; Πίεση</div>
+  <div class="g3">
+    <div class="fld"><label>Συστολική</label><input type="number" id="sbp" value="110" inputmode="decimal"><div class="u">mmHg</div></div>
+    <div class="fld"><label>Διαστολική</label><input type="number" id="dbp" value="60" inputmode="decimal"><div class="u">mmHg</div></div>
+    <div class="fld"><label>Παλμοί</label><input type="number" id="hr" value="60" inputmode="decimal"><div class="u">bpm</div></div>
+  </div>
+  <div class="slabel">PhenoAge Biomarkers</div>
+  <div class="g2">
+    <div class="fld"><label>Κρεατινίνη</label><input type="number" id="creatinine" value="0.97" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld"><label>MCV</label><input type="number" id="mcv" value="83.5" inputmode="decimal"><div class="u">fL</div></div>
+    <div class="fld"><label>WBC</label><input type="number" id="wbc" value="11.5" inputmode="decimal"><div class="u">K/μL</div></div>
+    <div class="fld"><label>Λεμφοκύτταρα %</label><input type="number" id="lymph" value="22" inputmode="decimal"><div class="u">%</div></div>
+    <div class="fld opt"><label>ALP</label><input type="number" id="alp" placeholder="—" inputmode="decimal"><div class="u">U/L</div></div>
+    <div class="fld opt"><label>Γλυκόζη νηστείας</label><input type="number" id="glucose" placeholder="—" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld opt"><label>RDW</label><input type="number" id="rdw" placeholder="—" inputmode="decimal"><div class="u">%</div></div>
+    <div class="fld opt"><label>Αλβουμίνη</label><input type="number" id="albumin" placeholder="—" inputmode="decimal"><div class="u">g/dL</div></div>
+    <div class="fld opt"><label>CRP (hs)</label><input type="number" id="crp" placeholder="—" inputmode="decimal"><div class="u">mg/L</div></div>
+  </div>
+  <div class="slabel">Λιπίδια</div>
+  <div class="g2">
+    <div class="fld"><label>Χοληστερόλη</label><input type="number" id="cholesterol" value="110" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld"><label>HDL</label><input type="number" id="hdl" value="50.7" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld"><label>LDL</label><input type="number" id="ldl" value="81" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld"><label>Τριγλυκερίδια</label><input type="number" id="trig" value="149" inputmode="decimal"><div class="u">mg/dL</div></div>
+  </div>
+  <div class="slabel">Βιταμίνες &amp; Μέταλλα</div>
+  <div class="g2">
+    <div class="fld"><label>Βιτ. D3 (25-OH)</label><input type="number" id="vitd" value="29" inputmode="decimal"><div class="u">ng/mL</div></div>
+    <div class="fld"><label>Βιτ. B12</label><input type="number" id="b12" value="358" inputmode="decimal"><div class="u">pg/mL</div></div>
+    <div class="fld"><label>Φυλλικό</label><input type="number" id="folate" value="5.4" inputmode="decimal"><div class="u">ng/mL</div></div>
+    <div class="fld"><label>Φερριτίνη</label><input type="number" id="ferritin" value="63.1" inputmode="decimal"><div class="u">ng/mL</div></div>
+    <div class="fld"><label>Ασβέστιο</label><input type="number" id="calcium" value="9.9" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld"><label>Μαγνήσιο</label><input type="number" id="magnesium" value="2.2" inputmode="decimal"><div class="u">mg/dL</div></div>
+  </div>
+  <div class="slabel">CBC &amp; Ήπαρ</div>
+  <div class="g3">
+    <div class="fld"><label>Αιμοσφαιρίνη</label><input type="number" id="hgb" value="15.0" inputmode="decimal"><div class="u">g/dL</div></div>
+    <div class="fld"><label>Αιμοπετάλια</label><input type="number" id="plt" value="258" inputmode="decimal"><div class="u">K/μL</div></div>
+    <div class="fld"><label>Ουρικό</label><input type="number" id="uricacid" value="5.7" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld"><label>AST</label><input type="number" id="ast" value="13.2" inputmode="decimal"><div class="u">U/L</div></div>
+    <div class="fld"><label>ALT</label><input type="number" id="alt" value="10.1" inputmode="decimal"><div class="u">U/L</div></div>
+    <div class="fld"><label>γ-GT</label><input type="number" id="ggt" value="12.3" inputmode="decimal"><div class="u">U/L</div></div>
+  </div>
+  <button class="cbtn" onclick="calculate()">Υπολόγισε →</button>
 </div>
 
-<div class="st">PhenoAge core biomarkers</div>
-<div class="g2">
-<div class="fld"><label>Κρεατινίνη</label><input type="number" id="creatinine" value="0.97" inputmode="decimal"><div class="u">mg/dL</div></div>
-<div class="fld"><label>MCV</label><input type="number" id="mcv" value="83.5" inputmode="decimal"><div class="u">fL</div></div>
-<div class="fld"><label>Λευκά (WBC)</label><input type="number" id="wbc" value="11.5" inputmode="decimal"><div class="u">K/μL</div></div>
-<div class="fld"><label>Λεμφοκύτταρα %</label><input type="number" id="lymph" value="22" inputmode="decimal"><div class="u">%</div></div>
-<div class="fld opt"><label>ALP</label><input type="number" id="alp" placeholder="—" inputmode="decimal"><div class="u">U/L</div></div>
-<div class="fld opt"><label>Γλυκόζη νηστείας</label><input type="number" id="glucose" placeholder="—" inputmode="decimal"><div class="u">mg/dL</div></div>
-<div class="fld opt"><label>RDW</label><input type="number" id="rdw" placeholder="—" inputmode="decimal"><div class="u">%</div></div>
-<div class="fld opt"><label>Αλβουμίνη</label><input type="number" id="albumin" placeholder="—" inputmode="decimal"><div class="u">g/dL</div></div>
-<div class="fld opt"><label>CRP</label><input type="number" id="crp" placeholder="—" inputmode="decimal"><div class="u">mg/L</div></div>
+<!-- LIFESTYLE -->
+<div class="sec" id="sec-life">
+  <div class="slabel">Ύπνος</div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Ώρες / βράδυ</span><span class="sfld-val" id="v-sleep">7</span></div>
+    <input type="range" id="sleep" min="4" max="10" step=".5" value="7" oninput="upd('sleep','v-sleep');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint">4h</span><span class="sfld-hint" style="color:var(--em)">7–8h ✓</span><span class="sfld-hint">10h</span></div>
+  </div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Ποιότητα ύπνου</span><span class="sfld-val" id="v-sleepq">3</span>/5</div>
+    <input type="range" id="sleepq" min="1" max="5" step="1" value="3" oninput="upd('sleepq','v-sleepq');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint">Κακή</span><span class="sfld-hint" style="color:var(--em)">Άριστη</span></div>
+  </div>
+  <div class="slabel">Άσκηση</div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Αερόβια / εβδ.</span><span class="sfld-val" id="v-cardio">150</span>min</div>
+    <input type="range" id="cardio" min="0" max="400" step="30" value="150" oninput="upd('cardio','v-cardio');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint">0</span><span class="sfld-hint" style="color:var(--em)">150+ ✓</span><span class="sfld-hint">400</span></div>
+  </div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Αντιστάσεις / εβδ.</span><span class="sfld-val" id="v-strength">2</span>x</div>
+    <input type="range" id="strength" min="0" max="5" step="1" value="2" oninput="upd('strength','v-strength');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint">0</span><span class="sfld-hint" style="color:var(--em)">2–3 ✓</span><span class="sfld-hint">5+</span></div>
+  </div>
+  <div class="slabel">Διατροφή</div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Ποιότητα</span><span class="sfld-val" id="v-diet">3</span>/5</div>
+    <input type="range" id="diet" min="1" max="5" step="1" value="3" oninput="upd('diet','v-diet');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint">Fast food</span><span class="sfld-hint" style="color:var(--em)">Μεσόγειος</span></div>
+  </div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Επεξ. τρόφιμα / εβδ.</span><span class="sfld-val" id="v-processed">3</span>μερίδες</div>
+    <input type="range" id="processed" min="0" max="21" step="1" value="3" oninput="upd('processed','v-processed');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint">0</span><span class="sfld-hint" style="color:var(--em)">&lt;3 ✓</span><span class="sfld-hint">21+</span></div>
+  </div>
+  <div class="slabel">Κάπνισμα &amp; Αλκοόλ</div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Κάπνισμα</span><span class="sfld-val" id="v-smoke">Ποτέ</span></div>
+    <input type="range" id="smoke" min="0" max="3" step="1" value="0" oninput="upd('smoke','v-smoke',['Ποτέ','Παλιά','Περιστ.','Καθημ.']);saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint" style="color:var(--em)">Ποτέ</span><span class="sfld-hint">Καθημ.</span></div>
+  </div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Αλκοόλ / εβδ.</span><span class="sfld-val" id="v-alc">2</span>units</div>
+    <input type="range" id="alc" min="0" max="21" step="1" value="2" oninput="upd('alc','v-alc');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint">0</span><span class="sfld-hint" style="color:var(--em)">&lt;7 ✓</span><span class="sfld-hint">21+</span></div>
+  </div>
+  <div class="slabel">Στρες &amp; Κοινωνικά</div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Επίπεδο στρες</span><span class="sfld-val" id="v-stress">3</span>/5</div>
+    <input type="range" id="stress" min="1" max="5" step="1" value="3" oninput="upd('stress','v-stress');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint" style="color:var(--em)">Χαμηλό</span><span class="sfld-hint">Υψηλό</span></div>
+  </div>
+  <div class="sfld">
+    <div class="sfld-top"><span class="sfld-label">Κοινωνικές επαφές</span><span class="sfld-val" id="v-social">3</span>/5</div>
+    <input type="range" id="social" min="1" max="5" step="1" value="3" oninput="upd('social','v-social');saveLife()">
+    <div class="sfld-hints"><span class="sfld-hint">Απομόνωση</span><span class="sfld-hint" style="color:var(--em)">Πλούσιες</span></div>
+  </div>
+  <button class="cbtn" onclick="calculate()">Υπολόγισε →</button>
 </div>
 
-<div class="st">Λιπιδαιμικό προφίλ</div>
-<div class="g2">
-<div class="fld"><label>Χοληστερόλη</label><input type="number" id="cholesterol" value="110" inputmode="decimal"><div class="u">mg/dL</div></div>
-<div class="fld"><label>HDL</label><input type="number" id="hdl" value="50.7" inputmode="decimal"><div class="u">mg/dL</div></div>
-<div class="fld"><label>LDL</label><input type="number" id="ldl" value="81" inputmode="decimal"><div class="u">mg/dL</div></div>
-<div class="fld"><label>Τριγλυκερίδια</label><input type="number" id="trig" value="149" inputmode="decimal"><div class="u">mg/dL</div></div>
+<!-- NEWS -->
+<div class="sec" id="sec-news">
+  <div class="news-hero">
+    <div class="news-htag">🔬 Longevity Science</div>
+    <div class="news-htitle">Η επιστήμη της αντιγήρανσης</div>
+    <div class="news-hsub">Από επαναπρογραμματισμό κυττάρων έως senolytics — το πεδίο αλλάζει ταχύτατα.</div>
+  </div>
+  <div id="news-list"></div>
 </div>
 
-<div class="st">Βιταμίνες &amp; Μέταλλα</div>
-<div class="g2">
-<div class="fld"><label>Βιτ. D3 (25-OH)</label><input type="number" id="vitd" value="29" inputmode="decimal"><div class="u">ng/mL</div></div>
-<div class="fld"><label>Βιτ. B12</label><input type="number" id="b12" value="358" inputmode="decimal"><div class="u">pg/mL</div></div>
-<div class="fld"><label>Φυλλικό οξύ</label><input type="number" id="folate" value="5.4" inputmode="decimal"><div class="u">ng/mL</div></div>
-<div class="fld"><label>Φερριτίνη</label><input type="number" id="ferritin" value="63.1" inputmode="decimal"><div class="u">ng/mL</div></div>
-<div class="fld"><label>Ασβέστιο</label><input type="number" id="calcium" value="9.9" inputmode="decimal"><div class="u">mg/dL</div></div>
-<div class="fld"><label>Μαγνήσιο</label><input type="number" id="magnesium" value="2.2" inputmode="decimal"><div class="u">mg/dL</div></div>
-</div>
-
-<div class="st">CBC &amp; Ηπατικές</div>
-<div class="g3">
-<div class="fld"><label>Αιμοσφαιρίνη</label><input type="number" id="hgb" value="15.0" inputmode="decimal"><div class="u">g/dL</div></div>
-<div class="fld"><label>Αιμοπετάλια</label><input type="number" id="plt" value="258" inputmode="decimal"><div class="u">K/μL</div></div>
-<div class="fld"><label>Ουρικό</label><input type="number" id="uricacid" value="5.7" inputmode="decimal"><div class="u">mg/dL</div></div>
-<div class="fld"><label>AST</label><input type="number" id="ast" value="13.2" inputmode="decimal"><div class="u">U/L</div></div>
-<div class="fld"><label>ALT</label><input type="number" id="alt" value="10.1" inputmode="decimal"><div class="u">U/L</div></div>
-<div class="fld"><label>γ-GT</label><input type="number" id="ggt" value="12.3" inputmode="decimal"><div class="u">U/L</div></div>
-</div>
-
-<button class="cbtn" onclick="calculate()">Υπολόγισε βιολογική ηλικία →</button>
-</div>
-
-<div class="sec" id="sec-results"><div id="rc"><div class="empty"><p>Συμπλήρωσε τα δεδομένα<br>και πάτα "Υπολόγισε"</p></div></div></div>
-<div class="sec" id="sec-recs"><div id="recc"><div class="empty"><p>Πρώτα υπολόγισε τη βιολογική σου ηλικία</p></div></div></div>
-
+<!-- NAV -->
 <nav class="bnav">
-<button class="nb active" id="nav-input" onclick="showTab('input')">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Δεδομένα</button>
-<button class="nb" id="nav-results" onclick="showTab('results')">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Αποτελέσματα</button>
-<button class="nb" id="nav-recs" onclick="showTab('recs')">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>Συστάσεις</button>
+  <button class="nb active" id="nav-score" onclick="showTab('score')">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Score</button>
+  <button class="nb" id="nav-blood" onclick="showTab('blood')">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6 9 4 13 4 16a8 8 0 0016 0c0-3-2-7-8-14z"/></svg>Blood</button>
+  <button class="nb" id="nav-life" onclick="showTab('life')">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>Lifestyle</button>
+  <button class="nb" id="nav-news" onclick="showTab('news')">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>News</button>
 </nav>
 </div>
 
 <script>
-function fv(id){const e=document.getElementById(id);return e?parseFloat(e.value):NaN}
-function ok(x){return !isNaN(x)&&x>0}
-function normalCDF(z){
-  const t=1/(1+0.2316419*Math.abs(z));
-  const p=t*(0.31938153+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));
-  const phi=1-(1/Math.sqrt(2*Math.PI))*Math.exp(-0.5*z*z)*p;
-  return z>=0?phi:1-phi;
+const $=id=>document.getElementById(id);
+function fv(id){const e=$(id);return e?parseFloat(e.value):NaN}
+function ok(x){return !isNaN(x)&&x!==null&&x>0}
+function normalCDF(z){const t=1/(1+0.2316419*Math.abs(z));const p=t*(0.31938153+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));const phi=1-(1/Math.sqrt(2*Math.PI))*Math.exp(-.5*z*z)*p;return z>=0?phi:1-phi}
+
+// ─── CALIBRATED MARKER SYSTEM ────────────────────────────────────────────
+// Guaranteed: all at median → 0y, all at top1% → -20y, all at bottom1% → +20y
+// SCALE = 20 / (sum_weights * 2.327)
+const SCALE = 7.709;
+
+// {weight, lower_better, pop_mean(age), pop_sd(age), opt_lo(age), opt_hi(age), lo, hi, unit}
+function mkDef(w, lower, mFn, sdFn, oLFn, oHFn, lo, hi, unit){
+  return{w, lower, mFn, sdFn, oLFn, oHFn, lo, hi, unit};
+}
+const MDEFS = {
+  sbp:      mkDef(.12,true, a=>115+Math.max(0,a-20)*.6,   ()=>14,  ()=>90,  a=>116+Math.max(0,a-20)*.2, 80,180,'mmHg'),
+  dbp:      mkDef(.05,true, a=>75+Math.max(0,a-20)*.2,    ()=>10,  ()=>55,  ()=>80, 50,105,'mmHg'),
+  hr:       mkDef(.08,true, ()=>72,                         ()=>10,  ()=>45,  ()=>65, 35,110,'bpm'),
+  trig:     mkDef(.07,true, a=>90+Math.max(0,a-20)*1.4,   a=>42+Math.max(0,a-20)*.5, ()=>0, a=>85+Math.max(0,a-20)*.5, 0,400,'mg/dL'),
+  hdl:      mkDef(.07,false,()=>52,                         ()=>12,  ()=>55,  ()=>120,25,120,'mg/dL'),
+  ldl:      mkDef(.06,true, a=>100+Math.max(0,a-20)*.7,   ()=>30,  ()=>0,   a=>95+Math.max(0,a-20)*.3,  0,250,'mg/dL'),
+  cholesterol:mkDef(.04,true,a=>170+Math.max(0,a-20)*.8,  ()=>35,  ()=>140, a=>190+Math.max(0,a-20)*.5, 80,320,'mg/dL'),
+  bmi:      mkDef(.06,true, ()=>23,                         ()=>4,   ()=>18.5,()=>24.9,14,45,''),
+  body_fat: mkDef(.05,true, ()=>18,                         ()=>6,   ()=>8,   ()=>18, 4,45,'%'),
+  muscle_mass:mkDef(.04,false,()=>35,                       ()=>8,   ()=>30,  ()=>50, 15,70,'kg'),
+  waist_hip:mkDef(.04,true, ()=>0.87,                       ()=>0.07,()=>0,   ()=>0.9,0.6,1.2,''),
+  vitd:     mkDef(.05,false,()=>28,                         ()=>11,  ()=>40,  ()=>70, 5,100,'ng/mL'),
+  b12:      mkDef(.03,false,()=>450,                        ()=>150, ()=>400, ()=>900,150,1500,'pg/mL'),
+  glucose:  mkDef(.05,true, a=>90+Math.max(0,a-30)*.3,    ()=>11,  ()=>70,  ()=>90, 55,200,'mg/dL'),
+  wbc:      mkDef(.06,true, a=>6+Math.max(0,a-20)*.03,    ()=>1.8, ()=>4,   ()=>7,  2,20,'K/μL'),
+  ferritin: mkDef(.03,true, a=>80+Math.max(0,a-20)*2.5,   a=>60+Math.max(0,a-20), ()=>30,()=>150, 5,600,'ng/mL'),
+  ast:      mkDef(.03,true, ()=>24,                         ()=>9,   ()=>10,  ()=>30, 5,200,'U/L'),
+  alt:      mkDef(.03,true, ()=>24,                         ()=>10,  ()=>10,  ()=>30, 5,200,'U/L'),
+  folate:   mkDef(.02,false,()=>9,                          ()=>4,   ()=>7,   ()=>20, 2,30,'ng/mL'),
+  uricacid: mkDef(.02,true, ()=>5.5,                        ()=>1.2, ()=>3.5, ()=>5.8,2,12,'mg/dL'),
+  // lifestyle (z-scores passed directly)
+  sleep_z:  mkDef(.035,false,()=>0,()=>1,()=>0,()=>1,-3,3,''),
+  exercise_z:mkDef(.04,false,()=>0,()=>1,()=>0,()=>1,-3,3,''),
+  diet_z:   mkDef(.03,false,()=>0,()=>1,()=>0,()=>1,-3,3,''),
+  smoke_z:  mkDef(.04,true, ()=>0,()=>1,()=>0,()=>0,-3,3,''),
+  alc_z:    mkDef(.02,true, ()=>0,()=>1,()=>0,()=>0,-3,3,''),
+  stress_z: mkDef(.015,true,()=>0,()=>1,()=>0,()=>0,-3,3,''),
+  social_z: mkDef(.015,false,()=>0,()=>1,()=>0,()=>1,-3,3,''),
+};
+
+function scoreOne(key, rawVal, age){
+  const d=MDEFS[key]; if(!d)return null;
+  const m=d.mFn(age), sd=d.sdFn(age), oL=d.oLFn(age), oH=d.oHFn(age);
+  const z=(rawVal-m)/sd;
+  const goodZ=d.lower?-z:z;
+  let delta=-goodZ*d.w*SCALE;
+  // If in optimal zone: only allow benefit, no penalty
+  const inOpt=rawVal>=oL&&rawVal<=oH;
+  if(inOpt) delta=Math.min(0,delta);
+  delta=Math.max(-d.w*SCALE*3,Math.min(d.w*SCALE*3,delta));
+  const inNorm=rawVal>=d.lo&&rawVal<=d.hi;
+  return{key,val:rawVal,delta,z,goodZ,inOpt,status:inOpt?'optimal':inNorm?'normal':'abnormal',
+    m,sd,oL,oH,lo:d.lo,hi:d.hi,unit:d.unit};
 }
 
-// Age-adjusted population reference (mean, sd) + optimal zone per age
-function ageRef(marker, age){
-  const a=age||24;
-  const R={
-    trig:{m:90+Math.max(0,a-20)*1.4, sd:42+Math.max(0,a-20)*0.5, oL:0, oH:85+Math.max(0,a-20)*0.5, lo:0, hi:160+Math.max(0,a-20)*1.2, lower:true},
-    cholesterol:{m:170+Math.max(0,a-20)*0.8, sd:35, oL:140, oH:190+Math.max(0,a-20)*0.5, lo:100, hi:220+Math.max(0,a-20)*0.8, lower:true},
-    ldl:{m:100+Math.max(0,a-20)*0.7, sd:30, oL:0, oH:95+Math.max(0,a-20)*0.3, lo:0, hi:140+Math.max(0,a-20)*0.6, lower:true},
-    hdl:{m:52-Math.max(0,a-20)*0.05, sd:12, oL:55, oH:120, lo:35, hi:120, lower:false},
-    sbp:{m:115+Math.max(0,a-20)*0.6, sd:14, oL:90, oH:116+Math.max(0,a-20)*0.2, lo:85, hi:140+Math.max(0,a-20)*0.5, lower:true},
-    dbp:{m:75+Math.max(0,a-20)*0.2, sd:10, oL:55, oH:80, lo:50, hi:92, lower:true},
-    hr:{m:72, sd:10, oL:45, oH:65, lo:40, hi:100, lower:true},
-    glucose:{m:90+Math.max(0,a-30)*0.3, sd:11, oL:70, oH:90, lo:65, hi:105+Math.max(0,a-30)*0.5, lower:true},
-    vitd:{m:28, sd:11, oL:40, oH:70, lo:15, hi:80, lower:false},
-    b12:{m:450, sd:150, oL:400, oH:900, lo:200, hi:900, lower:false},
-    folate:{m:9, sd:4, oL:7, oH:20, lo:3, hi:20, lower:false},
-    wbc:{m:6.0+Math.max(0,a-20)*0.03, sd:1.8, oL:4.0, oH:7.0, lo:3.5, hi:11, lower:true},
-    ferritin:{m:80+Math.max(0,a-20)*2.5, sd:60+Math.max(0,a-20)*1.5, oL:30, oH:150+Math.max(0,a-20)*1.0, lo:15, hi:250+Math.max(0,a-20)*2.0, lower:true},
-    uricacid:{m:5.5, sd:1.2, oL:3.5, oH:5.8, lo:2.5, hi:7.5, lower:true},
-    calcium:{m:9.5, sd:0.5, oL:9.0, oH:10.2, lo:8.5, hi:10.6, lower:false},
-    magnesium:{m:2.1, sd:0.25, oL:2.0, oH:2.6, lo:1.7, hi:2.8, lower:false},
-    ast:{m:24, sd:9, oL:10, oH:30, lo:5, hi:50, lower:true},
-    alt:{m:24, sd:10, oL:10, oH:30, lo:5, hi:50, lower:true},
-    ggt:{m:25, sd:14, oL:5, oH:28, lo:5, hi:60, lower:true},
-    bmi:{m:23+Math.max(0,a-20)*0.05, sd:4, oL:18.5, oH:24.9, lo:16, hi:35, lower:true}
-  };
-  return R[marker];
+// ─── LIFESTYLE Z-SCORES ──────────────────────────────────────────────────
+function lifeZScores(){
+  const sleep=fv('sleep')||7, sq=fv('sleepq')||3;
+  const cardio=fv('cardio')||0, str=fv('strength')||0;
+  const diet=fv('diet')||3, proc=fv('processed')||7;
+  const smoke=fv('smoke')||0, alc=fv('alc')||2;
+  const stress=fv('stress')||3, social=fv('social')||3;
+  // Convert each slider to z-score: optimal→+2, median→0, worst→-2.3
+  const sleepZ=(sleep<6?-2:(sleep<7?-0.8:(sleep<=8?1.5:(sleep<=9?0.5:-0.5)))) + (sq-3)*0.4;
+  const exZ=(cardio===0?-2.3:(cardio<75?-1.2:(cardio<150?-0.2:(cardio<=300?1.5:2.0)))) + (str>=2?0.5:str===1?0.1:-0.5);
+  const dietZ=(diet-3)*0.7 - (proc<=2?0:(proc<=7?0.2:(proc<=14?0.7:1.5)));
+  const smokeZ=[1.5,0.5,-1.2,-2.3][smoke]||1.5;
+  const alcZ=alc<=2?1:(alc<=7?0.3:(alc<=14?-0.8:-2));
+  const stressZ=(3-stress)*0.7;
+  const socialZ=(social-3)*0.5;
+  return{sleepZ,exZ,dietZ,smokeZ,alcZ,stressZ,socialZ};
 }
 
-// PhenoAge core formula
-function phenoAgeRaw(age, ov){
-  const ALB=ok(ov.albumin)?ov.albumin:4.2, CRE=ok(ov.creatinine)?ov.creatinine:0.9;
-  const GLU=ok(ov.glucose)?ov.glucose:90.0, CRP=ok(ov.crp)?Math.max(ov.crp,0.05):0.5;
-  const LYM=ok(ov.lymph)?ov.lymph:28.0, MCV=ok(ov.mcv)?ov.mcv:88.0;
-  const RDW=ok(ov.rdw)?ov.rdw:12.8, ALP=ok(ov.alp)?ov.alp:67.0, WBC=ok(ov.wbc)?ov.wbc:6.5;
-  const xb=-19.907-0.0336*ALB+0.0095*CRE+0.1953*(GLU/18.0)+0.0954*Math.log(CRP)
-    -0.0120*LYM+0.0268*MCV+0.3306*RDW+0.00188*ALP+0.0554*WBC+0.0804*age;
-  const M=1-Math.exp(-1.51714*Math.exp(xb)/0.0076927);
+// ─── PhenoAge Accel ──────────────────────────────────────────────────────
+function phenoRaw(age,ov){
+  const ALB=ok(ov.alb)?ov.alb:4.2,CRE=ok(ov.cre)?ov.cre:0.9;
+  const GLU=ok(ov.glu)?ov.glu:90,CRP=ok(ov.crp)?Math.max(ov.crp,.05):.5;
+  const LYM=ok(ov.lym)?ov.lym:28,MCV=ok(ov.mcv)?ov.mcv:88;
+  const RDW=ok(ov.rdw)?ov.rdw:12.8,ALP=ok(ov.alp)?ov.alp:67,WBC=ok(ov.wbc)?ov.wbc:6.5;
+  const xb=-19.907-.0336*ALB+.0095*CRE+.1953*(GLU/18)+.0954*Math.log(CRP)
+    -.012*LYM+.0268*MCV+.3306*RDW+.00188*ALP+.0554*WBC+.0804*age;
+  const M=1-Math.exp(-1.51714*Math.exp(xb)/.0076927);
   const Mc=Math.min(Math.max(M,1e-10),1-1e-10);
-  const pa=141.50+Math.log(-0.00553*Math.log(1-Mc))/0.09165;
+  const pa=141.5+Math.log(-.00553*Math.log(1-Mc))/.09165;
   return isNaN(pa)?age:pa;
 }
 
-// PhenoAgeAccel: how much user's PhenoAge exceeds a HEALTHY reference of same age
-function phenoAgeAccel(age){
-  const ov={creatinine:fv('creatinine'),mcv:fv('mcv'),wbc:fv('wbc'),lymph:fv('lymph'),
-            alp:fv('alp'),glucose:fv('glucose'),rdw:fv('rdw'),albumin:fv('albumin'),crp:fv('crp')};
-  const measured=[ok(ov.albumin),ok(ov.creatinine),ok(ov.glucose),ok(ov.crp),ok(ov.lymph),ok(ov.mcv),ok(ov.rdw),ok(ov.alp),ok(ov.wbc)].filter(Boolean).length;
-  const userPheno=phenoAgeRaw(age,ov);
-  // Healthy reference person of same age (median-healthy biomarkers)
-  const healthyPheno=phenoAgeRaw(age,{});
-  const accel=userPheno-healthyPheno; // age-independent!
-  return {accel, measured, ci:1.8+(9-measured)*0.5};
-}
-
-// One biomarker → year delta vs age-matched peers
-function scoreMarker(name, val, marker, age, maxBenefit, maxHarm){
-  if(!ok(val))return null;
-  const r=ageRef(marker,age); if(!r)return null;
-  const inOpt=val>=r.oL&&val<=r.oH;
-  const inNorm=val>=r.lo&&val<=r.hi;
-  const z=(val-r.m)/r.sd;
-  const goodZ=r.lower?-z:z;      // positive = healthier than peers
-  let delta=-goodZ*1.8;          // each SD healthier → 1.8y younger
-  if(inOpt) delta=Math.min(0,delta);  // optimal never penalized
-  delta=Math.max(-maxBenefit,Math.min(maxHarm,delta));
-  const status=inOpt?'optimal':inNorm?'normal':'abnormal';
-  return {name,val,marker,delta,goodZ,status,m:r.m,oL:r.oL,oH:r.oH,lo:r.lo,hi:r.hi};
-}
-
-function kdmDelta(age){
-  const C=[];
-  function s(name,id,marker,mb,mh){const r=scoreMarker(name,fv(id),marker,age,mb,mh);if(r)C.push(r);}
-  // Cardiovascular (highest weight)
-  s('Συστολική ΑΠ','sbp','sbp',2.5,3.0);
-  s('Παλμοί ηρεμίας','hr','hr',2.0,2.5);
-  s('Διαστολική ΑΠ','dbp','dbp',1.5,2.0);
-  // Metabolic
-  s('Τριγλυκερίδια','trig','trig',2.0,2.5);
-  s('HDL','hdl','hdl',1.5,2.0);
-  s('LDL','ldl','ldl',1.5,2.0);
-  s('Χοληστερόλη','cholesterol','cholesterol',1.2,1.8);
-  // BMI
-  const h=fv('height'),w=fv('weight');
-  if(ok(h)&&ok(w)){const bmi=w/((h/100)**2);const r=scoreMarker('BMI',bmi,'bmi',age,1.5,2.0);if(r)C.push(r);}
-  // Vitamins
-  s('Βιτ. D3','vitd','vitd',1.5,2.5);
-  s('B12','b12','b12',0.8,1.5);
-  s('Φυλλικό','folate','folate',0.5,0.8);
-  s('Φερριτίνη','ferritin','ferritin',0.8,1.5);
-  s('Ασβέστιο','calcium','calcium',0.4,0.8);
-  s('Μαγνήσιο','magnesium','magnesium',0.4,0.8);
-  // Liver / other
-  s('AST','ast','ast',0.6,1.2);
-  s('ALT','alt','alt',0.6,1.2);
-  s('γ-GT','ggt','ggt',0.4,1.0);
-  s('Ουρικό','uricacid','uricacid',0.4,1.0);
-  const total=C.reduce((a,c)=>a+c.delta,0);
-  return {total,C};
-}
-
+// ─── MAIN CALCULATE ──────────────────────────────────────────────────────
 function calculate(){
   const age=fv('age')||24;
-  const {accel, measured, ci}=phenoAgeAccel(age);
-  const {total:kdmTotal, C}=kdmDelta(age);
+  const h=fv('height'),w=fv('weight');
+  const bmi=(ok(h)&&ok(w))?w/((h/100)**2):NaN;
 
-  // Both accel and kdmTotal are AGE-INDEPENDENT deltas.
-  // Combine them (weighted), then add to chronological age.
-  const pw=0.45+(measured/9)*0.20;   // PhenoAge weight 0.45–0.65
-  const kw=1-pw;
-  const combinedDelta=pw*accel+kw*kdmTotal;
-  const bioAge=age+combinedDelta;
-  const diff=combinedDelta;
-  const p=normalCDF(-diff/6.5)*100;
+  // Waist-hip ratio
+  const waist=fv('waist'),hip=fv('hip');
+  const whr=(ok(waist)&&ok(hip))?waist/hip:NaN;
 
-  const rk=diff<=-5?{l:'Top 5% 🏆',bg:'rgba(46,204,113,.2)',c:'#2ecc71'}
-         :diff<=-3?{l:'Top 10% 🥇',bg:'rgba(46,204,113,.15)',c:'#2ecc71'}
-         :diff<=-1?{l:'Top 25% ✨',bg:'rgba(139,195,74,.15)',c:'#8bc34a'}
-         :diff<=1 ?{l:'Top 50% 👍',bg:'rgba(52,152,219,.15)',c:'#3498db'}
-         :diff<=3 ?{l:'Bottom 50%',bg:'rgba(243,156,18,.15)',c:'#f39c12'}
-         :          {l:'Bottom 25% ⚡',bg:'rgba(231,76,60,.15)',c:'#e74c3c'};
-  const col=diff<=-3?'#2ecc71':diff<=-1?'#8bc34a':diff<=2?'#f39c12':'#e74c3c';
+  // Score all blood markers
+  const bloodKeys=['sbp','dbp','hr','trig','hdl','ldl','cholesterol','vitd','b12','glucose',
+    'wbc','ferritin','ast','alt','folate','uricacid'];
+  const results={};
+  bloodKeys.forEach(k=>{
+    const r=scoreOne(k,fv(k),age);
+    if(r)results[k]=r;
+  });
+  if(!isNaN(bmi)) results.bmi=scoreOne('bmi',bmi,age);
+  if(ok(fv('body_fat'))) results.body_fat=scoreOne('body_fat',fv('body_fat'),age);
+  if(ok(fv('muscle_mass'))) results.muscle_mass=scoreOne('muscle_mass',fv('muscle_mass'),age);
+  if(!isNaN(whr)) results.waist_hip=scoreOne('waist_hip',whr,age);
+
+  // PhenoAge accel (separate, contributes via its own weight)
+  const phenoOv={alb:fv('albumin'),cre:fv('creatinine'),glu:fv('glucose'),crp:fv('crp'),
+    lym:fv('lymph'),mcv:fv('mcv'),rdw:fv('rdw'),alp:fv('alp'),wbc:fv('wbc')};
+  const measured=Object.values(phenoOv).filter(v=>ok(v)).length;
+  const phenoAccel=phenoRaw(age,phenoOv)-phenoRaw(age,{});
+  // Convert PhenoAccel to our scale: PhenoAccel SD~5y, so z=phenoAccel/5
+  const phenoZ=phenoAccel/5;
+  const phenoWeight=0.10+(measured/9)*0.05; // 0.10–0.15
+  const phenoDelta=-phenoZ*phenoWeight*SCALE*0.5;
+
+  // Lifestyle
+  const lz=lifeZScores();
+  const lifeScores={
+    sleep_z:  scoreOne('sleep_z',   lz.sleepZ, age),
+    exercise_z:scoreOne('exercise_z',lz.exZ,   age),
+    diet_z:   scoreOne('diet_z',    lz.dietZ,  age),
+    smoke_z:  scoreOne('smoke_z',   lz.smokeZ, age),
+    alc_z:    scoreOne('alc_z',     lz.alcZ,   age),
+    stress_z: scoreOne('stress_z',  lz.stressZ,age),
+    social_z: scoreOne('social_z',  lz.socialZ,age),
+  };
+
+  // Total delta
+  let totalDelta=phenoDelta;
+  Object.values(results).forEach(r=>{if(r)totalDelta+=r.delta});
+  Object.values(lifeScores).forEach(r=>{if(r)totalDelta+=r.delta});
+
+  const bioAge=Math.max(age-18,Math.min(age+18,age+totalDelta));
+  const diff=bioAge-age;
+  const pct=normalCDF(-diff/7)*100;
+
+  // Save to history
+  saveHistory(age,bioAge,diff);
+
+  // Render
+  renderScore(age,bioAge,diff,pct,results,lifeScores,lz,phenoAccel,measured,totalDelta,bmi,whr);
+  showTab('score');
+}
+
+// ─── RENDER SCORE ────────────────────────────────────────────────────────
+function renderScore(age,bioAge,diff,pct,results,lifeScores,lz,phenoAccel,measured,totalDelta,bmi,whr){
+  $('hdr-n').textContent=bioAge.toFixed(1);
+  $('hdr-bio').style.display='block';
+  const col=diff<=-4?'#10B981':diff<=-2?'#34D399':diff<=0?'#6EE7B7':diff<=2?'#F59E0B':diff<=4?'#F97316':'#EF4444';
+  const rk=diff<=-5?'Top 5% 🏆':diff<=-3?'Top 10% 🥇':diff<=-1?'Top 25% ✨':diff<=1?'Top 50% 👍':diff<=3?'Bottom 50%':'Bottom 25% ⚡';
   const sign=diff>0?'+':'';
 
-  function bmRow(c){
-    const sCol=c.status==='optimal'?'#2ecc71':c.status==='normal'?'#8bc34a':'#e74c3c';
-    const dCol=c.delta<=-0.5?'#2ecc71':c.delta<-0.05?'#8bc34a':c.delta<0.15?'#8888aa':c.delta<0.7?'#f39c12':'#e74c3c';
-    const dLab=c.delta<=-0.8?'▼▼':c.delta<=-0.15?'▼':c.delta>=0.8?'▲▲':c.delta>=0.15?'▲':'●';
-    const range=c.hi-c.lo||1;
-    const pos=Math.min(100,Math.max(0,((c.val-c.lo)/range)*100));
-    const oLo=Math.min(100,Math.max(0,((c.oL-c.lo)/range)*100));
-    const oHi=Math.min(100,Math.max(0,((c.oH-c.lo)/range)*100));
-    const mPos=Math.min(100,Math.max(0,((c.m-c.lo)/range)*100));
-    return `<div class="bmr">
-      <div class="bmd" style="background:${sCol}"></div>
-      <div style="flex:1">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span class="bmn">${c.name}</span>
-          <span class="bmv" style="color:${sCol}">${c.val.toFixed(1)}</span>
-        </div>
-        <div class="agebar-wrap">
-          <div class="agebar-label"><span>βέλτιστο ${age}ετών</span><span style="color:${sCol}">${c.status==='optimal'?'βέλτιστο':c.status==='normal'?'φυσιολογικό':'εκτός'}</span></div>
-          <div class="agebar">
-            <div class="agebar-fill" style="left:${oLo}%;width:${Math.max(2,oHi-oLo)}%;background:rgba(46,204,113,.3)"></div>
-            <div class="agebar-marker" style="left:${mPos}%;background:var(--hint)"></div>
-            <div class="agebar-marker" style="left:${pos}%;background:var(--al)"></div>
+  // Pillar totals
+  const cardDelta=(results.sbp?.delta||0)+(results.dbp?.delta||0)+(results.hr?.delta||0);
+  const metaDelta=(results.trig?.delta||0)+(results.hdl?.delta||0)+(results.ldl?.delta||0)+(results.bmi?.delta||0)+(results.glucose?.delta||0);
+  const bloodDelta=Object.values(results).reduce((a,r)=>a+(r?.delta||0),0)+phenoAccel*(-0.1);
+  const lifeDelta=Object.values(lifeScores).reduce((a,r)=>a+(r?.delta||0),0);
+
+  function pillarHTML(icon,name,d){
+    const c=d<=-1?'#10B981':d<0?'#34D399':d<.5?'#F59E0B':'#EF4444';
+    return`<div class="pillar"><div class="p-icon">${icon}</div><div class="p-name">${name}</div><div class="p-score" style="color:${c}">${d>0?'+':''}${d.toFixed(1)}y</div><div class="p-sub" style="color:${c}">${d<0?'νεότερος':'μεγαλύτερος'}</div><div class="p-bar" style="background:${c}"></div></div>`;
+  }
+
+  // Body map SVG
+  const systems=[
+    {id:'cardio',label:'Καρδιά',d:cardDelta,x:'72%',y:'32%'},
+    {id:'meta',label:'Μεταβολ.',d:metaDelta,x:'72%',y:'52%'},
+    {id:'blood',label:'Αίμα/Ήπαρ',d:bloodDelta,x:'5%',y:'38%'},
+    {id:'life',label:'Lifestyle',d:lifeDelta,x:'5%',y:'58%'},
+  ];
+  const badgeHTML=systems.map(s=>{
+    const c=s.d<=-0.5?'#10B981':s.d<0?'#34D399':s.d<.5?'#F59E0B':'#EF4444';
+    return`<div class="sys-badge" style="left:${s.x};top:${s.y};color:${c};border-color:${c};background:${c}15">${s.label} ${s.d>0?'+':''}${s.d.toFixed(1)}y</div>`;
+  }).join('');
+
+  // Biomarker rows
+  function bmRow(r,label){
+    if(!r)return'';
+    const sc=r.status==='optimal'?'#10B981':r.status==='normal'?'#34D399':'#EF4444';
+    const dc=r.delta<=-0.3?'#10B981':r.delta<0?'#34D399':r.delta<.15?'#6B7280':r.delta<.6?'#F59E0B':'#EF4444';
+    const range=r.hi-r.lo||1;
+    const pos=Math.min(97,Math.max(3,((r.val-r.lo)/range)*100));
+    const oL=Math.min(97,Math.max(0,((r.oL-r.lo)/range)*100));
+    const oH=Math.min(97,Math.max(0,((r.oH-r.lo)/range)*100));
+    const mP=Math.min(97,Math.max(3,((r.m-r.lo)/range)*100));
+    const valStr=r.val<10?r.val.toFixed(2):r.val<100?r.val.toFixed(1):r.val.toFixed(0);
+    return`<div class="bmr">
+      <div class="bm-dot" style="background:${sc}"></div>
+      <div class="bm-info">
+        <div class="bm-name">${label||r.key}</div>
+        <div class="bm-bar-row">
+          <div class="bm-track">
+            <div class="bm-opt" style="left:${oL}%;width:${Math.max(3,oH-oL)}%;background:rgba(16,185,129,.2)"></div>
+            <div class="bm-mk" style="left:${mP}%;background:#4B5563"></div>
+            <div class="bm-mk" style="left:${pos}%;background:${sc}"></div>
           </div>
         </div>
       </div>
-      <div class="bmc2" style="color:${dCol};font-weight:600">${dLab} ${c.delta>0?'+':''}${c.delta.toFixed(1)}y</div>
+      <div class="bm-val" style="color:${sc}">${valStr}${r.unit?` <span style="font-size:9px;color:var(--hint)">${r.unit}</span>`:''}</div>
+      <div class="bm-dy" style="color:${dc}">${r.delta>0?'+':''}${r.delta.toFixed(2)}y</div>
     </div>`;
   }
 
-  const cardio=['Συστολική ΑΠ','Διαστολική ΑΠ','Παλμοί ηρεμίας','Τριγλυκερίδια','HDL','LDL','Χοληστερόλη','BMI'];
-  document.getElementById('rc').innerHTML=`
-<div class="hero">
-  <div class="ca">Χρονολογική ηλικία: ${age} ετών</div>
-  <div class="ba" style="color:${col}">${bioAge.toFixed(1)}</div>
-  <div class="bal">Εκτιμώμενη βιολογική ηλικία</div>
-  <div class="cil">95% CI: ${(bioAge-ci).toFixed(1)} – ${(bioAge+ci).toFixed(1)} ετών</div>
-  <div class="rbadge" style="background:${rk.bg};color:${rk.c}">${rk.l}</div>
-  <div class="pw">
-    <div class="pl">Percentile vs συνομηλίκων ${age} ετών (${p.toFixed(0)}η θέση)</div>
-    <div class="pb"><div class="pm" style="left:${Math.min(Math.max(p,2),98)}%"></div></div>
-    <div class="pt"><span>0</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
-  </div>
-  <div class="dl">Γερνάς <strong style="color:${col}">${sign}${diff.toFixed(1)} χρόνια</strong> ${diff<0?'πιο αργά':'πιο γρήγορα'} απ' τον μέσο συνομήλικο</div>
-  <div class="mpills">
-    <span class="mpill">PhenoAgeAccel ${accel>0?'+':''}${accel.toFixed(1)}y</span>
-    <span class="mpill">KDM ${kdmTotal>0?'+':''}${kdmTotal.toFixed(1)}y</span>
-    <span class="mpill">Βάρη ${(pw*100).toFixed(0)}/${(kw*100).toFixed(0)}%</span>
-  </div>
-</div>
-<div class="st" style="margin-top:0">Συνεισφορά vs συνομήλικοι ${age} ετών</div>
-<div style="font-size:11px;color:var(--hint);margin-bottom:8px">Πράσινη ζώνη = βέλτιστο για ${age} ετών · γκρι = μέσος συνομήλικος · μωβ = εσύ</div>
-<div class="bmc"><div class="bmgt">Καρδιαγγειακό &amp; Μεταβολικό</div>${C.filter(c=>cardio.includes(c.name)).map(bmRow).join('')}</div>
-<div class="bmc"><div class="bmgt">Βιταμίνες, ήπαρ &amp; λοιπά</div>${C.filter(c=>!cardio.includes(c.name)).map(bmRow).join('')}</div>
-<p style="font-size:11px;color:var(--hint);margin-top:4px">Αρνητικό = σε κάνει νεότερο vs συνομήλικους · θετικό = μεγαλύτερο.</p>`;
+  // What-if simulator
+  const improvements=[
+    {label:'WBC 7.5 K/μL',key:'wbc',target:7.5},
+    {label:'D3 50 ng/mL',key:'vitd',target:50},
+    {label:'Τριγλυκ. 90 mg/dL',key:'trig',target:90},
+    {label:'HR 55 bpm',key:'hr',target:55},
+    {label:'LDL 70 mg/dL',key:'ldl',target:70},
+  ];
+  const wiHTML=improvements.map(imp=>{
+    const cur=results[imp.key]||scoreOne(imp.key,fv(imp.key),fv('age')||24);
+    if(!cur)return'';
+    const improved=scoreOne(imp.key,imp.target,fv('age')||24);
+    const gain=cur.delta-improved.delta;
+    if(Math.abs(gain)<0.05)return'';
+    const c=gain>0?'#10B981':'#EF4444';
+    return`<div class="wi-row">
+      <div class="bm-dot" style="background:${c};flex-shrink:0"></div>
+      <div class="wi-label">${imp.label}</div>
+      <div class="wi-impact" style="color:${c}">${gain>0?'-':'+'}${Math.abs(gain).toFixed(1)}y</div>
+    </div>`;
+  }).join('');
 
-  buildRecs(C,age,diff,measured,accel);
-  showTab('results');
+  // Recommendations
+  const recs=buildRecs(results,lifeScores,lz,fv('age')||24,phenoAccel,measured);
+
+  // History chart
+  const histHTML=buildHistChart();
+
+  $('score-content').innerHTML=`
+    <div class="score-hero">
+      <div class="gauge-wrap">
+        <canvas id="gc" width="200" height="200"></canvas>
+        <div class="gauge-center">
+          <div class="gauge-age" style="color:${col}">${bioAge.toFixed(1)}</div>
+          <div class="gauge-lbl">βιολ. ηλικία</div>
+          <div class="gauge-chron">χρον. ${age}</div>
+        </div>
+      </div>
+      <div class="rank-pill" style="color:${col};border-color:${col};background:${col}18">${rk}</div>
+      <div class="diff-line">Γερνάς <strong style="color:${col}">${sign}${diff.toFixed(1)} χρόνια</strong> vs συνομηλίκους ηλικίας ${age}</div>
+      <div class="pct-wrap">
+        <div class="pct-lbl">Percentile — ${pct.toFixed(0)}η θέση</div>
+        <div class="pct-track"><div class="pct-thumb" style="left:${Math.min(Math.max(pct,2),98)}%"></div></div>
+        <div class="pct-ticks"><span>0</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+      </div>
+    </div>
+
+    <div class="slabel">Body Map</div>
+    <div class="body-map-wrap" style="height:200px;background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);margin-bottom:14px">
+      <svg class="body-map-svg" width="480" height="200" viewBox="0 0 480 200" style="opacity:.15">
+        <ellipse cx="240" cy="40" rx="30" ry="35" fill="#6B7280"/>
+        <rect x="205" y="72" width="70" height="80" rx="10" fill="#6B7280"/>
+        <rect x="175" y="75" width="28" height="65" rx="8" fill="#6B7280"/>
+        <rect x="277" y="75" width="28" height="65" rx="8" fill="#6B7280"/>
+        <rect x="210" y="148" width="25" height="50" rx="7" fill="#6B7280"/>
+        <rect x="245" y="148" width="25" height="50" rx="7" fill="#6B7280"/>
+      </svg>
+      ${badgeHTML}
+    </div>
+
+    <div class="slabel">4 Πυλώνες</div>
+    <div class="pillars4">
+      ${pillarHTML('💓','Καρδιά',cardDelta)}
+      ${pillarHTML('⚡','Μεταβολ.',metaDelta)}
+      ${pillarHTML('🩸','Αίμα',bloodDelta)}
+      ${pillarHTML('❤️','Lifestyle',lifeDelta)}
+    </div>
+
+    <div class="slabel">Ανάλυση Biomarkers</div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">Πράσινη ζώνη = βέλτιστο για ηλικία ${age} · γκρι δείκτης = μέσος συνομηλίκου · χρωμ. = εσύ</div>
+    <div class="bmc"><div class="bmgt">Καρδιά &amp; Πίεση</div>
+      ${bmRow(results.sbp,'Συστολική ΑΠ')}${bmRow(results.dbp,'Διαστολική ΑΠ')}${bmRow(results.hr,'Παλμοί ηρ.')}
+    </div>
+    <div class="bmc"><div class="bmgt">Λιπίδια &amp; Μεταβολισμός</div>
+      ${bmRow(results.trig,'Τριγλυκερίδια')}${bmRow(results.hdl,'HDL')}${bmRow(results.ldl,'LDL')}
+      ${bmRow(results.cholesterol,'Χοληστερόλη')}${bmRow(results.glucose,'Γλυκόζη')}
+    </div>
+    <div class="bmc"><div class="bmgt">Σύνθεση σώματος</div>
+      ${results.bmi?bmRow(results.bmi,`BMI (${(fv('weight')/((fv('height')/100)**2)).toFixed(1)})`):''} 
+      ${results.body_fat?bmRow(results.body_fat,'Λίπος σώματος'):''}
+      ${results.muscle_mass?bmRow(results.muscle_mass,'Μυϊκή μάζα'):''}
+      ${results.waist_hip?bmRow(results.waist_hip,`Μέση/Ισχίο (${(fv('waist')/fv('hip')).toFixed(2)})`):
+        '<div class="bmr"><div style="font-size:11px;color:var(--hint);padding:4px 0">Πρόσθεσε μέση + ισχίο για WHR scoring</div></div>'}
+    </div>
+    <div class="bmc"><div class="bmgt">Βιταμίνες &amp; Φλεγμονή</div>
+      ${bmRow(results.vitd,'Βιτ. D3')}${bmRow(results.b12,'B12')}
+      ${bmRow(results.wbc,'WBC (φλεγμονή)')}${bmRow(results.ferritin,'Φερριτίνη')}
+      ${bmRow(results.folate,'Φυλλικό')}${bmRow(results.uricacid,'Ουρικό')}
+    </div>
+    <div class="bmc"><div class="bmgt">Ήπαρ</div>
+      ${bmRow(results.ast,'AST')}${bmRow(results.alt,'ALT')}
+    </div>
+
+    <div class="slabel">What-if Simulator</div>
+    <div class="wi-card"><div class="wi-title">🔮 Αν βελτιώσεις…</div>${wiHTML||'<div style="font-size:12px;color:var(--muted)">Όλα τα βασικά biomarkers σου είναι ήδη κοντά στο βέλτιστο!</div>'}</div>
+
+    ${histHTML}
+
+    <div class="slabel">Συστάσεις</div>
+    <div class="disc">⚠️ Ενδεικτικό. Συμβουλέψου γιατρό πριν από αλλαγές φαρμακευτικής αγωγής.</div>
+    ${recs}
+    <div style="font-size:10px;color:var(--hint);text-align:center;padding:10px 0;line-height:1.7">
+      Composite: Blood ${Object.keys(results).length} markers · PhenoAge ${measured}/9 · Lifestyle 7 factors<br>
+      Calibrated: top1%→−20y · median→0y · bottom1%→+20y
+    </div>
+  `;
+  drawGauge(diff,col);
 }
 
-function buildRecs(C,age,diff,measured,accel){
-  let h=`<div class="disc">⚠️ Ενδεικτικές συστάσεις από δημοσιευμένη βιβλιογραφία. Συμβουλέψου γιατρό ή φαρμακοποιό πριν από αλλαγές.</div>`;
+function drawGauge(diff,col){
+  const c=$('gc'); if(!c)return;
+  const ctx=c.getContext('2d'),cx=100,cy=100,r=88;
+  ctx.clearRect(0,0,200,200);
+  const startA=Math.PI*.75,endA=Math.PI*2.25;
+  ctx.beginPath();ctx.arc(cx,cy,r,startA,endA);
+  ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=7;ctx.lineCap='round';ctx.stroke();
+  const progress=Math.min(1,Math.max(0,(diff+18)/36));
+  const targetA=startA+(endA-startA)*progress;
+  let cur=startA;
+  const step=()=>{
+    cur+=0.045; if(cur>targetA)cur=targetA;
+    ctx.clearRect(0,0,200,200);
+    ctx.beginPath();ctx.arc(cx,cy,r,startA,endA);
+    ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=7;ctx.lineCap='round';ctx.stroke();
+    ctx.beginPath();ctx.arc(cx,cy,r,startA,cur);
+    const g=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
+    g.addColorStop(0,'#10B981');g.addColorStop(.5,'#7C3AED');g.addColorStop(1,'#EF4444');
+    ctx.strokeStyle=g;ctx.lineWidth=7;ctx.lineCap='round';ctx.stroke();
+    const tx=cx+r*Math.cos(cur),ty=cy+r*Math.sin(cur);
+    ctx.beginPath();ctx.arc(tx,ty,4.5,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
+    if(cur<targetA)requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+// ─── HISTORY ─────────────────────────────────────────────────────────────
+function saveHistory(age,bioAge,diff){
+  try{
+    const hist=JSON.parse(localStorage.getItem('yh_hist')||'[]');
+    hist.push({date:new Date().toISOString().slice(0,10),age,bioAge:parseFloat(bioAge.toFixed(1)),diff:parseFloat(diff.toFixed(1))});
+    // Keep last 20
+    if(hist.length>20)hist.splice(0,hist.length-20);
+    localStorage.setItem('yh_hist',JSON.stringify(hist));
+  }catch(e){}
+}
+
+function buildHistChart(){
+  try{
+    const hist=JSON.parse(localStorage.getItem('yh_hist')||'[]');
+    if(hist.length<2)return`<div class="slabel">Trend</div><div class="trend-chart"><div class="trend-empty">Θα εμφανιστεί γράφημα μετά από 2+ μετρήσεις.</div></div>`;
+
+    const minD=Math.min(...hist.map(h=>h.diff))-1;
+    const maxD=Math.max(...hist.map(h=>h.diff))+1;
+    const range=maxD-minD||1;
+    const W=320,H=80,pad=20;
+    const pts=hist.map((h,i)=>{
+      const x=pad+(i/(hist.length-1))*(W-2*pad);
+      const y=pad+(1-(h.diff-minD)/range)*(H-2*pad);
+      return{x,y,h};
+    });
+    const path=pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(' ');
+    const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="${p.h.diff<0?'#10B981':p.h.diff<2?'#F59E0B':'#EF4444'}"/>`).join('');
+    const lastH=hist[hist.length-1];
+    const prevH=hist[hist.length-2];
+    const trend=lastH.diff-prevH.diff;
+    const trendStr=trend<0?`↓ Βελτίωση ${Math.abs(trend).toFixed(1)}y`:trend>0?`↑ Επιδείνωση ${trend.toFixed(1)}y`:'Σταθερό';
+    const trendCol=trend<0?'#10B981':trend>0?'#EF4444':'#6B7280';
+
+    const rows=hist.slice(-5).reverse().map(h=>{
+      const c=h.diff<0?'#10B981':h.diff<2?'#F59E0B':'#EF4444';
+      return`<div class="trend-entry">
+        <div><div class="trend-date">${h.date}</div><div style="font-size:10px;color:var(--muted)">χρον. ${h.age}</div></div>
+        <div class="trend-ages">
+          <div class="trend-bio" style="color:${c}">${h.bioAge}</div>
+          <div class="trend-diff" style="background:${c}18;color:${c}">${h.diff>0?'+':''}${h.diff}y</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    return`<div class="slabel">Trend <span style="font-size:10px;color:${trendCol};font-weight:700">${trendStr}</span></div>
+    <div class="trend-chart">
+      <svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible">
+        <line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+        <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H-pad}" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+        <path d="${path}" fill="none" stroke="rgba(0,212,255,.4)" stroke-width="2"/>
+        ${dots}
+      </svg>
+      <div style="font-size:10px;color:var(--hint);margin-top:4px;text-align:center">Βιολογική ηλικία − χρονολογική ηλικία (αρνητικό = νεότερος)</div>
+    </div>
+    ${rows}`;
+  }catch(e){return'';}
+}
+
+// ─── RECS ─────────────────────────────────────────────────────────────────
+function buildRecs(results,lifeScores,lz,age,phenoAccel,measured){
   const recs=[];
-  const g=n=>C.find(c=>c.name===n);
+  const r=k=>results[k];
 
-  const sbpC=g('Συστολική ΑΠ'),hrC=g('Παλμοί ηρεμίας');
-  if(sbpC&&sbpC.status==='optimal'&&hrC&&hrC.status==='optimal')
-    recs.push({t:'good',title:'🏆 Καρδιαγγειακό — Εξαιρετικό',tags:['tp'],body:`ΑΠ ${fv('sbp')}/${fv('dbp')}, HR ${fv('hr')} bpm. Top tier για ${age} ετών (μέσος: ~${(115+Math.max(0,age-20)*0.6).toFixed(0)}/${(75+Math.max(0,age-20)*0.2).toFixed(0)}, HR ~72). Συνδυασμένη συνεισφορά: ${((sbpC.delta+hrC.delta+(g('Διαστολική ΑΠ')?.delta||0))).toFixed(1)} έτη.`});
+  if(r('sbp')?.status==='optimal'&&r('hr')?.status==='optimal')
+    recs.push({t:'good',title:'🏆 Καρδιαγγειακό — Εξαιρετικό',tags:['rt-pos'],body:`ΑΠ ${fv('sbp')}/${fv('dbp')}, HR ${fv('hr')} bpm. Top tier για ${age} ετών.`});
+  if(r('cholesterol')?.status==='optimal')
+    recs.push({t:'good',title:'🏆 Χοληστερόλη — Εξαιρετική',tags:['rt-pos'],body:`${fv('cholesterol')} mg/dL. Κατώτατο 10% για την ηλικία σου.`});
+  if(r('ast')?.status==='optimal'&&r('alt')?.status==='optimal')
+    recs.push({t:'good',title:'🏆 Ηπατικές — Άριστες',tags:['rt-pos'],body:`AST ${fv('ast')}, ALT ${fv('alt')} U/L. Ήπαρ σε εξαιρετική κατάσταση.`});
 
-  const trigC=g('Τριγλυκερίδια'),chC=g('Χοληστερόλη');
-  if(chC&&chC.status==='optimal'&&fv('cholesterol')<150)
-    recs.push({t:'good',title:'🏆 Χοληστερόλη — Εξαιρετική',tags:['tp'],body:`${fv('cholesterol')} mg/dL. Ο μέσος ${age}χρονος: ~${(170+Math.max(0,age-20)*0.8).toFixed(0)}. Ισχυρό cardiovascular προστατευτικό.`});
-
-  const vd=g('Βιτ. D3');
-  if(vd&&vd.status!=='optimal')
-    recs.push({t:vd.delta>1?'bad':'warn',title:'Βιτ. D3 — Υποβέλτιστη',tags:['ts','tl'],body:`${fv('vitd')} ng/mL (στόχος 40–70). Συνεισφορά: +${vd.delta.toFixed(1)} έτη. D3 4000–6000 IU + K2 (MK-7) 100mcg/ημέρα. Επανέλεγχος 3 μήνες.`});
-
-  if(ok(fv('wbc'))&&fv('wbc')>8){
-    const wc=g('Λευκά')||C.find(c=>c.marker==='wbc');
-    recs.push({t:fv('wbc')>11?'bad':'warn',title:'WBC — Πάνω από μέσο ηλικίας',tags:['tm'],body:`${fv('wbc')} K/μL. Μέσος ${age}χρονου: ~${(6.0+Math.max(0,age-20)*0.03).toFixed(1)}. Longevity βέλτιστο <7.5. Πιθανή υποκλινική φλεγμονή — εξέτασε hs-CRP.`});
-  }
-
-  if(trigC&&trigC.status!=='optimal'&&fv('trig')>100)
-    recs.push({t:fv('trig')>200?'bad':'warn',title:`Τριγλυκερίδια — Οριακά για ${age} ετών`,tags:['td','tl'],body:`${fv('trig')} mg/dL. Μέσος ${age}χρονου: ~${(90+Math.max(0,age-20)*1.4).toFixed(0)}. Συνεισφορά +${trigC.delta.toFixed(1)}y. Omega-3 2–4g/ημέρα + λιγότεροι υδατάνθρακες.`});
-
+  if(r('vitd')?.delta>0.2)
+    recs.push({t:r('vitd').delta>0.8?'bad':'warn',title:'Βιτ. D3 — Υποβέλτιστη',tags:['rt-sup','rt-life'],body:`${fv('vitd')} ng/mL (στόχος 40–70). Πρωτόκολλο: D3 5000 IU + K2 (MK-7) 100mcg/ημέρα. Επανέλεγχος σε 3 μήνες.`});
+  if(r('wbc')?.delta>0.5)
+    recs.push({t:r('wbc').delta>1.5?'bad':'warn',title:'WBC — Πάνω από βέλτιστο',tags:['rt-med'],body:`${fv('wbc')} K/μL. Μέσος ${age}χρονου: ~${(6+Math.max(0,age-20)*.03).toFixed(1)}. Βέλτιστο longevity <7.5. Εξέτασε hs-CRP.`});
+  if(r('trig')?.delta>0.3)
+    recs.push({t:'warn',title:`Τριγλυκερίδια — Οριακά για ${age} ετών`,tags:['rt-diet','rt-life'],body:`${fv('trig')} mg/dL vs μέσο ${(90+Math.max(0,age-20)*1.4).toFixed(0)} mg/dL. Omega-3 EPA+DHA 2–4g/ημέρα + μείωση επεξεργασμένων υδ/κων.`});
   if(ok(fv('b12'))&&fv('b12')<400)
-    recs.push({t:'warn',title:'B12 — Υποβέλτιστη',tags:['ts'],body:`${fv('b12')} pg/mL. Στόχος >500. Methylcobalamin 1000 mcg/ημέρα sublingual.`});
+    recs.push({t:'warn',title:'B12 — Υποβέλτιστη',tags:['rt-sup'],body:`${fv('b12')} pg/mL. Στόχος >500. Methylcobalamin 1000mcg/ημέρα sublingual.`});
+  if(lz.smokeZ<0)
+    recs.push({t:'bad',title:'Κάπνισμα — Μέγιστος παράγοντας',tags:['rt-life'],body:`Μεγαλύτερο single lifestyle risk factor. Κάθε χρόνο καπνίσματος ≈ +0.3y βιολογική ηλικία (Framingham).`});
+  if(lz.exZ<-0.5)
+    recs.push({t:'warn',title:'Άσκηση — Αυξάνει βιολ. ηλικία',tags:['rt-life'],body:`Αερόβια ${fv('cardio')}min/εβδ (στόχος 150+). Κάθε 30min επιπλέον αερόβιας ≈ −0.4y. Resistance 2–3x/εβδ ≈ −0.6y.`});
+  if(lz.sleepZ<-0.5)
+    recs.push({t:'warn',title:'Ύπνος — Επηρεάζει γήρανση',tags:['rt-life'],body:`${fv('sleep')}h (βέλτιστο 7–8h). Κάθε ώρα κάτω από 7h ≈ +0.5y βιολογική ηλικία.`});
 
   const miss=[];
   if(!ok(fv('crp')))miss.push('CRP');if(!ok(fv('rdw')))miss.push('RDW');if(!ok(fv('glucose')))miss.push('Γλυκόζη');
-  if(miss.length>0)recs.push({t:'warn',title:`Βελτίωσε ακρίβεια (${9-measured}/9 PhenoAge)`,tags:['tm'],body:`Λείπουν: ${miss.join(', ')}. Ειδικά RDW (βάρος 0.33) & CRP (φλεγμονή) μειώνουν το CI.`});
+  if(miss.length)recs.push({t:'warn',title:`Βελτίωσε ακρίβεια (${9-measured}/9)`,tags:['rt-med'],body:`Λείπουν από PhenoAge: ${miss.join(', ')}. Ειδικά RDW (βάρος 0.33) μειώνει σημαντικά το CI.`});
 
-  h+=recs.map(r=>`<div class="rc ${r.t}"><div class="tags">${r.tags.map(t=>`<span class="tag ${t}">${t==='tp'?'✓ Θετικό':t==='ts'?'Συμπλήρωμα':t==='td'?'Διατροφή':t==='tl'?'Τρόπος ζωής':'Ιατρική παρ/θηση'}</span>`).join('')}</div><div class="rt">${r.title}</div><div class="rb">${r.body}</div></div>`).join('');
-  document.getElementById('recc').innerHTML=h;
+  return recs.map(r=>`<div class="rec ${r.t}"><div class="rec-tags">${r.tags.map(t=>`<span class="rtag ${t}">${t==='rt-pos'?'✓ Θετικό':t==='rt-sup'?'Συμπλήρωμα':t==='rt-diet'?'Διατροφή':t==='rt-life'?'Lifestyle':'Ιατρική'}</span>`).join('')}</div><div class="rec-title">${r.title}</div><div class="rec-body">${r.body}</div></div>`).join('');
 }
 
-function showTab(id){['input','results','recs'].forEach(t=>{document.getElementById('sec-'+t).classList.toggle('active',t===id);document.getElementById('nav-'+t).classList.toggle('active',t===id);});window.scrollTo(0,0);}
-function save(){const keys=['age','height','weight','sbp','dbp','hr','creatinine','mcv','wbc','lymph','alp','glucose','rdw','albumin','crp','cholesterol','hdl','ldl','trig','vitd','b12','folate','ferritin','calcium','magnesium','hgb','plt','uricacid','ast','alt','ggt'];const d={};keys.forEach(k=>{const e=document.getElementById(k);if(e)d[k]=e.value;});try{localStorage.setItem('lv4',JSON.stringify(d));}catch(e){}}
-function load(){try{const d=JSON.parse(localStorage.getItem('lv4')||'{}');Object.entries(d).forEach(([k,v])=>{const e=document.getElementById(k);if(e&&v)e.value=v;});}catch(e){}}
-load();document.querySelectorAll('input').forEach(e=>e.addEventListener('change',save));
+// ─── NEWS ─────────────────────────────────────────────────────────────────
+const NEWS_RES=[
+  {paper:'https://www.nature.com/articles/s41586-020-2975-4',yt:'https://www.youtube.com/results?search_query=Sinclair+Yamanaka+partial+reprogramming+aging',art:'https://www.statnews.com/2023/01/06/altos-labs-aging-reprogramming/'},
+  {paper:'https://www.sens.org/research/',yt:'https://www.youtube.com/results?search_query=Aubrey+de+Grey+SENS+longevity+escape+velocity',art:'https://www.technologyreview.com/2021/09/04/1034364/aubrey-de-grey-aging-foundation/'},
+  {paper:'https://www.nature.com/articles/s43587-022-00248-2',yt:'https://www.youtube.com/results?search_query=epigenetic+clock+biological+age+DunedinPACE+Horvath',art:'https://www.science.org/content/article/researchers-are-reversing-aging-mice-are-people-next'},
+  {paper:'https://www.afar.org/tame-trial',yt:'https://www.youtube.com/results?search_query=TAME+trial+metformin+longevity+Barzilai',art:'https://www.nytimes.com/2023/10/17/health/metformin-aging-drug-tame-trial.html'},
+  {paper:'https://www.cell.com/cell/fulltext/S0092-8674(13)01521-3',yt:'https://www.youtube.com/results?search_query=NAD+NMN+David+Sinclair+aging+sirtuins',art:'https://www.nature.com/articles/d41586-022-04037-8'},
+  {paper:'https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2707428',yt:'https://www.youtube.com/results?search_query=VO2max+longevity+Peter+Attia+cardiorespiratory+fitness',art:'https://peterattiamd.com/vo2max/'},
+];
+const NEWS=[
+  {tag:'Επαναπρογραμματισμός',tc:'#7C3AED',date:'2024',auth:'Sinclair Lab, Harvard',title:'Yamanaka Factors & Μερικός Επαναπρογραμματισμός',sum:'Οι 4 παράγοντες Yamanaka (Oct4, Sox2, Klf4, c-Myc) μπορούν να "επαναφέρουν" το γερασμένο κύτταρο σε νεανική κατάσταση χωρίς να το μετατρέψουν σε stem cell.',body:`Ο David Sinclair και η ομάδα του στο Harvard έδειξαν το 2020 ότι η επαγωγή τριών Yamanaka factors (OSK — χωρίς c-Myc για ασφάλεια) στα γαγγλιακά κύτταρα του αμφιβληστροειδή αποκαθιστά την όραση σε ηλικιωμένα ποντίκια.\n\nΤο 2023 η Retro Biosciences (χρηματοδότηση $180M από τον Sam Altman) ξεκίνησε κλινικές δοκιμές OSK-AAV για ανθρώπους. Παράλληλα, η Altos Labs (Jeff Bezos, $3B) εστιάζει σε in vivo partial reprogramming.\n\nΗ βασική πρόκληση: πώς να ελέγξεις τη δόση ώστε να αντιστρέψεις γήρανση αλλά να αποφύγεις καρκινογένεση.`},
+  {tag:'SENS / Senolytics',tc:'#0EA5E9',date:'2024',auth:'Aubrey de Grey, SENS Foundation',title:'Longevity Escape Velocity & SENS',sum:'Αν η επιστήμη μπορεί να επιμηκύνει τη ζωή κατά 1+ χρόνο για κάθε χρόνο που περνά, η γήρανση μπορεί θεωρητικά να "ξεπεραστεί".',body:`Ο Aubrey de Grey πρότεινε το SENS (Strategies for Engineered Negligible Senescence) — 7 τύποι βλαβών που πρέπει να αντιμετωπιστούν:\n\n1. Κυτταρική απώλεια\n2. Ογκογόνοι μεταλλαγές\n3. Μεταλλαγές μιτοχονδρίων\n4. Ενδοκυτταρικά σκουπίδια (lipofuscin)\n5. Εξωκυτταρικά σκουπίδια (amyloid)\n6. Κυτταρική γήρανση (senescence)\n7. Εξωκυτταρική σύνδεση (crosslinks)\n\nΚλινικές δοκιμές με senolytics (dasatinib+quercetin) δείχνουν βελτίωση σε δείκτες φυσικής κατάστασης. Το Unity Biotechnology αναπτύσσει νέους αναστολείς BCL-2 (navitoclax).`},
+  {tag:'Epigenetics',tc:'#F59E0B',date:'2023',auth:'Horvath & Raj, UCLA',title:'Επιγενετικά Ρολόγια',sum:'Τα DNA methylation clocks (Horvath, GrimAge, DunedinPACE) είναι οι πιο ακριβείς εκτιμητές βιολογικής ηλικίας — χρειάζονται DNA.',body:`Το Horvath Clock (2013): 353 CpG θέσεις → βιολογική ηλικία με ακρίβεια ±3.6 χρόνια.\n\nΤο GrimAge (2019): πρόβλεψη θνησιμότητας με plasma proteins + methylation.\n\nΤο DunedinPACE (2022, Duke): μετρά ρυθμό γήρανσης αντί για απόλυτη ηλικία — π.χ. 0.8 = γερνάς 20% πιο αργά.\n\nΈρευνα Fahy (2019): αντιστροφή επιγενετικής ηλικίας κατά ~2.5 χρόνια με GH + metformin + DHEA σε 9 μήνες.`},
+  {tag:'TAME Trial',tc:'#6366F1',date:'2024',auth:'Nir Barzilai, Einstein College',title:'Metformin ως Anti-Aging Drug',sum:'Το TAME είναι η πρώτη κλινική δοκιμή με FDA χρηματοδότηση για φάρμακο ενάντια στη γήρανση ως νόσο.',body:`Το metformin σε παρατηρησιακές μελέτες:\n• Μείωση θνησιμότητας καρκίνου ~25-35%\n• Μείωση καρδιαγγειακών συμβαμάτων\n• Μεγαλύτερη επιβίωση vs non-diabetics\n\nΜηχανισμοί: αναστολή mTOR μέσω AMPK, μείωση oxidative stress.\n\nTAME: 3000 άτομα 65-79 ετών, 6 χρόνια, $75M. Αποτελέσματα αναμένονται 2026-2027. Αν επιτύχει, θα είναι η πρώτη φορά που FDA αναγνωρίζει τη "γήρανση" ως θεραπεύσιμη πάθηση.`},
+  {tag:'NAD+ & Sirtuins',tc:'#EC4899',date:'2024',auth:'Sinclair Lab / MIT',title:'NAD+ & Sirtuins — Ο Ενεργειακός Άξονας',sum:'Τα επίπεδα NAD+ μειώνονται ~50% από 40 έως 60 ετών. Πρόδρομοι όπως NMN και NR μπορεί να τα αποκαταστήσουν.',body:`Ο Sinclair στη θεωρία "Information Theory of Aging": η γήρανση είναι απώλεια επιγενετικής πληροφορίας, και το NAD+ είναι κρίσιμο για τις sirtuins (SIRT1-7).\n\nΕρευνητικά δεδομένα:\n• NMN σε ποντίκια: βελτίωση μυϊκής λειτουργίας και μεταβολισμού\n• NR κλινικές: αύξηση NAD+ στο αίμα, ασαφή κλινικά αποτελέσματα\n• Ο Sinclair παίρνει 1g NMN + resveratrol + quercetin daily\n\n⚠️ Μελέτη 2023 (Cell): NMN μπορεί να επιταχύνει ήδη υπάρχοντες όγκους σε ποντίκια.`},
+  {tag:'VO2max & Longevity',tc:'#10B981',date:'2024',auth:'Attia / Cooper Institute',title:'VO2max — Ο Ισχυρότερος Δείκτης Longevity',sum:'Το VO2max (αερόβια ικανότητα) είναι ο ισχυρότερος μεμονωμένος προβλεπτής επιβίωσης — ισχυρότερος ακόμα και από το κάπνισμα.',body:`Μελέτη JAMA 2018 (122,000 άτομα): κάθε αύξηση κατά 1 MET στο VO2max → 12% μείωση θνησιμότητας.\n\nΤα quintile του VO2max:\n• Top 2.5% vs Bottom 25%: μείωση θνησιμότητας 5x\n• Το να περάσεις από "low" σε "below average" → 50% μείωση θανάτου\n\nΠώς να βελτιώσεις VO2max:\n• Zone 2 cardio 45-60min, 3-4x/εβδ (μακροπρόθεσμη βάση)\n• HIIT 4x4min @ 90-95% max HR (γρήγορη βελτίωση)\n• Στόχος: >50 ml/kg/min για άντρες\n\nΥπολογισμός VO2max από HR ηρεμίας: προσεχώς στο app!`},
+];
+
+function renderNews(){
+  $('news-list').innerHTML=NEWS.map((n,i)=>{
+    const res=NEWS_RES[i]||{};
+    const links=res.paper?`<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--gb)">
+      <a href="${res.paper}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:4px 10px;border-radius:100px;background:rgba(124,58,237,.15);color:#A78BFA;border:1px solid rgba(124,58,237,.25);text-decoration:none">📄 Paper</a>
+      <a href="${res.yt}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:4px 10px;border-radius:100px;background:rgba(239,68,68,.12);color:#FCA5A5;border:1px solid rgba(239,68,68,.2);text-decoration:none">▶ YouTube</a>
+      <a href="${res.art}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:4px 10px;border-radius:100px;background:rgba(0,212,255,.1);color:var(--cyan);border:1px solid rgba(0,212,255,.2);text-decoration:none">🗞 Article</a>
+    </div>`:'';
+    return `<div class="news-card">
+      <span class="news-tag" style="background:${n.tc}22;color:${n.tc};border:1px solid ${n.tc}44">${n.tag}</span>
+      <div class="news-ctitle">${n.title}</div>
+      <div class="news-cbody">${n.sum}</div>
+      <button class="expand-btn" onclick="toggleN(${i},this)">Διάβασε περισσότερα ↓</button>
+      <div class="news-exp" id="ne-${i}">${n.body.split('\n').map(l=>l.trim()?`<p>${l}</p>`:'').join('')}</div>
+      <div class="news-footer"><span>${n.auth}</span><span>·</span><span>${n.date}</span></div>
+      ${links}
+    </div>`;
+  }).join('');
+}
+function toggleN(i,btn){
+  const e=$(`ne-${i}`),open=e.classList.toggle('open');
+  btn.textContent=open?'Λιγότερα ↑':'Διάβασε περισσότερα ↓';
+}
+
+function upd(id,vid,labels){
+  const v=$(`${id}`).value;
+  $(`${vid}`).textContent=labels?labels[parseInt(v)]:v;
+}
+function showTab(id){
+  ['score','blood','life','news'].forEach(t=>{$('sec-'+t).classList.toggle('active',t===id);$('nav-'+t).classList.toggle('active',t===id);});
+  window.scrollTo(0,0);
+}
+
+const BK=['age','height','weight','body_fat','muscle_mass','waist','hip','sbp','dbp','hr','creatinine','mcv','wbc','lymph','alp','glucose','rdw','albumin','crp','cholesterol','hdl','ldl','trig','vitd','b12','folate','ferritin','calcium','magnesium','hgb','plt','uricacid','ast','alt','ggt'];
+const LK=['sleep','sleepq','cardio','strength','diet','processed','smoke','alc','stress','social'];
+function saveBlood(){const d={};BK.forEach(k=>{const e=$(k);if(e)d[k]=e.value;});try{localStorage.setItem('yh_b',JSON.stringify(d));}catch(e){}}
+function saveLife(){const d={};LK.forEach(k=>{const e=$(k);if(e)d[k]=e.value;});try{localStorage.setItem('yh_l',JSON.stringify(d));}catch(e){}}
+function loadAll(){
+  try{
+    const b=JSON.parse(localStorage.getItem('yh_b')||'{}');
+    Object.entries(b).forEach(([k,v])=>{const e=$(k);if(e&&v)e.value=v;});
+    const l=JSON.parse(localStorage.getItem('yh_l')||'{}');
+    const smokeLabels=['Ποτέ','Παλιά','Περιστ.','Καθημ.'];
+    Object.entries(l).forEach(([k,v])=>{
+      const e=$(k);if(!e||v===undefined||v==='')return;
+      e.value=v;
+      const disp=k==='smoke'?smokeLabels[parseInt(v)]:v;
+      const dEl=$(`v-${k}`);if(dEl)dEl.textContent=disp;
+    });
+  }catch(e){}
+}
+loadAll();
+document.querySelectorAll('#sec-blood input').forEach(e=>e.addEventListener('change',saveBlood));
+document.querySelectorAll('#sec-life input').forEach(e=>e.addEventListener('input',saveLife));
+renderNews();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
