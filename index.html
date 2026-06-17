@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="YouHealth">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>YouHealth 1.2</title>
+<title>YouHealth 1.3</title>
 <style>
 :root{--bg:#050A18;--bg2:#080E1F;--cyan:#00D4FF;--purple:#7C3AED;--em:#10B981;--am:#F59E0B;--red:#EF4444;--text:#E8EAF0;--muted:#6B7280;--hint:#2D3748;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.08);--r:16px;--rs:10px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -24,7 +24,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 .hdr-bio .n{font-size:22px;font-weight:800;background:linear-gradient(90deg,var(--cyan),var(--em));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
 .hdr-bio .l{font-size:9px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase}
 .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(5,10,24,.95);backdrop-filter:blur(20px);border-top:1px solid var(--gb);display:flex;z-index:100}
-.nb{flex:1;padding:10px 2px 13px;text-align:center;cursor:pointer;color:var(--muted);font-size:9px;letter-spacing:.3px;text-transform:uppercase;border:none;background:none;transition:color .2s}
+.nb{min-width:0}
+.nb{flex:1;padding:9px 1px 12px;text-align:center;cursor:pointer;color:var(--muted);font-size:8.5px;letter-spacing:.2px;text-transform:uppercase;border:none;background:none;transition:color .2s}
 .nb svg{display:block;margin:0 auto 3px;transition:transform .2s}
 .nb.active{color:var(--cyan)}.nb.active svg{transform:scale(1.12)}
 .sec{display:none;padding:16px}.sec.active{display:block}
@@ -68,6 +69,37 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 .body-map-wrap{position:relative;width:100%;margin-bottom:14px}
 .body-map-svg{display:block;margin:0 auto}
 .sys-badge{position:absolute;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:700;border:1px solid;backdrop-filter:blur(8px);cursor:pointer;white-space:nowrap}
+
+/* ORGAN BODY MAP v1.3 */
+.bm-toggle{display:flex;gap:6px;margin-bottom:12px;background:rgba(255,255,255,.03);border-radius:100px;padding:4px;border:1px solid var(--gb)}
+.bm-toggle-btn{flex:1;padding:8px 4px;border-radius:100px;border:none;background:none;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:all .2s}
+.bm-toggle-btn.active{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff}
+.organ-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+
+/* BODY SILHOUETTE v1.4 */
+.body-silhouette-wrap{position:relative;width:100%;max-width:320px;margin:0 auto 14px;background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);padding:16px 8px}
+.body-silhouette-svg{display:block;margin:0 auto;width:100%;max-width:200px}
+.organ-pin{position:absolute;display:flex;align-items:center;gap:6px;cursor:pointer}
+.organ-pin-icon{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);flex-shrink:0;position:relative;z-index:2}
+.organ-pin-icon svg{width:24px;height:24px}
+.organ-pin-label{background:rgba(5,10,24,.85);border:1px solid;border-radius:8px;padding:3px 8px;font-size:10px;font-weight:700;white-space:nowrap;backdrop-filter:blur(6px)}
+.organ-pin-label .nm{color:var(--muted);font-weight:600;font-size:9px;display:block;margin-bottom:1px}
+.organ-pin.left{flex-direction:row-reverse}
+.organ-pin.left .organ-pin-label{text-align:right}
+.organ-card{background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);padding:14px 12px;text-align:center;position:relative;overflow:hidden;transition:transform .15s}
+.organ-card:active{transform:scale(.97)}
+.organ-svg-wrap{width:64px;height:64px;margin:0 auto 8px;position:relative}
+.organ-name{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:3px}
+.organ-delta{font-size:17px;font-weight:800;line-height:1.1}
+.organ-status{font-size:9px;margin-top:2px;letter-spacing:.2px}
+.organ-glow-ring{position:absolute;inset:-4px;border-radius:50%;opacity:.5;filter:blur(8px)}
+.system-list{display:flex;flex-direction:column;gap:8px}
+.system-row{background:var(--glass);border:1px solid var(--gb);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:12px}
+.system-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.system-info{flex:1;min-width:0}
+.system-name{font-size:12px;font-weight:600;color:var(--text)}
+.system-organs{font-size:10px;color:var(--hint);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.system-delta{font-size:15px;font-weight:800;text-align:right;min-width:48px}
 
 /* PILLARS */
 .pillars4{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
@@ -148,7 +180,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 <body>
 <div class="app">
 <div class="hdr">
-  <div class="logo"><div class="logo-dot">🧬</div><h1>You<span>Health</span> <span style="font-size:10px;color:var(--muted);font-weight:400;-webkit-text-fill-color:var(--muted)">1.2</span></h1></div>
+  <div class="logo"><div class="logo-dot">🧬</div><h1>You<span>Health</span> <span style="font-size:10px;color:var(--muted);font-weight:400;-webkit-text-fill-color:var(--muted)">1.3</span></h1></div>
   <div class="hdr-bio" id="hdr-bio" style="display:none"><div class="n" id="hdr-n">—</div><div class="l">Βιολ. Ηλικία</div></div>
 </div>
 
@@ -181,9 +213,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
   <div class="slabel">PhenoAge Biomarkers</div>
   <div class="g2">
     <div class="fld"><label>Κρεατινίνη</label><input type="number" id="creatinine" value="0.97" inputmode="decimal"><div class="u">mg/dL</div></div>
-    <div class="fld"><label>MCV</label><input type="number" id="mcv" value="83.5" inputmode="decimal"><div class="u">fL</div></div>
+    <div class="fld opt"><label>MCV</label><input type="number" id="mcv" value="83.5" inputmode="decimal"><div class="u">fL</div></div>
     <div class="fld"><label>WBC</label><input type="number" id="wbc" value="11.5" inputmode="decimal"><div class="u">K/μL</div></div>
-    <div class="fld"><label>Λεμφοκύτταρα %</label><input type="number" id="lymph" value="22" inputmode="decimal"><div class="u">%</div></div>
+    <div class="fld opt"><label>Λεμφοκύτταρα %</label><input type="number" id="lymph" value="22" inputmode="decimal"><div class="u">%</div></div>
     <div class="fld opt"><label>ALP</label><input type="number" id="alp" placeholder="—" inputmode="decimal"><div class="u">U/L</div></div>
     <div class="fld opt"><label>Γλυκόζη νηστείας</label><input type="number" id="glucose" placeholder="—" inputmode="decimal"><div class="u">mg/dL</div></div>
     <div class="fld opt"><label>RDW</label><input type="number" id="rdw" placeholder="—" inputmode="decimal"><div class="u">%</div></div>
@@ -201,81 +233,156 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
   <div class="g2">
     <div class="fld"><label>Βιτ. D3 (25-OH)</label><input type="number" id="vitd" value="29" inputmode="decimal"><div class="u">ng/mL</div></div>
     <div class="fld"><label>Βιτ. B12</label><input type="number" id="b12" value="358" inputmode="decimal"><div class="u">pg/mL</div></div>
-    <div class="fld"><label>Φυλλικό</label><input type="number" id="folate" value="5.4" inputmode="decimal"><div class="u">ng/mL</div></div>
-    <div class="fld"><label>Φερριτίνη</label><input type="number" id="ferritin" value="63.1" inputmode="decimal"><div class="u">ng/mL</div></div>
-    <div class="fld"><label>Ασβέστιο</label><input type="number" id="calcium" value="9.9" inputmode="decimal"><div class="u">mg/dL</div></div>
-    <div class="fld"><label>Μαγνήσιο</label><input type="number" id="magnesium" value="2.2" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld opt"><label>Φυλλικό</label><input type="number" id="folate" value="5.4" inputmode="decimal"><div class="u">ng/mL</div></div>
+    <div class="fld opt"><label>Φερριτίνη</label><input type="number" id="ferritin" value="63.1" inputmode="decimal"><div class="u">ng/mL</div></div>
+    <div class="fld opt"><label>Ασβέστιο</label><input type="number" id="calcium" value="9.9" inputmode="decimal"><div class="u">mg/dL</div></div>
+    <div class="fld opt"><label>Μαγνήσιο</label><input type="number" id="magnesium" value="2.2" inputmode="decimal"><div class="u">mg/dL</div></div>
   </div>
   <div class="slabel">CBC &amp; Ήπαρ</div>
   <div class="g3">
-    <div class="fld"><label>Αιμοσφαιρίνη</label><input type="number" id="hgb" value="15.0" inputmode="decimal"><div class="u">g/dL</div></div>
-    <div class="fld"><label>Αιμοπετάλια</label><input type="number" id="plt" value="258" inputmode="decimal"><div class="u">K/μL</div></div>
+    <div class="fld opt"><label>Αιμοσφαιρίνη</label><input type="number" id="hgb" value="15.0" inputmode="decimal"><div class="u">g/dL</div></div>
+    <div class="fld opt"><label>Αιμοπετάλια</label><input type="number" id="plt" value="258" inputmode="decimal"><div class="u">K/μL</div></div>
     <div class="fld"><label>Ουρικό</label><input type="number" id="uricacid" value="5.7" inputmode="decimal"><div class="u">mg/dL</div></div>
     <div class="fld"><label>AST</label><input type="number" id="ast" value="13.2" inputmode="decimal"><div class="u">U/L</div></div>
     <div class="fld"><label>ALT</label><input type="number" id="alt" value="10.1" inputmode="decimal"><div class="u">U/L</div></div>
-    <div class="fld"><label>γ-GT</label><input type="number" id="ggt" value="12.3" inputmode="decimal"><div class="u">U/L</div></div>
+    <div class="fld opt"><label>γ-GT</label><input type="number" id="ggt" value="12.3" inputmode="decimal"><div class="u">U/L</div></div>
   </div>
+
+  <div class="slabel">Φυσική κατάσταση &amp; Μεταβολισμός <span style="font-size:9px;color:var(--cyan)">νέο</span></div>
+  <div class="g2">
+    <div class="fld opt"><label>VO₂max</label><input type="number" id="vo2max" placeholder="—" inputmode="decimal"><div class="u">ml/kg/min</div></div>
+    <div class="fld opt"><label>HbA1c</label><input type="number" id="hba1c" placeholder="—" inputmode="decimal" step="0.1"><div class="u">%</div></div>
+    <div class="fld opt"><label>Οστική πυκν. (T-score)</label><input type="number" id="tscore" placeholder="—" inputmode="decimal" step="0.1"><div class="u">SD (DEXA)</div></div>
+    <div class="fld opt"><label>HR ηρεμίας → VO₂max</label><input type="number" id="vo2hr" placeholder="—" inputmode="decimal"><div class="u">bpm (auto-υπολ.)</div></div>
+  </div>
+  <div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:8px;padding:0 2px">
+    💡 Δεν έχεις VO₂max; Άσ' το κενό και βάλε «HR ηρεμίας → VO₂max» — εκτιμάται αυτόματα (Uth-Sørensen: VO₂max ≈ 15 × HRmax/HRrest).
+  </div>
+
   <button class="cbtn" onclick="calculate()">Υπολόγισε →</button>
 </div>
 
 <!-- LIFESTYLE -->
 <div class="sec" id="sec-life">
+  <div id="life-feedback" style="margin-bottom:14px"></div>
   <div class="slabel">Ύπνος</div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Ώρες / βράδυ</span><span class="sfld-val" id="v-sleep">7</span></div>
-    <input type="range" id="sleep" min="4" max="10" step=".5" value="7" oninput="upd('sleep','v-sleep');saveLife()">
+    <input type="range" id="sleep" min="4" max="10" step=".5" value="7" oninput="upd('sleep','v-sleep');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint">4h</span><span class="sfld-hint" style="color:var(--em)">7–8h ✓</span><span class="sfld-hint">10h</span></div>
   </div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Ποιότητα ύπνου</span><span class="sfld-val" id="v-sleepq">3</span>/5</div>
-    <input type="range" id="sleepq" min="1" max="5" step="1" value="3" oninput="upd('sleepq','v-sleepq');saveLife()">
+    <input type="range" id="sleepq" min="1" max="5" step="1" value="3" oninput="upd('sleepq','v-sleepq');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint">Κακή</span><span class="sfld-hint" style="color:var(--em)">Άριστη</span></div>
   </div>
   <div class="slabel">Άσκηση</div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Αερόβια / εβδ.</span><span class="sfld-val" id="v-cardio">150</span>min</div>
-    <input type="range" id="cardio" min="0" max="400" step="30" value="150" oninput="upd('cardio','v-cardio');saveLife()">
+    <input type="range" id="cardio" min="0" max="400" step="30" value="150" oninput="upd('cardio','v-cardio');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint">0</span><span class="sfld-hint" style="color:var(--em)">150+ ✓</span><span class="sfld-hint">400</span></div>
   </div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Αντιστάσεις / εβδ.</span><span class="sfld-val" id="v-strength">2</span>x</div>
-    <input type="range" id="strength" min="0" max="5" step="1" value="2" oninput="upd('strength','v-strength');saveLife()">
+    <input type="range" id="strength" min="0" max="5" step="1" value="2" oninput="upd('strength','v-strength');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint">0</span><span class="sfld-hint" style="color:var(--em)">2–3 ✓</span><span class="sfld-hint">5+</span></div>
   </div>
   <div class="slabel">Διατροφή</div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Ποιότητα</span><span class="sfld-val" id="v-diet">3</span>/5</div>
-    <input type="range" id="diet" min="1" max="5" step="1" value="3" oninput="upd('diet','v-diet');saveLife()">
+    <input type="range" id="diet" min="1" max="5" step="1" value="3" oninput="upd('diet','v-diet');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint">Fast food</span><span class="sfld-hint" style="color:var(--em)">Μεσόγειος</span></div>
   </div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Επεξ. τρόφιμα / εβδ.</span><span class="sfld-val" id="v-processed">3</span>μερίδες</div>
-    <input type="range" id="processed" min="0" max="21" step="1" value="3" oninput="upd('processed','v-processed');saveLife()">
+    <input type="range" id="processed" min="0" max="21" step="1" value="3" oninput="upd('processed','v-processed');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint">0</span><span class="sfld-hint" style="color:var(--em)">&lt;3 ✓</span><span class="sfld-hint">21+</span></div>
   </div>
   <div class="slabel">Κάπνισμα &amp; Αλκοόλ</div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Κάπνισμα</span><span class="sfld-val" id="v-smoke">Ποτέ</span></div>
-    <input type="range" id="smoke" min="0" max="3" step="1" value="0" oninput="upd('smoke','v-smoke',['Ποτέ','Παλιά','Περιστ.','Καθημ.']);saveLife()">
+    <input type="range" id="smoke" min="0" max="3" step="1" value="0" oninput="upd('smoke','v-smoke',['Ποτέ','Παλιά','Περιστ.','Καθημ.']);saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint" style="color:var(--em)">Ποτέ</span><span class="sfld-hint">Καθημ.</span></div>
   </div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Αλκοόλ / εβδ.</span><span class="sfld-val" id="v-alc">2</span>units</div>
-    <input type="range" id="alc" min="0" max="21" step="1" value="2" oninput="upd('alc','v-alc');saveLife()">
+    <input type="range" id="alc" min="0" max="21" step="1" value="2" oninput="upd('alc','v-alc');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint">0</span><span class="sfld-hint" style="color:var(--em)">&lt;7 ✓</span><span class="sfld-hint">21+</span></div>
   </div>
   <div class="slabel">Στρες &amp; Κοινωνικά</div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Επίπεδο στρες</span><span class="sfld-val" id="v-stress">3</span>/5</div>
-    <input type="range" id="stress" min="1" max="5" step="1" value="3" oninput="upd('stress','v-stress');saveLife()">
+    <input type="range" id="stress" min="1" max="5" step="1" value="3" oninput="upd('stress','v-stress');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint" style="color:var(--em)">Χαμηλό</span><span class="sfld-hint">Υψηλό</span></div>
   </div>
   <div class="sfld">
     <div class="sfld-top"><span class="sfld-label">Κοινωνικές επαφές</span><span class="sfld-val" id="v-social">3</span>/5</div>
-    <input type="range" id="social" min="1" max="5" step="1" value="3" oninput="upd('social','v-social');saveLife()">
+    <input type="range" id="social" min="1" max="5" step="1" value="3" oninput="upd('social','v-social');saveLife();updateLifeFeedback()">
     <div class="sfld-hints"><span class="sfld-hint">Απομόνωση</span><span class="sfld-hint" style="color:var(--em)">Πλούσιες</span></div>
   </div>
   <button class="cbtn" onclick="calculate()">Υπολόγισε →</button>
+</div>
+
+<!-- BRAIN QUIZ -->
+<div class="sec" id="sec-brain">
+  <div class="news-hero" style="background:linear-gradient(135deg,rgba(162,28,175,.2),rgba(124,58,237,.12))">
+    <div class="news-htag">🧠 Cognitive Health</div>
+    <div class="news-htitle">Έλεγχος Εγκεφαλικής Υγείας</div>
+    <div class="news-hsub">Ένα γρήγορο τεστ με ερωτήσεις διαβαθμισμένης δυσκολίας: μνήμη, λογική, ταχύτητα επεξεργασίας & προσοχή. Το αποτέλεσμα τροφοδοτεί τον δείκτη υγείας του εγκεφάλου.</div>
+  </div>
+  <div id="brain-quiz-content">
+    <div class="gc" style="padding:18px">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">Επίλεξε δοκιμασία</div>
+      <div onclick="startQuiz()" style="display:flex;align-items:center;gap:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:12px;margin-bottom:10px;cursor:pointer">
+        <div style="font-size:28px">🧩</div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600">Γνωστικό Τεστ</div><div style="font-size:11px;color:var(--muted);margin-top:2px">10 ερωτήσεις · μνήμη, λογική, ταχύτητα · ~3 λεπτά</div></div>
+        <div style="color:var(--cyan)">→</div>
+      </div>
+      <div onclick="startReaction()" style="display:flex;align-items:center;gap:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:12px;margin-bottom:10px;cursor:pointer">
+        <div style="font-size:28px">⚡</div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600">Reaction Time</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Ταχύτητα αντίδρασης · δείκτης νευρικής επεξεργασίας · 1 λεπτό</div></div>
+        <div style="color:var(--cyan)">→</div>
+      </div>
+      <div onclick="startNback()" style="display:flex;align-items:center;gap:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:12px;cursor:pointer">
+        <div style="font-size:28px">🔢</div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600">N-Back (Working Memory)</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Εργαζόμενη μνήμη · ο "χρυσός κανόνας" γνωστικής εκπαίδευσης · 2 λεπτά</div></div>
+        <div style="color:var(--cyan)">→</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROTOCOL -->
+<div class="sec" id="sec-protocol">
+  <div class="news-hero" style="background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(0,212,255,.1))">
+    <div class="news-htag">✅ Protocol</div>
+    <div class="news-htitle">Το πλάνο δράσης σου</div>
+    <div class="news-hsub">Οι συστάσεις σου ως checklist με tracking. Τσέκαρε ό,τι κάνεις και δες την πρόοδό σου.</div>
+  </div>
+  <div id="protocol-content">
+    <div class="gc" style="text-align:center;padding:30px 20px">
+      <div style="font-size:40px;margin-bottom:12px">📋</div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.6">Υπολόγισε πρώτα τη βιολογική σου ηλικία στο <strong>Score</strong> για να δημιουργηθεί το protocol σου.</p>
+    </div>
+  </div>
+
+  <div class="slabel">Υπενθυμίσεις</div>
+  <div class="gc">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div><div style="font-size:13px;font-weight:600">Επανέλεγχος εξετάσεων</div><div style="font-size:11px;color:var(--muted);margin-top:2px" id="reminder-status">Δεν έχει οριστεί</div></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="setReminder(3)" style="flex:1;padding:10px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);border-radius:10px;color:var(--cyan);font-size:12px;font-weight:600;cursor:pointer">3 μήνες</button>
+      <button onclick="setReminder(6)" style="flex:1;padding:10px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);border-radius:10px;color:var(--cyan);font-size:12px;font-weight:600;cursor:pointer">6 μήνες</button>
+      <button onclick="setReminder(12)" style="flex:1;padding:10px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);border-radius:10px;color:var(--cyan);font-size:12px;font-weight:600;cursor:pointer">12 μήνες</button>
+    </div>
+  </div>
+
+  <div class="slabel">Εξαγωγή</div>
+  <div class="gc">
+    <button onclick="exportPDF()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer">📄 Εξαγωγή report για τον γιατρό</button>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.5">Δημιουργεί εκτυπώσιμο report με όλες τις μετρήσεις, τη βιολογική ηλικία και τις συστάσεις.</div>
+  </div>
 </div>
 
 <!-- NEWS -->
@@ -296,6 +403,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6 9 4 13 4 16a8 8 0 0016 0c0-3-2-7-8-14z"/></svg>Blood</button>
   <button class="nb" id="nav-life" onclick="showTab('life')">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>Lifestyle</button>
+  <button class="nb" id="nav-brain" onclick="showTab('brain')">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.5 2A2.5 2.5 0 0112 4.5v15a2.5 2.5 0 01-4.96.44 2.5 2.5 0 01-2.96-3.08 3 3 0 01-.34-5.58 2.5 2.5 0 011.32-4.24 2.5 2.5 0 014.44-1.04zm5 0A2.5 2.5 0 0012 4.5v15a2.5 2.5 0 004.96.44 2.5 2.5 0 002.96-3.08 3 3 0 00.34-5.58 2.5 2.5 0 00-1.32-4.24 2.5 2.5 0 00-4.44-1.04z"/></svg>Brain</button>
+  <button class="nb" id="nav-protocol" onclick="showTab('protocol')">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Protocol</button>
   <button class="nb" id="nav-news" onclick="showTab('news')">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>News</button>
 </nav>
@@ -305,12 +416,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 const $=id=>document.getElementById(id);
 function fv(id){const e=$(id);return e?parseFloat(e.value):NaN}
 function ok(x){return !isNaN(x)&&x!==null&&x>0}
+function okZ(x){return typeof x==='number'&&!isNaN(x)&&isFinite(x)}
 function normalCDF(z){const t=1/(1+0.2316419*Math.abs(z));const p=t*(0.31938153+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));const phi=1-(1/Math.sqrt(2*Math.PI))*Math.exp(-.5*z*z)*p;return z>=0?phi:1-phi}
 
 // ─── CALIBRATED MARKER SYSTEM ────────────────────────────────────────────
 // Guaranteed: all at median → 0y, all at top1% → -20y, all at bottom1% → +20y
 // SCALE = 20 / (sum_weights * 2.327)
-const SCALE = 7.709;
+const SCALE = 6.3929;
 
 // {weight, lower_better, pop_mean(age), pop_sd(age), opt_lo(age), opt_hi(age), lo, hi, unit}
 function mkDef(w, lower, mFn, sdFn, oLFn, oHFn, lo, hi, unit){
@@ -330,13 +442,19 @@ const MDEFS = {
   waist_hip:mkDef(.04,true, ()=>0.87,                       ()=>0.07,()=>0,   ()=>0.9,0.6,1.2,''),
   vitd:     mkDef(.05,false,()=>28,                         ()=>11,  ()=>40,  ()=>70, 5,100,'ng/mL'),
   b12:      mkDef(.03,false,()=>450,                        ()=>150, ()=>400, ()=>900,150,1500,'pg/mL'),
-  glucose:  mkDef(.05,true, a=>90+Math.max(0,a-30)*.3,    ()=>11,  ()=>70,  ()=>90, 55,200,'mg/dL'),
+  glucose:  mkDef(.03,true, a=>90+Math.max(0,a-30)*.3,    ()=>11,  ()=>70,  ()=>90, 55,200,'mg/dL'),
   wbc:      mkDef(.06,true, a=>6+Math.max(0,a-20)*.03,    ()=>1.8, ()=>4,   ()=>7,  2,20,'K/μL'),
   ferritin: mkDef(.03,true, a=>80+Math.max(0,a-20)*2.5,   a=>60+Math.max(0,a-20), ()=>30,()=>150, 5,600,'ng/mL'),
   ast:      mkDef(.03,true, ()=>24,                         ()=>9,   ()=>10,  ()=>30, 5,200,'U/L'),
   alt:      mkDef(.03,true, ()=>24,                         ()=>10,  ()=>10,  ()=>30, 5,200,'U/L'),
   folate:   mkDef(.02,false,()=>9,                          ()=>4,   ()=>7,   ()=>20, 2,30,'ng/mL'),
   uricacid: mkDef(.02,true, ()=>5.5,                        ()=>1.2, ()=>3.5, ()=>5.8,2,12,'mg/dL'),
+  // VO2max: strongest longevity predictor. Age-declining. Higher=better.
+  vo2max:   mkDef(.08,false,a=>45-Math.max(0,a-25)*0.4,    ()=>8,   a=>42-Math.max(0,a-25)*0.35, ()=>65, 20,75,'ml/kg/min'),
+  // Bone density T-score: 0=young adult mean, negative=osteopenia/osteoporosis
+  tscore:   mkDef(.04,false,()=>0,                          ()=>1,   ()=>-0.5,()=>2.5, -4,3,'SD'),
+  // HbA1c: 3-month glucose avg. Lower=better (down to ~5.0)
+  hba1c:    mkDef(.05,true, ()=>5.4,                        ()=>0.5, ()=>4.8, ()=>5.4, 4,10,'%'),
   // lifestyle (z-scores passed directly)
   sleep_z:  mkDef(.035,false,()=>0,()=>1,()=>0,()=>1,-3,3,''),
   exercise_z:mkDef(.04,false,()=>0,()=>1,()=>0,()=>1,-3,3,''),
@@ -349,6 +467,7 @@ const MDEFS = {
 
 function scoreOne(key, rawVal, age){
   const d=MDEFS[key]; if(!d)return null;
+  if(!okZ(rawVal))return null;
   const m=d.mFn(age), sd=d.sdFn(age), oL=d.oLFn(age), oH=d.oHFn(age);
   const z=(rawVal-m)/sd;
   const goodZ=d.lower?-z:z;
@@ -394,6 +513,238 @@ function phenoRaw(age,ov){
   return isNaN(pa)?age:pa;
 }
 
+// ─── ORGAN SVG ICONS (v1.3) ───────────────────────────────────────────────
+const ORGAN_SVGS = {
+  heart: `<svg viewBox="0 0 60 60" width="100%" height="100%">
+    <defs><radialGradient id="hG{ID}" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="{COLOR}" stop-opacity="0.45"/><stop offset="100%" stop-color="{COLOR}" stop-opacity="0"/></radialGradient>
+    <linearGradient id="hB{ID}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FB7185"/><stop offset="50%" stop-color="#E11D48"/><stop offset="100%" stop-color="#9F1239"/></linearGradient></defs>
+    <circle cx="30" cy="30" r="28" fill="url(#hG{ID})"/>
+    <path d="M30 48 C18 38 8 30 8 20 C8 12 14 8 20 8 C25 8 28 11 30 15 C32 11 35 8 40 8 C46 8 52 12 52 20 C52 30 42 38 30 48 Z" fill="url(#hB{ID})" stroke="#FCA5A5" stroke-width="0.5"/>
+    <path d="M22 14 C24 18 26 22 25 28" stroke="#FCA5A5" stroke-width="1.4" fill="none" opacity="0.5" stroke-linecap="round"/></svg>`,
+  lungs: `<svg viewBox="0 0 60 60" width="100%" height="100%">
+    <defs><radialGradient id="lG{ID}" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="{COLOR}" stop-opacity="0.4"/><stop offset="100%" stop-color="{COLOR}" stop-opacity="0"/></radialGradient>
+    <linearGradient id="lB{ID}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7DD3FC"/><stop offset="100%" stop-color="#0284C7"/></linearGradient></defs>
+    <circle cx="30" cy="30" r="28" fill="url(#lG{ID})"/>
+    <rect x="28" y="4" width="4" height="12" rx="2" fill="#94A3B8"/>
+    <path d="M28 14 C20 14 10 20 8 32 C6 42 10 50 16 50 C22 50 26 44 27 36 L27 16 Z" fill="url(#lB{ID})" stroke="#BAE6FD" stroke-width="0.5"/>
+    <path d="M32 14 C40 14 50 20 52 32 C54 42 50 50 44 50 C38 50 34 44 33 36 L33 16 Z" fill="url(#lB{ID})" stroke="#BAE6FD" stroke-width="0.5"/></svg>`,
+  liver: `<svg viewBox="0 0 60 60" width="100%" height="100%">
+    <defs><radialGradient id="vG{ID}" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="{COLOR}" stop-opacity="0.4"/><stop offset="100%" stop-color="{COLOR}" stop-opacity="0"/></radialGradient>
+    <linearGradient id="vB{ID}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#B45309"/><stop offset="100%" stop-color="#7C2D12"/></linearGradient></defs>
+    <circle cx="30" cy="30" r="28" fill="url(#vG{ID})"/>
+    <path d="M10 24 C10 16 18 12 28 13 C38 11 50 14 52 22 C54 28 50 34 44 36 C46 40 44 46 38 47 C30 49 14 46 11 38 C8 32 9 28 10 24 Z" fill="url(#vB{ID})" stroke="#D97706" stroke-width="0.5"/></svg>`,
+  kidneys: `<svg viewBox="0 0 60 60" width="100%" height="100%">
+    <defs><radialGradient id="kG{ID}" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="{COLOR}" stop-opacity="0.4"/><stop offset="100%" stop-color="{COLOR}" stop-opacity="0"/></radialGradient>
+    <linearGradient id="kB{ID}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C084FC"/><stop offset="100%" stop-color="#7E22CE"/></linearGradient></defs>
+    <circle cx="30" cy="30" r="28" fill="url(#kG{ID})"/>
+    <path d="M14 16 C8 16 6 24 8 30 C6 36 8 44 14 44 C20 44 22 36 20 30 C22 24 20 16 14 16 Z" fill="url(#kB{ID})" stroke="#E9D5FF" stroke-width="0.5"/>
+    <path d="M46 16 C52 16 54 24 52 30 C54 36 52 44 46 44 C40 44 38 36 40 30 C38 24 40 16 46 16 Z" fill="url(#kB{ID})" stroke="#E9D5FF" stroke-width="0.5"/></svg>`,
+  brain: `<svg viewBox="0 0 60 60" width="100%" height="100%">
+    <defs><radialGradient id="bG{ID}" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="{COLOR}" stop-opacity="0.4"/><stop offset="100%" stop-color="{COLOR}" stop-opacity="0"/></radialGradient>
+    <linearGradient id="bB{ID}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0ABFC"/><stop offset="100%" stop-color="#A21CAF"/></linearGradient></defs>
+    <circle cx="30" cy="30" r="28" fill="url(#bG{ID})"/>
+    <path d="M16 24 C14 16 22 10 30 11 C38 10 46 16 44 24 C48 28 46 36 40 38 C40 44 32 46 30 42 C28 46 20 44 20 38 C14 36 12 28 16 24 Z" fill="url(#bB{ID})" stroke="#F5D0FE" stroke-width="0.5"/>
+    <path d="M22 18 C24 22 23 26 20 28" stroke="#701A75" stroke-width="0.9" fill="none" opacity="0.4"/>
+    <path d="M30 14 C30 20 30 26 30 32" stroke="#701A75" stroke-width="0.9" fill="none" opacity="0.4"/>
+    <path d="M38 18 C36 22 37 26 40 28" stroke="#701A75" stroke-width="0.9" fill="none" opacity="0.4"/></svg>`,
+};
+function renderOrgan(type, delta){
+  const c = delta<=-0.8?'#10B981':delta<0?'#34D399':delta<0.4?'#F59E0B':'#EF4444';
+  const id = type+Math.floor(Math.random()*99999);
+  return (ORGAN_SVGS[type]||'').replace(/\{ID\}/g,id).replace(/\{COLOR\}/g,c);
+}
+
+// ─── REALISTIC ANATOMICAL BODY (v1.3) ─────────────────────────────────────
+// Renders a body silhouette with organs embedded in correct positions.
+// mode 'organs': 5 organs colored by health + side labels with delta years.
+// mode 'systems': same body, organs of each system highlighted + list below.
+function organColorFn(d){return d<=-0.8?'#10B981':d<0?'#34D399':d<0.4?'#F59E0B':'#EF4444';}
+
+function bodySVG(organD, highlightOrgans){
+  // highlightOrgans: null = show all colored (organs mode), or array of keys to highlight (systems mode)
+  const oc = k => {
+    if(highlightOrgans && !highlightOrgans.includes(k)) return '#3A4250'; // dimmed
+    return organColorFn(organD[k]);
+  };
+  const op = k => (highlightOrgans && !highlightOrgans.includes(k)) ? 0.25 : 0.92;
+  return `<svg viewBox="0 0 240 440" style="width:100%;max-width:240px;display:block;margin:0 auto">
+    <defs>
+      <linearGradient id="skinG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5B6472" stop-opacity="0.4"/><stop offset="100%" stop-color="#2D3543" stop-opacity="0.25"/></linearGradient>
+    </defs>
+    <!-- body silhouette -->
+    <path d="M120 18 C133 18 142 29 142 44 C142 56 137 64 130 68 L110 68 C103 64 98 56 98 44 C98 29 107 18 120 18 Z" fill="url(#skinG)"/>
+    <path d="M112 66 L128 66 L127 80 L113 80 Z" fill="url(#skinG)"/>
+    <path d="M113 78 C95 80 78 86 70 96 C76 100 82 104 84 112 C82 130 80 150 82 172 C83 190 86 205 88 220 C92 232 100 238 120 239 C140 238 148 232 152 220 C154 205 157 190 158 172 C160 150 158 130 156 112 C158 104 164 100 170 96 C162 86 145 80 127 78 Z" fill="url(#skinG)"/>
+    <path d="M72 97 C60 104 52 118 48 140 C45 158 44 178 46 196 C47 204 50 208 54 208 C58 208 60 204 60 196 C60 178 62 160 66 142 C70 124 76 110 84 102 Z" fill="url(#skinG)"/>
+    <path d="M168 97 C180 104 188 118 192 140 C195 158 196 178 194 196 C193 204 190 208 186 208 C182 208 180 204 180 196 C180 178 178 160 174 142 C170 124 164 110 156 102 Z" fill="url(#skinG)"/>
+    <path d="M90 232 C88 244 88 252 90 260 L150 260 C152 252 152 244 150 232 Z" fill="url(#skinG)"/>
+    <path d="M92 256 C90 290 88 330 88 360 C87 385 88 405 90 420 L106 420 C107 405 107 385 108 360 C110 330 112 295 114 258 Z" fill="url(#skinG)"/>
+    <path d="M148 256 C150 290 152 330 152 360 C153 385 152 405 150 420 L134 420 C133 405 133 385 132 360 C130 330 128 295 126 258 Z" fill="url(#skinG)"/>
+
+    <!-- BRAIN (in head) -->
+    <g transform="translate(120,42)" opacity="${op('brain')}">
+      <path d="M-16 -2 C-18 -10 -10 -18 0 -16 C10 -18 18 -10 16 -2 C20 2 18 10 12 12 C12 17 4 18 0 15 C-4 18 -12 17 -12 12 C-18 10 -20 2 -16 -2 Z" fill="${oc('brain')}" stroke="#fff" stroke-width="0.3" stroke-opacity="0.4"/>
+      <path d="M-8 -10 C-6 -6 -7 -2 -10 0 M0 -14 L0 8 M8 -10 C6 -6 7 -2 10 0" stroke="#000" stroke-width="0.7" fill="none" opacity="0.25"/>
+    </g>
+    <!-- LUNGS -->
+    <g transform="translate(105,120)" opacity="${op('lungs')}">
+      <path d="M8 -14 C0 -14 -10 -8 -12 4 C-14 14 -10 22 -4 22 C2 22 6 16 7 8 L7 -12 Z" fill="${oc('lungs')}" stroke="#fff" stroke-width="0.3" stroke-opacity="0.4"/>
+    </g>
+    <g transform="translate(135,120)" opacity="${op('lungs')}">
+      <path d="M-8 -14 C0 -14 10 -8 12 4 C14 14 10 22 4 22 C-2 22 -6 16 -7 8 L-7 -12 Z" fill="${oc('lungs')}" stroke="#fff" stroke-width="0.3" stroke-opacity="0.4"/>
+    </g>
+    <!-- HEART -->
+    <g transform="translate(116,116)" opacity="${op('heart')}">
+      <path d="M0 13 C-7 7 -13 2 -13 -4 C-13 -9 -9 -11 -6 -11 C-3 -11 -1 -9 0 -6 C1 -9 3 -11 6 -11 C9 -11 13 -9 13 -4 C13 2 7 7 0 13 Z" fill="${oc('heart')}" stroke="#fff" stroke-width="0.3" stroke-opacity="0.5"/>
+    </g>
+    <!-- LIVER -->
+    <g transform="translate(110,160)" opacity="${op('liver')}">
+      <path d="M-14 -6 C-14 -11 -6 -13 4 -12 C12 -13 18 -10 18 -5 C18 0 14 4 8 5 C2 7 -10 6 -13 1 C-15 -2 -14 -4 -14 -6 Z" fill="${oc('liver')}" stroke="#fff" stroke-width="0.3" stroke-opacity="0.4"/>
+    </g>
+    <!-- KIDNEYS -->
+    <g transform="translate(102,185)" opacity="${op('kidneys')}">
+      <path d="M0 -8 C-5 -8 -7 -2 -5 3 C-7 8 -4 14 0 14 C5 14 6 8 4 3 C6 -2 5 -8 0 -8 Z" fill="${oc('kidneys')}" stroke="#fff" stroke-width="0.3" stroke-opacity="0.4"/>
+    </g>
+    <g transform="translate(138,185)" opacity="${op('kidneys')}">
+      <path d="M0 -8 C5 -8 7 -2 5 3 C7 8 4 14 0 14 C-5 14 -6 8 -4 3 C-6 -2 -5 -8 0 -8 Z" fill="${oc('kidneys')}" stroke="#fff" stroke-width="0.3" stroke-opacity="0.4"/>
+    </g>
+  </svg>`;
+}
+
+// map each of the 9 systems to which of our 5 visible organs to highlight
+const SYS_ORGANS = {
+  circulatory:['heart'], respiratory:['lungs'], digestive:['liver'],
+  nervous:['brain'], musculo:[], urinary:['kidneys'],
+  endocrine:['liver'], immune:[], reproductive:[]
+};
+
+function buildBodyView(mode, organD, results, lifeScores){
+  const organNames={heart:'Καρδιά',lungs:'Πνεύμονες',liver:'Συκώτι',kidneys:'Νεφρά',brain:'Εγκέφαλος'};
+  if(mode==='organs'){
+    // body + side legend with each organ delta
+    const legend = ['brain','lungs','heart','liver','kidneys'].map(k=>{
+      const d=organD[k], c=organColorFn(d);
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:10px;margin-bottom:6px">
+        <div style="width:26px;height:26px;flex-shrink:0">${renderOrgan(k,d)}</div>
+        <div style="flex:1"><div style="font-size:12px;color:var(--text)">${organNames[k]}</div></div>
+        <div style="font-size:14px;font-weight:800;color:${c}">${d>0?'+':''}${d.toFixed(1)}y</div>
+      </div>`;
+    }).join('');
+    return `<div style="display:flex;gap:8px;align-items:flex-start">
+      <div style="flex:0 0 50%;background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);padding:8px">${bodySVG(organD,null)}</div>
+      <div style="flex:1">${legend}</div>
+    </div>`;
+  } else {
+    // systems mode: list of 9 systems, each tappable to highlight on the body
+    const sysRows = SYSTEMS_DEF.map((s,i)=>{
+      const d=s.calc(results,lifeScores);
+      const c=d<=-0.5?'#10B981':d<0?'#34D399':d<0.3?'#F59E0B':'#EF4444';
+      const organsJson=JSON.stringify(SYS_ORGANS[s.key]||[]).replace(/"/g,'&quot;');
+      return`<div class="system-row" onclick="highlightSystem('${organsJson}',this)" style="cursor:pointer">
+        <div class="system-icon" style="background:${s.color}22">${s.icon}</div>
+        <div class="system-info"><div class="system-name">${s.name}</div><div class="system-organs">${s.organs}</div></div>
+        <div class="system-delta" style="color:${c}">${d>0?'+':''}${d.toFixed(1)}y</div>
+      </div>`;
+    }).join('');
+    return `<div id="sys-body-holder" style="background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);padding:8px;margin-bottom:12px;max-width:220px;margin-left:auto;margin-right:auto">${bodySVG(organD,[])}</div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:10px">Πάτα ένα σύστημα για να δεις τα όργανά του στο σώμα</div>
+      <div class="system-list">${sysRows}</div>`;
+  }
+}
+
+function highlightSystem(organsJson, el){
+  try{
+    const organs=JSON.parse(organsJson.replace(/&quot;/g,'"'));
+    const holder=document.getElementById('sys-body-holder');
+    if(holder && window._lastOrganD){
+      holder.innerHTML=bodySVG(window._lastOrganD, organs);
+    }
+    document.querySelectorAll('.system-row').forEach(r=>r.style.background='');
+    if(el)el.style.background='rgba(0,212,255,.08)';
+  }catch(e){}
+}
+
+// ─── ORGAN DELTA MAPPING ──────────────────────────────────────────────────
+function computeOrganDeltas(results, lifeScores, phenoAccel){
+  const r=k=>results[k]?.delta||0;
+  const l=k=>lifeScores[k]?.delta||0;
+  return {
+    heart:   r('sbp')+r('dbp')+r('hr')+r('hdl')*0.3+l('exercise_z')*0.4+l('smoke_z')*0.5,
+    lungs:   l('exercise_z')*0.5+l('smoke_z')*1.2+r('wbc')*0.2,
+    liver:   r('ast')+r('alt')+r('cholesterol')*0.2+l('alc_z')*0.8,
+    kidneys: r('uricacid')+r('sbp')*0.2+(results.creatinine?.delta||0),
+    brain:   l('sleep_z')*0.8+l('stress_z')*0.5+l('social_z')*0.4+r('b12')*0.3+r('folate')*0.2+(function(){try{const q=JSON.parse(localStorage.getItem('yh_brainquiz')||'null');return q?q.cogDelta:0;}catch(e){return 0;}})(),
+  };
+}
+
+// ─── 9 BODY SYSTEMS ────────────────────────────────────────────────────────
+const SYSTEMS_DEF = [
+  {key:'circulatory',icon:'❤️',name:'Κυκλοφορικό',organs:'Καρδιά, αγγεία, αίμα',color:'#EF4444',
+    calc:(R,L)=>(R.sbp?.delta||0)+(R.dbp?.delta||0)+(R.hr?.delta||0)+(R.hdl?.delta||0)*0.3+(R.ldl?.delta||0)*0.3},
+  {key:'respiratory',icon:'🫁',name:'Αναπνευστικό',organs:'Πνεύμονες, τραχεία',color:'#0EA5E9',
+    calc:(R,L)=>(L.exercise_z?.delta||0)*0.5+(L.smoke_z?.delta||0)*1.3+(R.wbc?.delta||0)*0.15},
+  {key:'digestive',icon:'🍽️',name:'Πεπτικό',organs:'Στομάχι, συκώτι, πάγκρεας',color:'#D97706',
+    calc:(R,L)=>(R.ast?.delta||0)+(R.alt?.delta||0)+(R.glucose?.delta||0)*0.4+(L.diet_z?.delta||0)*0.5},
+  {key:'nervous',icon:'🧠',name:'Νευρικό',organs:'Εγκέφαλος, νωτιαίος μυελός',color:'#A21CAF',
+    calc:(R,L)=>(L.sleep_z?.delta||0)*0.7+(L.stress_z?.delta||0)*0.6+(R.b12?.delta||0)*0.4},
+  {key:'musculo',icon:'💪',name:'Μυοσκελετικό',organs:'Οστά, μύες, αρθρώσεις',color:'#F59E0B',
+    calc:(R,L)=>(R.muscle_mass?.delta||0)+(R.calcium?.delta||0)*0.3+(L.exercise_z?.delta||0)*0.6},
+  {key:'urinary',icon:'💧',name:'Ουροποιητικό',organs:'Νεφροί, ουροδόχος κύστη',color:'#7E22CE',
+    calc:(R,L)=>(R.uricacid?.delta||0)+(R.sbp?.delta||0)*0.2},
+  {key:'endocrine',icon:'⚗️',name:'Ενδοκρινικό',organs:'Θυρεοειδής, πάγκρεας, επινεφρίδια',color:'#10B981',
+    calc:(R,L)=>(R.glucose?.delta||0)*0.6+(R.bmi?.delta||0)*0.4},
+  {key:'immune',icon:'🛡️',name:'Ανοσοποιητικό',organs:'Λευκά αιμοσφαίρια, σπλήνας',color:'#06B6D4',
+    calc:(R,L)=>(R.wbc?.delta||0)+(R.ferritin?.delta||0)*0.3},
+  {key:'reproductive',icon:'⚥',name:'Αναπαραγωγικό',organs:'Γεννητικό σύστημα',color:'#EC4899',
+    calc:(R,L)=>(R.vitd?.delta||0)*0.3+(L.stress_z?.delta||0)*0.2},
+];
+
+// ─── HUMOR RECOMMENDATION ENGINE (stand-up level, in Greek) ──────────────
+function humorLine(key, vals){
+  const lines = {
+    glucose_high: [
+      "Μήπως να κόψουμε λίγο τα γλυκά; Το πάγκρεας σου δουλεύει υπερωρίες χωρίς extra μισθό.",
+      "Η γλυκόζη σου λέει «γεια» στον διαβήτη τύπου 2 από μακριά. Ίσως ώρα να μην απαντήσεις στον χαιρετισμό."
+    ],
+    bmi_high: [
+      "Έχεις σκεφτεί να ξεκινήσεις γυμναστήριο; Όχι σαν New Year's resolution που πεθαίνει τον Φεβρουάριο — σαν lifestyle.",
+      "Το BMI σου λέει ότι το σώμα σου παίρνει \"all you can eat\" λίγο πολύ κυριολεκτικά."
+    ],
+    smoke_active: [
+      "Καπνίζεις ακόμα; Οι πνεύμονές σου σου γράφουν κακές κριτικές στο Google Reviews.",
+      "Κάθε τσιγάρο είναι ένα μικρό \"f*** you\" στους πνεύμονές σου. Just saying."
+    ],
+    alc_high: [
+      "Το συκώτι σου άρχισε να κρατάει tally marks στον τοίχο σαν φυλακισμένος.",
+      "Λίγο αλκοόλ είναι κοινωνικό. Πολύ αλκοόλ και το συκώτι σου ζητάει διαζύγιο."
+    ],
+    sleep_low: [
+      "Λιγότερος ύπνος από γάτα σε quarantine. Ο εγκέφαλός σου δεν προλαβαίνει να κάνει cleanup.",
+      "Ο ύπνος σου είναι πιο σύντομος από ελληνική διαφημιστική παύση. Δώσε χρόνο στον εγκέφαλό σου να βγάλει τα σκουπίδια."
+    ],
+    exercise_low: [
+      "Η μόνη άσκηση που κάνεις είναι να σηκώνεις το ποτήρι. Δεν μετράει, δυστυχείς.",
+      "Ο καναπές σου σε ξέρει καλύτερα από τον γυμναστή σου. Ίσως ώρα να αλλάξουμε αυτό."
+    ],
+    vitd_low: [
+      "Η βιταμίνη D σου λέει \"βγες έξω, δεν είμαστε vampire\".",
+      "Λιγότερος ήλιος από Σκανδιναβό τον Δεκέμβριο. Άστο λίγο τον υπολογιστή και βγες."
+    ],
+    wbc_high: [
+      "Τα λευκά αιμοσφαίρια σου είναι σε κατάσταση πολεμικής επιφυλακής χωρίς εμφανή εχθρό. Κάτι σε ψήνει από μέσα."
+    ],
+    waist_high: [
+      "Η μέση σου κι η ισχία σου σε χωρισμό. Ώρα για διαπραγματεύσεις (και cardio)."
+    ],
+    stress_high: [
+      "Το στρες σου είναι σε επίπεδο \"προθεσμία στις 5 και είναι 4:58\" 24/7. Πάρε ανάσα, σώπα, ζήσε."
+    ],
+  };
+  const arr = lines[key];
+  if(!arr) return null;
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
 // ─── MAIN CALCULATE ──────────────────────────────────────────────────────
 function calculate(){
   const age=fv('age')||24;
@@ -416,6 +767,21 @@ function calculate(){
   if(ok(fv('body_fat'))) results.body_fat=scoreOne('body_fat',fv('body_fat'),age);
   if(ok(fv('muscle_mass'))) results.muscle_mass=scoreOne('muscle_mass',fv('muscle_mass'),age);
   if(!isNaN(whr)) results.waist_hip=scoreOne('waist_hip',whr,age);
+
+  // VO2max: use entered value, else estimate from resting HR (Uth-Sørensen)
+  let vo2 = fv('vo2max');
+  if(!ok(vo2)){
+    const rhr = ok(fv('vo2hr')) ? fv('vo2hr') : fv('hr');
+    if(ok(rhr)){
+      const hrMax = 208 - 0.7*age; // Tanaka formula
+      vo2 = 15.3 * (hrMax / rhr); // Uth-Sørensen
+    }
+  }
+  if(ok(vo2)) results.vo2max=scoreOne('vo2max',vo2,age);
+  if(ok(fv('hba1c'))) results.hba1c=scoreOne('hba1c',fv('hba1c'),age);
+  // T-score can be negative/zero (osteopenia), use okZ
+  const ts=fv('tscore');
+  if(okZ(ts) && document.getElementById('tscore').value!=='') results.tscore=scoreOne('tscore',ts,age);
 
   // PhenoAge accel (separate, contributes via its own weight)
   const phenoOv={alb:fv('albumin'),cre:fv('creatinine'),glu:fv('glucose'),crp:fv('crp'),
@@ -463,6 +829,16 @@ function renderScore(age,bioAge,diff,pct,results,lifeScores,lz,phenoAccel,measur
   const col=diff<=-4?'#10B981':diff<=-2?'#34D399':diff<=0?'#6EE7B7':diff<=2?'#F59E0B':diff<=4?'#F97316':'#EF4444';
   const rk=diff<=-5?'Top 5% 🏆':diff<=-3?'Top 10% 🥇':diff<=-1?'Top 25% ✨':diff<=1?'Top 50% 👍':diff<=3?'Bottom 50%':'Bottom 25% ⚡';
   const sign=diff>0?'+':'';
+
+  // Organ deltas (v1.3 — realistic anatomical body)
+  const organD = computeOrganDeltas(results, lifeScores, phenoAccel);
+  window._lastOrganD = organD;
+  const organNames={heart:'Καρδιά',lungs:'Πνεύμονες',liver:'Συκώτι',kidneys:'Νεφρά',brain:'Εγκέφαλος'};
+  const organColor=d=>d<=-0.8?'#10B981':d<0?'#34D399':d<0.4?'#F59E0B':'#EF4444';
+  const organStatus=d=>d<=-0.8?'Εξαιρετικό':d<0?'Καλό':d<0.4?'Οριακό':'Φροντίδα';
+
+  const organHTML = buildBodyView('organs', organD, results, lifeScores);
+  const systemsHTML = buildBodyView('systems', organD, results, lifeScores);
 
   // Pillar totals
   const cardDelta=(results.sbp?.delta||0)+(results.dbp?.delta||0)+(results.hr?.delta||0);
@@ -563,17 +939,12 @@ function renderScore(age,bioAge,diff,pct,results,lifeScores,lz,phenoAccel,measur
     </div>
 
     <div class="slabel">Body Map</div>
-    <div class="body-map-wrap" style="height:200px;background:var(--glass);border:1px solid var(--gb);border-radius:var(--r);margin-bottom:14px">
-      <svg class="body-map-svg" width="480" height="200" viewBox="0 0 480 200" style="opacity:.15">
-        <ellipse cx="240" cy="40" rx="30" ry="35" fill="#6B7280"/>
-        <rect x="205" y="72" width="70" height="80" rx="10" fill="#6B7280"/>
-        <rect x="175" y="75" width="28" height="65" rx="8" fill="#6B7280"/>
-        <rect x="277" y="75" width="28" height="65" rx="8" fill="#6B7280"/>
-        <rect x="210" y="148" width="25" height="50" rx="7" fill="#6B7280"/>
-        <rect x="245" y="148" width="25" height="50" rx="7" fill="#6B7280"/>
-      </svg>
-      ${badgeHTML}
+    <div class="bm-toggle">
+      <button class="bm-toggle-btn active" id="bmt-organs" onclick="switchBodyView('organs')">🫀 Όργανα</button>
+      <button class="bm-toggle-btn" id="bmt-systems" onclick="switchBodyView('systems')">⚙️ Συστήματα (9)</button>
     </div>
+    <div id="bodyview-organs">${organHTML}</div>
+    <div id="bodyview-systems" style="display:none">${systemsHTML}</div>
 
     <div class="slabel">4 Πυλώνες</div>
     <div class="pillars4">
@@ -590,8 +961,12 @@ function renderScore(age,bioAge,diff,pct,results,lifeScores,lz,phenoAccel,measur
     </div>
     <div class="bmc"><div class="bmgt">Λιπίδια &amp; Μεταβολισμός</div>
       ${bmRow(results.trig,'Τριγλυκερίδια')}${bmRow(results.hdl,'HDL')}${bmRow(results.ldl,'LDL')}
-      ${bmRow(results.cholesterol,'Χοληστερόλη')}${bmRow(results.glucose,'Γλυκόζη')}
+      ${bmRow(results.cholesterol,'Χοληστερόλη')}${bmRow(results.glucose,'Γλυκόζη')}${results.hba1c?bmRow(results.hba1c,'HbA1c (3μηνη γλυκ.)'):''}
     </div>
+    ${(results.vo2max||results.tscore)?`<div class="bmc"><div class="bmgt">Φυσική κατάσταση &amp; Οστά</div>
+      ${results.vo2max?bmRow(results.vo2max, ok(fv('vo2max'))?'VO₂max':'VO₂max (εκτ. από HR)'):''}
+      ${results.tscore?bmRow(results.tscore,'Οστική πυκνότητα (T-score)'):''}
+    </div>`:''}
     <div class="bmc"><div class="bmgt">Σύνθεση σώματος</div>
       ${results.bmi?bmRow(results.bmi,`BMI (${(fv('weight')/((fv('height')/100)**2)).toFixed(1)})`):''} 
       ${results.body_fat?bmRow(results.body_fat,'Λίπος σώματος'):''}
@@ -713,6 +1088,43 @@ function buildRecs(results,lifeScores,lz,age,phenoAccel,measured){
   const recs=[];
   const r=k=>results[k];
 
+  // Humor injections (stand-up level) — only when relevant
+  const glucoseV=fv('glucose'),bmiV=(fv('weight')&&fv('height'))?fv('weight')/((fv('height')/100)**2):null;
+  const waistV=fv('waist'),hipV=fv('hip');
+
+  if(ok(glucoseV)&&glucoseV>100){
+    const h=humorLine('glucose_high');
+    if(h)recs.push({t:'warn',title:'😅 Ζάχαρη',tags:['rt-diet'],body:h+` (Γλυκόζη: ${glucoseV} mg/dL, στόχος <90)`});
+  }
+  if(bmiV&&bmiV>=30){
+    const h=humorLine('bmi_high');
+    if(h)recs.push({t:'bad',title:'😅 BMI',tags:['rt-life'],body:h+` (BMI: ${bmiV.toFixed(1)})`});
+  }
+  if(fv('smoke')>=2){
+    const h=humorLine('smoke_active');
+    if(h)recs.push({t:'bad',title:'😅 Κάπνισμα',tags:['rt-life'],body:h});
+  }
+  if(fv('alc')>14){
+    const h=humorLine('alc_high');
+    if(h)recs.push({t:'warn',title:'😅 Αλκοόλ',tags:['rt-life'],body:h+` (${fv('alc')} units/εβδ)`});
+  }
+  if(fv('sleep')<6){
+    const h=humorLine('sleep_low');
+    if(h)recs.push({t:'warn',title:'😅 Ύπνος',tags:['rt-life'],body:h+` (${fv('sleep')}h/βράδυ)`});
+  }
+  if(fv('cardio')===0){
+    const h=humorLine('exercise_low');
+    if(h)recs.push({t:'warn',title:'😅 Άσκηση',tags:['rt-life'],body:h});
+  }
+  if(ok(waistV)&&ok(hipV)&&(waistV/hipV)>0.95){
+    const h=humorLine('waist_high');
+    if(h)recs.push({t:'warn',title:'😅 Αναλογία Μέσης/Ισχίου',tags:['rt-life'],body:h+` (WHR: ${(waistV/hipV).toFixed(2)})`});
+  }
+  if(fv('stress')>=4){
+    const h=humorLine('stress_high');
+    if(h)recs.push({t:'warn',title:'😅 Στρες',tags:['rt-life'],body:h});
+  }
+
   if(r('sbp')?.status==='optimal'&&r('hr')?.status==='optimal')
     recs.push({t:'good',title:'🏆 Καρδιαγγειακό — Εξαιρετικό',tags:['rt-pos'],body:`ΑΠ ${fv('sbp')}/${fv('dbp')}, HR ${fv('hr')} bpm. Top tier για ${age} ετών.`});
   if(r('cholesterol')?.status==='optimal')
@@ -738,6 +1150,10 @@ function buildRecs(results,lifeScores,lz,age,phenoAccel,measured){
   const miss=[];
   if(!ok(fv('crp')))miss.push('CRP');if(!ok(fv('rdw')))miss.push('RDW');if(!ok(fv('glucose')))miss.push('Γλυκόζη');
   if(miss.length)recs.push({t:'warn',title:`Βελτίωσε ακρίβεια (${9-measured}/9)`,tags:['rt-med'],body:`Λείπουν από PhenoAge: ${miss.join(', ')}. Ειδικά RDW (βάρος 0.33) μειώνει σημαντικά το CI.`});
+
+  // Stash actionable (non-positive) recs for the Protocol tab
+  window._lastRecs = recs.filter(r=>r.t!=='good');
+  buildProtocol();
 
   return recs.map(r=>`<div class="rec ${r.t}"><div class="rec-tags">${r.tags.map(t=>`<span class="rtag ${t}">${t==='rt-pos'?'✓ Θετικό':t==='rt-sup'?'Συμπλήρωμα':t==='rt-diet'?'Διατροφή':t==='rt-life'?'Lifestyle':'Ιατρική'}</span>`).join('')}</div><div class="rec-title">${r.title}</div><div class="rec-body">${r.body}</div></div>`).join('');
 }
@@ -788,12 +1204,419 @@ function upd(id,vid,labels){
   const v=$(`${id}`).value;
   $(`${vid}`).textContent=labels?labels[parseInt(v)]:v;
 }
+function switchBodyView(view){
+  document.getElementById('bodyview-organs').style.display = view==='organs'?'block':'none';
+  document.getElementById('bodyview-systems').style.display = view==='systems'?'block':'none';
+  document.getElementById('bmt-organs').classList.toggle('active', view==='organs');
+  document.getElementById('bmt-systems').classList.toggle('active', view==='systems');
+}
+// ─── BRAIN QUIZ (graded difficulty) ───────────────────────────────────────
+const QUIZ_QUESTIONS = [
+  // EASY — processing speed / attention
+  {diff:'easy', cat:'Ταχύτητα', q:'Ποιος αριθμός λείπει; 2, 4, 6, __, 10', opts:['7','8','9'], correct:1},
+  {diff:'easy', cat:'Προσοχή', q:'Πόσα γράμματα "α" υπάρχουν: «αναγκαστικά»;', opts:['3','4','5'], correct:1},
+  {diff:'easy', cat:'Λογική', q:'Αν όλα τα Α είναι Β, και όλα τα Β είναι Γ, τότε όλα τα Α είναι:', opts:['Γ','Όχι απαραίτητα','Κανένα'], correct:0},
+  // MEDIUM — memory / logic
+  {diff:'medium', cat:'Λογική', q:'Συμπλήρωσε: 1, 1, 2, 3, 5, 8, __', opts:['11','13','12'], correct:1},
+  {diff:'medium', cat:'Λογική', q:'Ποιο δεν ταιριάζει;', opts:['Τρίγωνο','Τετράγωνο','Κύκλος','Πεντάγωνο'], correct:2},
+  {diff:'medium', cat:'Επεξεργασία', q:'Αν 5 μηχανές φτιάχνουν 5 προϊόντα σε 5 λεπτά, πόσα λεπτά χρειάζονται 100 μηχανές για 100 προϊόντα;', opts:['100','5','20'], correct:1},
+  {diff:'medium', cat:'Μνήμη', q:'Θυμήσου: ΗΛΙΟΣ-7-ΜΠΛΕ. Ποιος ήταν ο αριθμός;', opts:['5','7','9'], correct:1},
+  // HARD — abstract reasoning
+  {diff:'hard', cat:'Λογική', q:'Ποιος αριθμός ακολουθεί; 2, 6, 12, 20, 30, __', opts:['40','42','36'], correct:1},
+  {diff:'hard', cat:'Αφαίρεση', q:'«Βιβλίο» είναι στο «Διάβασμα» όπως «Πιρούνι» είναι στο:', opts:['Φαγητό','Κουζίνα','Μαχαίρι'], correct:0},
+  {diff:'hard', cat:'Λογική', q:'Σε έναν κώδικα, CAT=3120. Πώς γράφεται το DOG;', opts:['4157','41514','4715'], correct:1},
+];
+let quizState = {idx:0, score:0, startTime:0, answers:[]};
+
+function startQuiz(){
+  quizState = {idx:0, score:0, startTime:Date.now(), answers:[]};
+  renderQuizQuestion();
+}
+function renderQuizQuestion(){
+  const q=QUIZ_QUESTIONS[quizState.idx];
+  const diffColor={easy:'#10B981',medium:'#F59E0B',hard:'#EF4444'}[q.diff];
+  const diffLabel={easy:'Εύκολο',medium:'Μέτριο',hard:'Δύσκολο'}[q.diff];
+  const progress=((quizState.idx)/QUIZ_QUESTIONS.length*100).toFixed(0);
+  $('brain-quiz-content').innerHTML=`
+    <div class="gc">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:11px;color:var(--muted)">Ερώτηση ${quizState.idx+1}/${QUIZ_QUESTIONS.length}</span>
+        <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;background:${diffColor}22;color:${diffColor};border:1px solid ${diffColor}44">${q.cat} · ${diffLabel}</span>
+      </div>
+      <div style="height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-bottom:18px"><div style="height:100%;width:${progress}%;background:linear-gradient(90deg,var(--purple),var(--cyan));border-radius:2px;transition:width .3s"></div></div>
+      <div style="font-size:16px;font-weight:600;line-height:1.5;margin-bottom:18px">${q.q}</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${q.opts.map((o,i)=>`<button onclick="answerQuiz(${i})" style="padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid var(--gb);border-radius:var(--rs);color:var(--text);font-size:15px;text-align:left;cursor:pointer;transition:all .15s" onmousedown="this.style.background='rgba(0,212,255,.1)'">${o}</button>`).join('')}
+      </div>
+    </div>`;
+}
+function answerQuiz(choice){
+  const q=QUIZ_QUESTIONS[quizState.idx];
+  const correct=choice===q.correct;
+  // Weight by difficulty: easy=1, medium=2, hard=3
+  const weight={easy:1,medium:2,hard:3}[q.diff];
+  if(correct)quizState.score+=weight;
+  quizState.answers.push({correct,diff:q.diff});
+  quizState.idx++;
+  if(quizState.idx<QUIZ_QUESTIONS.length){
+    renderQuizQuestion();
+  }else{
+    finishQuiz();
+  }
+}
+function finishQuiz(){
+  const maxScore=QUIZ_QUESTIONS.reduce((a,q)=>a+({easy:1,medium:2,hard:3}[q.diff]),0);
+  const pct=Math.round(quizState.score/maxScore*100);
+  const timeSec=Math.round((Date.now()-quizState.startTime)/1000);
+  // Cognitive age estimate: 100%→-3y, 50%→0y, 0%→+5y; speed bonus if fast
+  let cogDelta = (50-pct)/50*3;
+  if(pct>=80) cogDelta = -3*(pct-50)/50;
+  // Speed factor: <90s good
+  const speedBonus = timeSec<90 ? -0.5 : timeSec>180 ? 0.5 : 0;
+  cogDelta += speedBonus;
+  // Save for brain organ scoring
+  try{ localStorage.setItem('yh_brainquiz', JSON.stringify({pct,cogDelta,date:new Date().toISOString().slice(0,10)})); }catch(e){}
+
+  const c=pct>=80?'#10B981':pct>=60?'#34D399':pct>=40?'#F59E0B':'#EF4444';
+  const verdict=pct>=80?'Εξαιρετική γνωστική απόδοση! 🏆':pct>=60?'Πολύ καλή απόδοση ✨':pct>=40?'Μέτρια — υπάρχει περιθώριο 👍':'Χαμηλή — αξίζει περαιτέρω εξέταση ⚡';
+  const breakdown=['easy','medium','hard'].map(d=>{
+    const qs=quizState.answers.filter(a=>a.diff===d);
+    const right=qs.filter(a=>a.correct).length;
+    const dl={easy:'Εύκολες',medium:'Μέτριες',hard:'Δύσκολες'}[d];
+    return `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--gb);font-size:13px"><span style="color:var(--muted)">${dl}</span><span style="font-weight:700">${right}/${qs.length}</span></div>`;
+  }).join('');
+
+  $('brain-quiz-content').innerHTML=`
+    <div class="gc" style="text-align:center">
+      <div style="font-size:14px;color:var(--muted);margin-bottom:6px">Γνωστικό Σκορ</div>
+      <div style="font-size:52px;font-weight:800;color:${c};line-height:1">${pct}%</div>
+      <div style="font-size:14px;color:${c};margin-top:8px;font-weight:600">${verdict}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px">Χρόνος: ${timeSec}s · Επίδραση εγκεφάλου: ${cogDelta>0?'+':''}${cogDelta.toFixed(1)}y</div>
+    </div>
+    <div class="gc">
+      <div class="gc-title">ΑΝΑΛΥΣΗ ΑΝΑ ΔΥΣΚΟΛΙΑ</div>
+      ${breakdown}
+    </div>
+    <div class="gc" style="font-size:12px;color:var(--muted);line-height:1.6">
+      💡 Το γνωστικό τεστ είναι ενδεικτικό, όχι διαγνωστικό, και <strong>δεν επηρεάζει τη συνολική βιολογική ηλικία</strong> (δείχνει μόνο την υγεία του εγκεφάλου στο body map). Για ανησυχίες μνήμης/προσοχής συμβουλέψου νευρολόγο.
+    </div>
+    <button class="cbtn" onclick="startQuiz()">Επανάληψη τεστ</button>
+    <button class="cbtn" style="background:rgba(255,255,255,.06);box-shadow:none;margin-top:8px" onclick="brainMenu()">← Πίσω στο μενού</button>`;
+}
+
+function brainMenu(){
+  document.getElementById('brain-quiz-content').innerHTML=`
+    <div class="gc" style="padding:18px">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">Επίλεξε δοκιμασία</div>
+      <div onclick="startQuiz()" style="display:flex;align-items:center;gap:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:12px;margin-bottom:10px;cursor:pointer">
+        <div style="font-size:28px">🧩</div><div style="flex:1"><div style="font-size:14px;font-weight:600">Γνωστικό Τεστ</div><div style="font-size:11px;color:var(--muted);margin-top:2px">10 ερωτήσεις · ~3 λεπτά</div></div><div style="color:var(--cyan)">→</div>
+      </div>
+      <div onclick="startReaction()" style="display:flex;align-items:center;gap:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:12px;margin-bottom:10px;cursor:pointer">
+        <div style="font-size:28px">⚡</div><div style="flex:1"><div style="font-size:14px;font-weight:600">Reaction Time</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Ταχύτητα αντίδρασης · 1 λεπτό</div></div><div style="color:var(--cyan)">→</div>
+      </div>
+      <div onclick="startNback()" style="display:flex;align-items:center;gap:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:12px;cursor:pointer">
+        <div style="font-size:28px">🔢</div><div style="flex:1"><div style="font-size:14px;font-weight:600">N-Back (Working Memory)</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Εργαζόμενη μνήμη · 2 λεπτά</div></div><div style="color:var(--cyan)">→</div>
+      </div>
+    </div>`;
+}
+
+// ─── REACTION TIME GAME ────────────────────────────────────────────────────
+let rxState={};
+function startReaction(){
+  rxState={round:0,times:[],waiting:false,ready:false,timer:null};
+  rxRound();
+}
+function rxRound(){
+  const el=document.getElementById('brain-quiz-content');
+  if(rxState.round>=5){
+    const avg=Math.round(rxState.times.reduce((a,b)=>a+b,0)/rxState.times.length);
+    const best=Math.min(...rxState.times);
+    // Typical: <250ms excellent, 250-350 good, >400 slow
+    const verdict=avg<250?'Εξαιρετικά γρήγορα! 🏆':avg<320?'Πολύ καλά ✨':avg<400?'Μέσος όρος 👍':'Αργά — ίσως κόπωση/ύπνος';
+    const c=avg<250?'#10B981':avg<320?'#34D399':avg<400?'#F59E0B':'#EF4444';
+    try{localStorage.setItem('yh_reaction',JSON.stringify({avg,best,date:new Date().toISOString().slice(0,10)}));}catch(e){}
+    el.innerHTML=`<div class="gc" style="text-align:center">
+      <div style="font-size:14px;color:var(--muted)">Μέσος χρόνος αντίδρασης</div>
+      <div style="font-size:48px;font-weight:800;color:${c};line-height:1.1;margin:8px 0">${avg}<span style="font-size:20px">ms</span></div>
+      <div style="font-size:13px;color:${c};font-weight:600">${verdict}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">Καλύτερος: ${best}ms · 5 προσπάθειες</div>
+    </div>
+    <div class="gc" style="font-size:12px;color:var(--muted);line-height:1.6">⚡ Ο χρόνος αντίδρασης είναι δείκτης ταχύτητας νευρικής επεξεργασίας. Επιβραδύνεται με την κόπωση, την έλλειψη ύπνου και την ηλικία. Φυσιολογικό για νέους: 200–270ms.</div>
+    <button class="cbtn" onclick="startReaction()">Ξανά</button>
+    <button class="cbtn" style="background:rgba(255,255,255,.06);box-shadow:none;margin-top:8px" onclick="brainMenu()">← Μενού</button>`;
+    return;
+  }
+  el.innerHTML=`<div id="rx-box" style="height:300px;border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#7C2D12;transition:background .1s" onclick="rxClick()">
+    <div style="text-align:center;padding:20px">
+      <div style="font-size:18px;font-weight:700;color:#fff" id="rx-text">Περίμενε το πράσινο...</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:8px">Προσπάθεια ${rxState.round+1}/5</div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px">Πάτα μόλις γίνει πράσινο. Μην πατήσεις νωρίς!</div>`;
+  rxState.ready=false;
+  const delay=1000+Math.random()*3000;
+  rxState.timer=setTimeout(()=>{
+    const box=document.getElementById('rx-box');
+    if(box){box.style.background='#10B981';document.getElementById('rx-text').textContent='ΠΑΤΑ ΤΩΡΑ!';rxState.ready=true;rxState.startT=Date.now();}
+  },delay);
+}
+function rxClick(){
+  if(!rxState.ready){
+    // clicked too early
+    clearTimeout(rxState.timer);
+    const box=document.getElementById('rx-box');
+    if(box){box.style.background='#EF4444';document.getElementById('rx-text').textContent='Πολύ νωρίς! Ξανά...';}
+    setTimeout(()=>rxRound(),900);
+    return;
+  }
+  const rt=Date.now()-rxState.startT;
+  rxState.times.push(rt);
+  rxState.round++;
+  const box=document.getElementById('rx-box');
+  if(box){document.getElementById('rx-text').textContent=rt+'ms';box.style.background='#1e1e32';}
+  setTimeout(()=>rxRound(),700);
+}
+
+// ─── N-BACK GAME (working memory, 2-back) ──────────────────────────────────
+let nbState={};
+function startNback(){
+  nbState={seq:[],idx:0,hits:0,misses:0,falsealarm:0,n:2,total:15,awaiting:false};
+  // generate sequence with ~30% 2-back matches
+  const letters=['Α','Β','Γ','Δ','Ε','Ζ'];
+  for(let i=0;i<nbState.total;i++){
+    if(i>=2 && Math.random()<0.3){nbState.seq.push(nbState.seq[i-2]);}
+    else nbState.seq.push(letters[Math.floor(Math.random()*letters.length)]);
+  }
+  nbStep();
+}
+function nbStep(){
+  const el=document.getElementById('brain-quiz-content');
+  if(nbState.idx>=nbState.total){nbFinish();return;}
+  const letter=nbState.seq[nbState.idx];
+  const isMatch=nbState.idx>=nbState.n && nbState.seq[nbState.idx]===nbState.seq[nbState.idx-nbState.n];
+  nbState.curMatch=isMatch;
+  nbState.responded=false;
+  el.innerHTML=`<div class="gc" style="text-align:center;padding:20px">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px">2-Back · ${nbState.idx+1}/${nbState.total}</div>
+    <div style="font-size:11px;color:var(--hint);margin-bottom:16px">Πάτα «Ίδιο» αν το γράμμα είναι ίδιο με αυτό 2 θέσεις πριν</div>
+    <div style="height:120px;display:flex;align-items:center;justify-content:center">
+      <div style="font-size:72px;font-weight:800;color:var(--cyan)">${letter}</div>
+    </div>
+    <button onclick="nbRespond(true)" style="width:100%;padding:16px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:10px">Ίδιο με 2 πριν ✓</button>
+  </div>`;
+  nbState.stepTimer=setTimeout(()=>{
+    // no response = treat as "not match"
+    if(!nbState.responded){
+      if(isMatch)nbState.misses++;
+    }
+    nbState.idx++;
+    nbStep();
+  },2500);
+}
+function nbRespond(pressed){
+  if(nbState.responded)return;
+  nbState.responded=true;
+  clearTimeout(nbState.stepTimer);
+  if(nbState.curMatch && pressed)nbState.hits++;
+  else if(!nbState.curMatch && pressed)nbState.falsealarm++;
+  nbState.idx++;
+  setTimeout(()=>nbStep(),300);
+}
+function nbFinish(){
+  const el=document.getElementById('brain-quiz-content');
+  const totalMatches=nbState.seq.filter((l,i)=>i>=2&&l===nbState.seq[i-2]).length;
+  const acc=totalMatches>0?Math.round(nbState.hits/totalMatches*100):0;
+  const penalty=nbState.falsealarm*5;
+  const score=Math.max(0,acc-penalty);
+  const c=score>=80?'#10B981':score>=60?'#34D399':score>=40?'#F59E0B':'#EF4444';
+  const verdict=score>=80?'Εξαιρετική εργαζόμενη μνήμη! 🏆':score>=60?'Καλή απόδοση ✨':score>=40?'Μέτρια 👍':'Χρειάζεται εξάσκηση';
+  try{localStorage.setItem('yh_nback',JSON.stringify({score,date:new Date().toISOString().slice(0,10)}));}catch(e){}
+  el.innerHTML=`<div class="gc" style="text-align:center">
+    <div style="font-size:14px;color:var(--muted)">N-Back Score</div>
+    <div style="font-size:48px;font-weight:800;color:${c};line-height:1.1;margin:8px 0">${score}%</div>
+    <div style="font-size:13px;color:${c};font-weight:600">${verdict}</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px">Σωστά: ${nbState.hits}/${totalMatches} · Λάθος συναγερμοί: ${nbState.falsealarm}</div>
+  </div>
+  <div class="gc" style="font-size:12px;color:var(--muted);line-height:1.6">🔢 Το N-back είναι η πιο μελετημένη δοκιμασία εργαζόμενης μνήμης. Τακτική εξάσκηση μπορεί να βελτιώσει τη ρευστή νοημοσύνη (fluid intelligence) σύμφωνα με ορισμένες μελέτες.</div>
+  <button class="cbtn" onclick="startNback()">Ξανά</button>
+  <button class="cbtn" style="background:rgba(255,255,255,.06);box-shadow:none;margin-top:8px" onclick="brainMenu()">← Μενού</button>`;
+}
+
+
+
+// ─── LIFESTYLE EDUCATIONAL FEEDBACK (with hard numbers) ───────────────────
+function lifeFacts(){
+  const facts=[];
+  const sleep=fv('sleep'), smoke=fv('smoke'), alc=fv('alc'), stress=fv('stress'),
+        cardio=fv('cardio'), social=fv('social'), processed=fv('processed'), diet=fv('diet');
+
+  if(ok(sleep)&&sleep<6.5){
+    facts.push({icon:'😴',type:'warn',text:`Κοιμάσαι ${sleep}h/βράδυ. Μήπως να μην ξενυχτούσαμε κάθε βράδυ στο κινητό; Χρόνιος ύπνος <6h συνδέεται με ~12% αυξημένη θνησιμότητα και επιταχύνει τη γνωστική έκπτωση. Στόχος: 7–8h.`});
+  } else if(ok(sleep)&&sleep>9){
+    facts.push({icon:'😴',type:'warn',text:`${sleep}h/βράδυ είναι υπερβολικά. Παραδόξως, ύπνος >9h συνδέεται κι αυτός με αυξημένο καρδιαγγειακό κίνδυνο. Ίσως κρύβει υποκείμενο πρόβλημα.`});
+  }
+  if(ok(smoke)&&smoke>=2){
+    facts.push({icon:'🚬',type:'bad',text:`Το κάπνισμα ευθύνεται για ~85–90% των καρκίνων του πνεύμονα και μειώνει το προσδόκιμο ζωής κατά ~10 χρόνια κατά μέσο όρο. Η διακοπή στα 30 ανακτά σχεδόν όλη τη χαμένη διάρκεια ζωής, στα 50 το μισό.`});
+  } else if(ok(smoke)&&smoke===1){
+    facts.push({icon:'🚬',type:'warn',text:`Παλιός καπνιστής: μπράβο! Ο κίνδυνος καρδιαγγειακών πέφτει 50% μέσα σε 1 χρόνο από τη διακοπή και προσεγγίζει τον μη-καπνιστή σε ~15 χρόνια.`});
+  }
+  if(ok(alc)&&alc>14){
+    facts.push({icon:'🍷',type:'bad',text:`${alc} units/εβδ. Πάνω από 14 units/εβδ μειώνει το προσδόκιμο ζωής: μια μελέτη του Lancet (600k άτομα) έδειξε ~1–2 χρόνια λιγότερα στα 40+ units. Το συκώτι κι ο εγκέφαλος πληρώνουν πρώτα.`});
+  }
+  if(ok(stress)&&stress>=4){
+    facts.push({icon:'🧠',type:'warn',text:`Υψηλό χρόνιο άγχος μειώνει το προσδόκιμο ζωής κατά ~2–3 χρόνια (μέσω κορτιζόλης, φλεγμονής, καρδιαγγειακών). Μήπως να επισκεφτείς έναν ψυχολόγο; Δεν είναι ντροπή — είναι συντήρηση.`});
+  }
+  if(ok(cardio)&&cardio<75){
+    facts.push({icon:'🏃',type:'warn',text:`${cardio}min αερόβιας/εβδ. Ο ΠΟΥ συνιστά 150min. Η καθιστική ζωή είναι το "νέο κάπνισμα" — αυξάνει τη θνησιμότητα ~20–30%. Ακόμα και 75min/εβδ προσθέτουν ~1.8 χρόνια ζωής.`});
+  }
+  if(ok(social)&&social<=2){
+    facts.push({icon:'👥',type:'warn',text:`Η κοινωνική απομόνωση έχει αντίκτυπο στη θνησιμότητα ισοδύναμο με 15 τσιγάρα/ημέρα (meta-analysis Holt-Lunstad). Οι σχέσεις είναι από τους ισχυρότερους longevity factors — ισχυρότερες από τη διατροφή.`});
+  }
+  if(ok(processed)&&processed>14){
+    facts.push({icon:'🍔',type:'warn',text:`${processed} μερίδες επεξεργασμένων/εβδ. Κάθε 10% αύξηση ultra-processed τροφών συνδέεται με ~14% αυξημένη θνησιμότητα (BMJ 2019). Η μεσογειακή διατροφή προσθέτει ~2–3 χρόνια.`});
+  }
+  // Positive reinforcement
+  if(ok(sleep)&&sleep>=7&&sleep<=8&&ok(cardio)&&cardio>=150&&(!ok(smoke)||smoke===0)){
+    facts.push({icon:'🏆',type:'good',text:`Εξαιρετικός συνδυασμός: σωστός ύπνος + άσκηση + μη-κάπνισμα. Αυτά τα τρία μαζί μπορούν να προσθέσουν 7–10 χρόνια υγιούς ζωής vs τον μέσο όρο.`});
+  }
+  return facts;
+}
+
+function updateLifeFeedback(){
+  const el=document.getElementById('life-feedback');
+  if(!el)return;
+  const facts=lifeFacts();
+  if(facts.length===0){ el.innerHTML=''; return; }
+  const colors={good:'#10B981',warn:'#F59E0B',bad:'#EF4444'};
+  el.innerHTML=facts.map(f=>{
+    const c=colors[f.type];
+    return `<div style="background:${c}12;border:1px solid ${c}33;border-left:3px solid ${c};border-radius:10px;padding:11px 13px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:18px;flex-shrink:0">${f.icon}</span>
+      <span style="font-size:12px;color:var(--text);line-height:1.55;opacity:.9">${f.text}</span>
+    </div>`;
+  }).join('');
+}
+
+// ─── PROTOCOL CHECKLIST ───────────────────────────────────────────────────
+function buildProtocol(){
+  const el=document.getElementById('protocol-content');
+  if(!el)return;
+  const recs=window._lastRecs||[];
+  if(recs.length===0){
+    el.innerHTML=`<div class="gc" style="text-align:center;padding:24px"><div style="font-size:32px;margin-bottom:10px">🎉</div><p style="font-size:14px;color:var(--em)">Δεν υπάρχουν εκκρεμότητες — όλα τα biomarkers σου είναι σε καλό επίπεδο! Συνέχισε έτσι.</p></div>`;
+    return;
+  }
+  let checked={};
+  try{checked=JSON.parse(localStorage.getItem('yh_protocol')||'{}');}catch(e){}
+  const doneCount=recs.filter((r,i)=>checked[r.title]).length;
+  const pct=Math.round(doneCount/recs.length*100);
+
+  el.innerHTML=`
+    <div class="gc">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:13px;font-weight:600">Πρόοδος</span>
+        <span style="font-size:13px;font-weight:700;color:var(--cyan)">${doneCount}/${recs.length} · ${pct}%</span>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--em),var(--cyan));border-radius:3px;transition:width .3s"></div></div>
+    </div>
+    ${recs.map((r,i)=>{
+      const isChecked=!!checked[r.title];
+      const c=r.t==='bad'?'#EF4444':'#F59E0B';
+      return `<div class="gc" style="padding:14px;display:flex;gap:12px;align-items:flex-start;opacity:${isChecked?0.6:1}">
+        <div onclick="toggleProtocol('${r.title.replace(/'/g,"\\\\'")}')" style="width:24px;height:24px;border-radius:7px;border:2px solid ${isChecked?'var(--em)':c};background:${isChecked?'var(--em)':'transparent'};flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:2px">${isChecked?'<span style="color:#fff;font-size:14px">✓</span>':''}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600;${isChecked?'text-decoration:line-through;color:var(--muted)':''}">${r.title}</div><div style="font-size:12px;color:var(--muted);line-height:1.55;margin-top:4px">${r.body}</div></div>
+      </div>`;
+    }).join('')}`;
+}
+function toggleProtocol(title){
+  let checked={};
+  try{checked=JSON.parse(localStorage.getItem('yh_protocol')||'{}');}catch(e){}
+  checked[title]=!checked[title];
+  try{localStorage.setItem('yh_protocol',JSON.stringify(checked));}catch(e){}
+  buildProtocol();
+}
+
+// ─── REMINDERS ─────────────────────────────────────────────────────────────
+function setReminder(months){
+  const due=new Date();
+  due.setMonth(due.getMonth()+months);
+  const dueStr=due.toISOString().slice(0,10);
+  try{localStorage.setItem('yh_reminder',JSON.stringify({months,due:dueStr,set:new Date().toISOString().slice(0,10)}));}catch(e){}
+  updateReminderStatus();
+  // Try native notification
+  if('Notification'in window){
+    Notification.requestPermission().then(p=>{
+      if(p==='granted')new Notification('YouHealth',{body:`Θα σου θυμίσουμε για επανέλεγχο στις ${dueStr}`});
+    });
+  }
+}
+function updateReminderStatus(){
+  const el=document.getElementById('reminder-status');
+  if(!el)return;
+  try{
+    const r=JSON.parse(localStorage.getItem('yh_reminder')||'null');
+    if(r){
+      const due=new Date(r.due), now=new Date();
+      const daysLeft=Math.ceil((due-now)/(1000*60*60*24));
+      el.innerHTML=daysLeft>0?`📅 Επόμενος έλεγχος: ${r.due} (σε ${daysLeft} ημέρες)`:`⚠️ Ώρα για επανέλεγχο! (έληξε ${r.due})`;
+      el.style.color=daysLeft>0?'var(--cyan)':'var(--am)';
+    }
+  }catch(e){}
+}
+
+// ─── PDF / PRINT EXPORT ────────────────────────────────────────────────────
+function exportPDF(){
+  const age=fv('age')||24;
+  const bioAge=document.getElementById('hdr-n').textContent;
+  const recs=window._lastRecs||[];
+  const date=new Date().toLocaleDateString('el-GR');
+
+  // Gather all entered biomarkers
+  const fields=[
+    ['Ηλικία',fv('age'),'έτη'],['Ύψος',fv('height'),'cm'],['Βάρος',fv('weight'),'kg'],
+    ['Συστολική ΑΠ',fv('sbp'),'mmHg'],['Διαστολική ΑΠ',fv('dbp'),'mmHg'],['Παλμοί',fv('hr'),'bpm'],
+    ['Χοληστερόλη',fv('cholesterol'),'mg/dL'],['HDL',fv('hdl'),'mg/dL'],['LDL',fv('ldl'),'mg/dL'],['Τριγλυκερίδια',fv('trig'),'mg/dL'],
+    ['Γλυκόζη',fv('glucose'),'mg/dL'],['HbA1c',fv('hba1c'),'%'],['VO₂max',fv('vo2max'),'ml/kg/min'],['T-score',fv('tscore'),'SD'],
+    ['Βιτ. D3',fv('vitd'),'ng/mL'],['Β12',fv('b12'),'pg/mL'],['WBC',fv('wbc'),'K/μL'],
+    ['Κρεατινίνη',fv('creatinine'),'mg/dL'],['AST',fv('ast'),'U/L'],['ALT',fv('alt'),'U/L'],
+  ].filter(f=>ok(f[1]));
+
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>YouHealth Report</title>
+  <style>
+    body{font-family:-apple-system,Arial,sans-serif;max-width:700px;margin:0 auto;padding:30px;color:#1a1a2e}
+    h1{color:#7C3AED;font-size:24px;border-bottom:3px solid #7C3AED;padding-bottom:8px}
+    h2{color:#0284C7;font-size:16px;margin-top:24px}
+    .bio{font-size:48px;font-weight:800;color:#10B981;text-align:center;margin:10px 0}
+    .sub{text-align:center;color:#666;font-size:13px}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    td{padding:6px 10px;border-bottom:1px solid #eee;font-size:13px}
+    td:last-child{text-align:right;font-weight:600}
+    .rec{padding:10px;background:#f8f8fc;border-left:3px solid #F59E0B;margin-bottom:8px;border-radius:4px}
+    .rec-t{font-weight:700;font-size:13px}.rec-b{font-size:12px;color:#555;margin-top:3px}
+    .disc{font-size:11px;color:#999;margin-top:24px;border-top:1px solid #eee;padding-top:12px}
+    @media print{body{padding:10px}}
+  </style></head><body>
+    <h1>🧬 YouHealth — Report Βιολογικής Ηλικίας</h1>
+    <div class="sub">Ημερομηνία: ${date}</div>
+    <div class="bio">${bioAge} ετών</div>
+    <div class="sub">Εκτιμώμενη βιολογική ηλικία (χρονολογική: ${age})</div>
+    <h2>Μετρήσεις</h2>
+    <table>${fields.map(f=>`<tr><td>${f[0]}</td><td>${f[1]} ${f[2]}</td></tr>`).join('')}</table>
+    <h2>Συστάσεις</h2>
+    ${recs.length?recs.map(r=>`<div class="rec"><div class="rec-t">${r.title}</div><div class="rec-b">${r.body}</div></div>`).join(''):'<p style="font-size:13px;color:#10B981">Δεν υπάρχουν εκκρεμότητες.</p>'}
+    <div class="disc">⚠️ Το report αυτό είναι ενδεικτικό και βασίζεται στον αλγόριθμο PhenoAge (Levine 2018) + composite scoring. ΔΕΝ αποτελεί ιατρική διάγνωση. Συμβουλευτείτε ιατρό για ερμηνεία. Δημιουργήθηκε από την εφαρμογή YouHealth.</div>
+    <script>setTimeout(()=>window.print(),500)<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
 function showTab(id){
-  ['score','blood','life','news'].forEach(t=>{$('sec-'+t).classList.toggle('active',t===id);$('nav-'+t).classList.toggle('active',t===id);});
+  ['score','blood','life','brain','protocol','news'].forEach(t=>{$('sec-'+t).classList.toggle('active',t===id);$('nav-'+t).classList.toggle('active',t===id);});
   window.scrollTo(0,0);
 }
 
-const BK=['age','height','weight','body_fat','muscle_mass','waist','hip','sbp','dbp','hr','creatinine','mcv','wbc','lymph','alp','glucose','rdw','albumin','crp','cholesterol','hdl','ldl','trig','vitd','b12','folate','ferritin','calcium','magnesium','hgb','plt','uricacid','ast','alt','ggt'];
+const BK=['age','height','weight','body_fat','muscle_mass','waist','hip','sbp','dbp','hr','creatinine','mcv','wbc','lymph','alp','glucose','rdw','albumin','crp','cholesterol','hdl','ldl','trig','vitd','b12','folate','ferritin','calcium','magnesium','hgb','plt','uricacid','ast','alt','ggt','vo2max','hba1c','tscore','vo2hr'];
 const LK=['sleep','sleepq','cardio','strength','diet','processed','smoke','alc','stress','social'];
 function saveBlood(){const d={};BK.forEach(k=>{const e=$(k);if(e)d[k]=e.value;});try{localStorage.setItem('yh_b',JSON.stringify(d));}catch(e){}}
 function saveLife(){const d={};LK.forEach(k=>{const e=$(k);if(e)d[k]=e.value;});try{localStorage.setItem('yh_l',JSON.stringify(d));}catch(e){}}
@@ -815,6 +1638,8 @@ loadAll();
 document.querySelectorAll('#sec-blood input').forEach(e=>e.addEventListener('change',saveBlood));
 document.querySelectorAll('#sec-life input').forEach(e=>e.addEventListener('input',saveLife));
 renderNews();
+updateLifeFeedback();
+updateReminderStatus();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
