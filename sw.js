@@ -1,4 +1,4 @@
-const CACHE = 'longevity-v1';
+const CACHE = 'youhealth-v2';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', e => {

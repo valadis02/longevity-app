@@ -1,11 +1,12 @@
 {
-  "name": "Longevity Age Estimator",
-  "short_name": "Longevity",
-  "description": "Εκτίμηση βιολογικής ηλικίας με PhenoAge algorithm",
+  "name": "YouHealth",
+  "short_name": "YouHealth",
+  "description": "Εκτίμηση βιολογικής ηλικίας με PhenoAge + composite score",
   "start_url": "/longevity-app/",
+  "scope": "/longevity-app/",
   "display": "standalone",
-  "background_color": "#0f0f1a",
-  "theme_color": "#1a1a2e",
+  "background_color": "#050A18",
+  "theme_color": "#050A18",
   "orientation": "portrait",
   "icons": [
     {
